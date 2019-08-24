@@ -5,7 +5,9 @@ import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 const ClassButton = (props)=> {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.touchOp}>
+            <TouchableOpacity 
+                style={styles.touchOp}
+                onPress ={() => props.navigation.navigate('class_info')}>
                 <Image 
                     style={{width: 50, height: 50}}
                     source={props.imageSource}

@@ -1,11 +1,14 @@
 import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-//import{Feather} from '@expo/vector-icons';
+import{Feather} from '@expo/vector-icons';
 
 const AddClassButton = ({navigation})=> {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.touchOp} onPress ={() => navigation.navigate('add_class') }>
+            <TouchableOpacity 
+            style={styles.touchOp} 
+            onPress ={() => navigation.navigate('add_class') }>
+                <Feather name ="plus"/>
                 <Text> add class </Text>
             </TouchableOpacity>  
                 
