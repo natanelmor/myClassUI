@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { CheckBox } from 'native-base';
-
+import axios from 'axios';
 
 export default class register_screen extends Component {
 
@@ -20,35 +20,25 @@ export default class register_screen extends Component {
         name   : '', 
         email   : '',
         password: '',
-        isteacher: false
+        isTeacher: false
     }
 
     this.onRegister = this.onRegister.bind(this);
   }
 
   onRegister = (viewId) => {
-    this.props.navigation.navigate('login_screen')
-      /*
-    fetch('http://794394c0.ngrok.io/user', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "name": this.state.name,
-        "email": this.state.email,
-        "password": this.state.password,
-        "type": this.state.isteacher ? "Teacher" : "Student"
-    })
-  })
-    .then((response) => response.json())
-    .then((responseJson) => {
-        this.props.navigation.navigate('login_screen')
-    })
-    .catch((error) => {
-      console.error(error);
+    const user = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      type: this.state.isTeacher ? "Teacher" : "Student"
+    };
+
+    axios.post('http://a25b7be9.ngrok.io/user',  user)
+    .catch((err) => {
+      console.log(err);
     });
-    */
+    this.props.navigation.navigate('login_screen');
   }
 
   render() {
@@ -56,8 +46,8 @@ export default class register_screen extends Component {
       <View style={styles.container}>
         <Text style={styles.loginText}>Teacher</Text>
             <CheckBox
-             onPress={() => this.setState({ isteacher: !this.state.isteacher})}
-            checked={this.state.isteacher}/>
+             onPress={() => this.setState({ isTeacher: !this.state.isTeacher})}
+            checked={this.state.isTeacher}/>
 
         <View style={styles.inputContainer}>
           <TextInput style={styles.inputs}
