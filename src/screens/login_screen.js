@@ -9,6 +9,7 @@ import {
   Image,
   Alert
 } from 'react-native';
+import axios from 'axios';
 
 export default class login_screen extends Component {
   constructor(props) {
@@ -23,25 +24,25 @@ export default class login_screen extends Component {
     this.onRegister = this.onRegister.bind(this);
   }
 
+  validateCredentials = (user) => {
+    return this.state.password === user['password'];
+  }
+
   onLogin = (viewId) => { 
-    this.props.navigation.navigate('my_profile') 
-      /*
-    fetch('http://794394c0.ngrok.io/user?email=${this.state.email}', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: null
+    const userCredentials = {
+      email: this.state.email,
+      password: this.state.password
+    }
+
+    axios.get('http://a25b7be9.ngrok.io/user?email='+this.state.email)
+    .then(res => {
+      if(this.validateCredentials(res.data)){
+        this.props.navigation.navigate('my_profile_screen');
+      }
     })
-    .then((response) => response.json())
-    .then((responseJson) => {
-      //todo elior: check when to navigate to my profile
-      this.props.navigation.navigate('my_profile')
-    })
-   .catch((error) => {
-      console.error(error);
+    .catch(err => {
+      console.log(err);
     });
-    */
   }
 
   onRestorePassword = (viewId) => {
@@ -49,7 +50,7 @@ export default class login_screen extends Component {
   }
 
   onRegister = (viewId) => {
-    this.props.navigation.navigate('register_screen')
+    this.props.navigation.navigate('register_screen');
   }
 
   render() {
