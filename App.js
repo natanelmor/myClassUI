@@ -23,7 +23,7 @@ const navigator = createStackNavigator(
   {
     initialRouteName: 'login_screen',
     defaultNavigationOptions: {
-      title: 'App'
+      header:null
     }
   }
 );

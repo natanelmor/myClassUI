@@ -57,8 +57,9 @@ export default class login_screen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Image source={require('../../assets/logo.png')}/>
         <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
+          <Image style={styles.inputIcon} source={{uri: 'https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/20-512.png'}}/>
           <TextInput style={styles.inputs}
               placeholder="Email"
               keyboardType="email-address"

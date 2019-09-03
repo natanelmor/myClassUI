@@ -7,13 +7,12 @@ import ClassesList from '../components/ClassesList';
 
 const my_classes_screen = ({navigation}) => {
     return (
-        <ImageBackground source= {require('../../assets/green-school-board-background.jpg')} 
-           style={{width:'100%', height:'100%' }}
-             >
+        <ImageBackground
+      source= {require('../../assets/background.jpeg')} 
+      style={{width:'100%', height:'100%' }}>
         <View style={styles.container}>
             <ClassesList />
             <AddClassButton />
-
         </View>
         </ImageBackground>
         );
