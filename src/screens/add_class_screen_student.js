@@ -5,6 +5,13 @@ import SearchBar from '../components/SearchBar';
 
 const add_classes_screen_student = () => {
     const [term, setTerm] = useState('') ;
+    const [results , setResults] = useState([]) ;
+
+   // const searchApi= async () => {
+
+    //}
+
+
     return (
        <View>
        <View>
@@ -13,7 +20,7 @@ const add_classes_screen_student = () => {
                 onTermChange ={(newTerm) => setTerm(newTerm)} 
                 onTermSubmit={()=> console.log('term was submitted')}
                 />
-            <Text>{term}</Text>
+            <Text>we found {results.length}</Text>
         </View>
         <View style={styles.container}>
         <ClassButton

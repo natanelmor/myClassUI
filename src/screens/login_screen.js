@@ -34,10 +34,11 @@ export default class login_screen extends Component {
       password: this.state.password
     }
 
-    axios.get('http://a25b7be9.ngrok.io/user?email='+this.state.email)
+    axios.get('https://d5451d14.ngrok.io/user?email='+this.state.email)
     .then(res => {
+      console.log(res.data);
       if(this.validateCredentials(res.data)){
-        this.props.navigation.navigate('my_profile_screen');
+        this.props.navigation.navigate('my_profile');
       }
     })
     .catch(err => {
