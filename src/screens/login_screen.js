@@ -34,7 +34,7 @@ export default class login_screen extends Component {
       password: this.state.password
     }
 
-    axios.get('https://d5451d14.ngrok.io/user?email='+this.state.email)
+    axios.get('https://36e96904.ngrok.io/user?email='+this.state.email)
     .then(res => {
       console.log(res.data);
       if(this.validateCredentials(res.data)){

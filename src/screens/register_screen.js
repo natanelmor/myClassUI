@@ -34,7 +34,7 @@ export default class register_screen extends Component {
       type: this.state.isTeacher ? "Teacher" : "Student"
     };
 
-    axios.post('https://d5451d14.ngrok.io/user',  user)
+    axios.post('https://36e96904.ngrok.io/user',  user)
     .catch((err) => {
       console.log(err);
     });

@@ -1,18 +1,22 @@
 import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
-
+import {withNavigation} from 'react-navigation';
 
 const ClassButton = (props)=> {
+    const {name , icon} = props.myclass; 
+    var src =icon;
+    console.log(icon);
     return (
         <View style={styles.container}>
             <TouchableOpacity 
                 style={styles.touchOp}
-                onPress ={() => props.navigation.navigate('class_info')}>
+                onPress ={() => props.navigation.navigate('class_info')}
+                >
                 <Image 
                     style={{width: 50, height: 50}}
-                    source={props.imageSource}
+                    source={{uri: icon}}
                 />
-                <Text> {props.title} </Text>
+                <Text> {name} </Text>
             </TouchableOpacity>  
         </View>
         );
@@ -37,4 +41,4 @@ const styles = StyleSheet.create({
     },
 }); 
 
-export default ClassButton;
+export default withNavigation(ClassButton);

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import ClassButton from '../components/ClassButton';
 import SearchBar from '../components/SearchBar';
+import ClassesList from '../components/ClassesList';
 
 const add_classes_screen_student = () => {
     const [term, setTerm] = useState('') ;
@@ -23,18 +24,7 @@ const add_classes_screen_student = () => {
             <Text>we found {results.length}</Text>
         </View>
         <View style={styles.container}>
-        <ClassButton
-            title="bible" 
-            imageSource={require('../../assets/bible.png')}/>
-        <ClassButton 
-            title="math" 
-            imageSource={require('../../assets/math.png')}/>
-        <ClassButton 
-            title="science" 
-            imageSource={require('../../assets/science.jpg')}/>
-        <ClassButton 
-            title="sport" 
-            imageSource={require('../../assets/sport.png')}/>
+            <ClassesList />
         </View>
         </View>
         );
