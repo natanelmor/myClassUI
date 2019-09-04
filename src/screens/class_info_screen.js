@@ -23,7 +23,12 @@ export default class class_info_screen extends Component {
 
 
         this.state = {
-            messages: 'Welcome! \n \n Education is the movement from darkness to light.\n ~Allan Bloom~ \n \n I wish you to be inspired by the school,  \n \n to explore things with curiosity and the eyes wide open, \n \n to listen attentively and then you will discover a whole new world! \n \n \n Be successful and have a lot fun at school!',
+            messages: [
+                { content: 'Welcome!' },
+                { content: 'Education is the movement from darkness to light.\n ~Allan Bloom~' },
+                { content: 'I wish you to be inspired by the school,  \n \n to explore things with curiosity and the eyes wide open, \n \n to listen attentively and then you will discover a whole new world!' },
+                { content: 'Be successful and have a lot fun at school!' },
+            ],
             participants: [
                 { name: 'student #1' },
                 { name: 'student #2' },
@@ -83,13 +88,22 @@ export default class class_info_screen extends Component {
                         </View>
                     </View>
 
-                    <View style={styles.containerMessages}>
-                        <TextInput
-                            multiline={true}
-                            scrollEnabled
-                            style={styles.messageInput}
-                            value={this.state.messages}
-                        />
+                    <View style={styles.messageInput}>
+                        <ScrollView
+                        nestedScrollEnabled
+                        showsVerticalScrollIndicator={false}
+                        >
+                        <FlatList
+                            keyExtractor={(message) => message.content}
+                            showsVerticalScrollIndicator
+                            data={this.state.messages}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item }) => {
+                                return (
+                                    <View><Text>{item.content + '\n'}</Text></View>
+                                );
+                            }}
+                        /></ScrollView>
                     </View>
 
                     <View style={styles.containerFiles}>
@@ -168,7 +182,7 @@ export default class class_info_screen extends Component {
                         />
                     </View>
                 </ScrollView>
-            </View>
+            </View >
         );
     }
 }
@@ -187,15 +201,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#c3c4be'
     },
     containerMessages: {
+        height: 180,
         borderWidth: 4,
         borderColor: 'black',
         backgroundColor: '#92f7e5'
     },
     messageInput: {
-        height: 150,
-
+        flex: 1,
         margin: 10,
-        textAlignVertical: 'top'
+        height: 180
     },
     container: {
         justifyContent: 'center',

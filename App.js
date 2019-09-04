@@ -23,7 +23,7 @@ const navigator = createStackNavigator(
     register_screen: register_screen,
   },
   {
-    initialRouteName: 'login_screen',
+    initialRouteName: 'class_info',
     defaultNavigationOptions: {
       header:null
     }
