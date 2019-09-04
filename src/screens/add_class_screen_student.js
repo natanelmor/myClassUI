@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Text, StyleSheet, View} from 'react-native';
 import ClassButton from '../components/ClassButton';
 import SearchBar from '../components/SearchBar';
-import ClassesList from '../components/ClassesList';
+import AllClassesList from '../components/AllClassesList'
 
 const add_classes_screen_student = () => {
     const [term, setTerm] = useState('') ;
@@ -24,7 +24,7 @@ const add_classes_screen_student = () => {
             <Text>we found {results.length}</Text>
         </View>
         <View style={styles.container}>
-            <ClassesList />
+        <AllClassesList/>
         </View>
         </View>
         );

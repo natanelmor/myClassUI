@@ -6,13 +6,16 @@ import ClassesList from '../components/ClassesList';
 
 
 const my_classes_screen = ({navigation}) => {
+    const passUser = navigation.getParam('user');
+    console.log('/////////////////////// my classes'+passUser);
+
     return (
         <ImageBackground
       source= {require('../../assets/background.jpeg')} 
       style={{width:'100%', height:'100%' }}>
         <View style={styles.container}>
-            <ClassesList />
-            <AddClassButton />
+            <ClassesList user= {passUser}/>
+            <AddClassButton user= {passUser}/>
         </View>
         </ImageBackground>
         );

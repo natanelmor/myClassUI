@@ -17,6 +17,7 @@ export default class login_screen extends Component {
     this.state = {
       email   : '',
       password: '',
+      type : '',
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -34,11 +35,13 @@ export default class login_screen extends Component {
       password: this.state.password
     }
 
-    axios.get('https://36e96904.ngrok.io/user?email='+this.state.email)
+    axios.get('https://2c1b4030.ngrok.io/user?email='+this.state.email)
     .then(res => {
       console.log(res.data);
       if(this.validateCredentials(res.data)){
-        this.props.navigation.navigate('my_profile');
+        console.log(res.data.type);
+        this.setState({type:res.data.type});
+        this.props.navigation.navigate('my_profile',{user: this.state});
       }
     })
     .catch(err => {
@@ -51,7 +54,8 @@ export default class login_screen extends Component {
   }
 
   onRegister = (viewId) => {
-    this.props.navigation.navigate('register_screen');
+
+    this.props.navigation.navigate('register_screen', );
   }
 
   render() {

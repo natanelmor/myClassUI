@@ -3,7 +3,7 @@ import {View , Text} from 'react-native';
 import axios from 'axios';
 import ClassButton from '../components/ClassButton';
 
-class ClassesList extends Component {
+class AllClassesList extends Component {
     constructor(props) {
         super(props);
     this.state ={classes:[]};
@@ -11,17 +11,13 @@ class ClassesList extends Component {
     }
     
     componentWillMount(){
-        console.log(this.props.user);
-        axios.get('https://2c1b4030.ngrok.io/classesOfUser?email='+this.props.user.email)
+        axios.get('https://2c1b4030.ngrok.io/classes')
         .then(response => {
             console.log('response.data:    ',response.data);
             this.setState({classes: response.data});
-            console.log('this.state.classes:    ',this.state.classes);
         }
         );
 
-            
-            
     }
 
     renderClasses(){
@@ -46,4 +42,4 @@ class ClassesList extends Component {
     }
 }
 
-export default ClassesList;
+export default AllClassesList;

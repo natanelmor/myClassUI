@@ -1,22 +1,44 @@
-import React from 'react';
+import React, {Component}  from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import{Feather} from '@expo/vector-icons';
 import {withNavigation} from 'react-navigation';
 
-const AddClassButton = ({navigation})=> {
-    return (
-        <View style={styles.container}>
-            <TouchableOpacity 
-            style={styles.touchOp} 
-            onPress ={() => navigation.navigate('add_class') }>
-                <Feather name ="plus"/>
-                <Text> add class </Text>
-            </TouchableOpacity>  
-                
-                
+const navigationPage= '';
 
-        </View>
-        );
+class AddClassButton extends Component {
+    constructor(props) {
+        super(props);
+    this.state ={};
+
+    }
+    
+
+    navigateAddClassByType(){
+        console.log('navigateAddClassByType: ');
+        if(this.props.user.type=='Student'){
+            this.props.navigation.navigate('add_class_student') ;
+        }
+        else if(this.props.user.type=='Teacher'){
+            this.props.navigation.navigate('add_class_teacher') ;
+        }
+
+
+    };
+
+    render(){
+        //{this.navigateAddClassByType()}
+        return (
+            <View style={styles.container}>
+                
+                <TouchableOpacity 
+                style={styles.touchOp} 
+                onPress ={() => this.navigateAddClassByType()}>
+                    <Feather name ="plus"/>
+                    <Text> add class </Text>
+                </TouchableOpacity>  
+            </View>
+            );
+    }
 };  
 
 const styles = StyleSheet.create({

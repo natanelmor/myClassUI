@@ -8,13 +8,15 @@ import class_info_screen from './src/screens/class_info_screen';
 import AddClassButton from './src/components/AddClassButton';
 import login_screen from './src/screens/login_screen'; 
 import register_screen from './src/screens/register_screen'; 
+import add_classes_screen_teacher from './src/screens/add_class_screen_teacher';
 
 
 const navigator = createStackNavigator(
   {
     my_profile: my_profile_screen,
     my_classes: my_classes_screen,
-    add_class : add_class_screen_student,
+    add_class_student : add_class_screen_student,
+    add_class_teacher : add_classes_screen_teacher,
     class_info : class_info_screen,
     addClassButton : AddClassButton,
     login_screen: login_screen,

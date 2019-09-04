@@ -4,6 +4,10 @@ import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
 
 
 const my_profile_screen = ({navigation}) => {
+  const passUser = navigation.getParam('user');
+
+
+  console.log('/////////////////////// my porfile'+passUser);
   return (
     <ImageBackground
       source= {require('../../assets/background.jpeg')} 
@@ -11,7 +15,7 @@ const my_profile_screen = ({navigation}) => {
   <View style={styles.container}>
     <Image source={require('../../assets/logo.png')}/>
     <Text style={styles.text}>My Profile</Text>
-    <TouchableOpacity style={styles.touchOp} onPress ={() => navigation.navigate('my_classes') }  >
+    <TouchableOpacity style={styles.touchOp} onPress ={() => navigation.navigate('my_classes',{ user : passUser} ) }  >
       <Text>classes </Text>
     </TouchableOpacity>
   </View>
