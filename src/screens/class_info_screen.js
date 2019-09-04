@@ -67,7 +67,7 @@ export default class class_info_screen extends Component {
                         <View>
                             <Image
                                 style={styles.classIcon}
-                                source={require('../../assets/classIcon.jpeg')}
+                                source={require('../../assets/classIcon.png')}
                             /></View>
                         <View style={{ alignItems: 'flex-start' }}>
                             <Image
@@ -99,7 +99,7 @@ export default class class_info_screen extends Component {
                             keyExtractor={(file) => file.id}
                             data={this.state.items}
                             renderItem={({ item }) => {
-                                icon = (item.type) === 'file' ? require('../../assets/fileIcon.jpeg') : require('../../assets/linkIcon.jpeg')
+                                icon = (item.type) === 'file' ? require('../../assets/fileIcon.png') : require('../../assets/linkIcon.png')
                                 return (
                                     <View style={{ height: 75, width: 75 }}>
                                         <TouchableOpacity>
@@ -125,7 +125,7 @@ export default class class_info_screen extends Component {
                                 <View>
                                     <Image
                                         style={styles.classIcon}
-                                        source={require('../../assets/credit-kahoot.jpeg')}
+                                        source={require('../../assets/credit-kahoot.png')}
                                     />
                                 </View>
                             </TouchableOpacity></View>
@@ -134,7 +134,7 @@ export default class class_info_screen extends Component {
                                 <View>
                                     <Image
                                         style={styles.classIcon}
-                                        source={require('../../assets/grades-icon.jpeg')}
+                                        source={require('../../assets/grades-icon.png')}
                                     />
                                 </View>
                             </TouchableOpacity></View>
@@ -160,7 +160,7 @@ export default class class_info_screen extends Component {
                                         <View style={styles.container}>
                                             <Image
                                                 style={styles.userIcon}
-                                                source={require('../../assets/user.jpeg')}
+                                                source={require('../../assets/user.png')}
                                             /></View>
                                         <Text style={styles.textStyle}>{item.name}</Text></View>
                                 );
