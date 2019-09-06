@@ -9,7 +9,7 @@ const Participants = (props) => {
             </View>
             <View>
                 <FlatList
-                    keyExtractor={(student) => student.name}
+                    keyExtractor={(student) => student}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     data={props.data}
@@ -21,7 +21,7 @@ const Participants = (props) => {
                                         style={styles.userIcon}
                                         source={require('../../assets/user.png')}
                                     /></View>
-                                <Text style={styles.nameStyle}>{item.name}</Text></View>
+                                <Text style={styles.nameStyle}>{item}</Text></View>
                         );
                     }}
                 />

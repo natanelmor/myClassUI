@@ -22,10 +22,11 @@ class ClassesList extends Component {
 
     renderClasses(){
         console.log('renderClasses');
+        //console.log(this.state.classes[0].id);
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
-                myclass={myclass} />)
+                myclass={myclass} user={this.props.user} />)
         )
     }
 

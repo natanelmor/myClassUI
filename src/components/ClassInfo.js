@@ -4,22 +4,15 @@ import { View, Image, StyleSheet, Text } from 'react-native';
 const ClassInfo = (props) => {
     return (
         <View style={styles.container} >
-            <View>
-                <Image
-                    style={styles.classIcon}
-                    source={require('../../assets/classIcon.png')}
-                /></View>
-            <View style={{ alignItems: 'flex-start' }}>
+            <View style={{ alignItems: 'center' }}>
                 <Image
                     style={styles.userIcon}
-                    source={props.icon}
+                    source={{uri: props.icon}}
                 />
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.name}</Text>
                 <Text>Time: {props.time}</Text>
-                <Text>Location:</Text>
-                <Text>{props.location}</Text>
-                <Text>Teacher:</Text>
-                <Text>{props.teacher}</Text>
+                <Text>Location: {props.location}</Text>
+                <Text>Teacher: {props.teacher}</Text>
             </View>
         </View>
     )
