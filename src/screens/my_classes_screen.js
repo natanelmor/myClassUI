@@ -1,13 +1,11 @@
 import React from 'react';
-import {Text, StyleSheet, View, ImageBackground } from 'react-native';
-import ClassButton from '../components/ClassButton';
+import {StyleSheet, View, ImageBackground } from 'react-native';
 import AddClassButton from '../components/AddClassButton';
 import ClassesList from '../components/ClassesList';
 
 
 const my_classes_screen = ({navigation}) => {
     const passUser = navigation.getParam('user');
-    console.log('/////////////////////// my classes'+passUser);
 
     return (
         <ImageBackground

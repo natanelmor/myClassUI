@@ -37,11 +37,9 @@ export default class login_screen extends Component {
 
     axios.get('https://myclass-backend.herokuapp.com/user?email='+this.state.email)
     .then(res => {
-      console.log(res.data);
       if(this.validateCredentials(res.data)){
-        console.log(res.data.type);
         this.setState({type:res.data.type});
-        this.props.navigation.navigate('my_profile',{user: this.state});
+        this.props.navigation.navigate('my_profile',{user: res.data});
       }
     })
     .catch(err => {

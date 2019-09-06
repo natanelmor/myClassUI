@@ -1,7 +1,8 @@
 import React, {Component}  from 'react';
-import {View , Text} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import axios from 'axios';
 import ClassButton from '../components/ClassButton';
+import { ScrollView } from 'react-native-gesture-handler';
 
 class ClassesList extends Component {
     constructor(props) {
@@ -14,14 +15,11 @@ class ClassesList extends Component {
         console.log(this.props.user);
         axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
         .then(response => {
-            console.log('response.data:    ',response.data);
             this.setState({classes: response.data});
-            console.log('this.state.classes:    ',this.state.classes);
         });
     }
 
     renderClasses(){
-        console.log('renderClasses');
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
@@ -29,17 +27,22 @@ class ClassesList extends Component {
         )
     }
 
-
     render(){
-        console.log('render :    ',this.state.classes)
-
         return (
-            <View>
+            <View style={styles.classes}>
                 {this.renderClasses()}
             </View>
 
         );
     }
 }
+
+const styles = StyleSheet.create({
+    classes: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        flexWrap: 'wrap'
+      }
+});
 
 export default ClassesList;
