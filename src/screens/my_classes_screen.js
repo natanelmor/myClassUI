@@ -7,6 +7,7 @@ import ClassesList from '../components/ClassesList';
 const my_classes_screen = ({navigation}) => {
     const passUser = navigation.getParam('user');
 
+
     return (
         <ImageBackground
       source= {require('../../assets/background.jpeg')} 

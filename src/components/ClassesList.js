@@ -23,11 +23,13 @@ class ClassesList extends Component {
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
-                myclass={myclass} user={this.props.user} />)
+                myclass={myclass} user={this.props.user}
+                nextPage= 'class_info' />)
         )
     }
 
     render(){
+
         return (
             <View style={styles.classes}>
                 {this.renderClasses()}

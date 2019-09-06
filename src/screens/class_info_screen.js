@@ -74,7 +74,7 @@ export default class class_info_screen extends Component {
                 { subject: 'Literature2', grade: '82' },
                 { subject: 'Sport2', grade: '100' },
             ],
-            quizes: 'https://play.kahoot.it/v2/lobby?quizId=ff490155-b7f8-40cc-92b3-4243b6b9487f',
+            quizes: 'https://create.kahoot.it/share/sport-class/6e43fa4e-499f-48a7-80a2-383cb0e064a3',
             modalVisible: false,
         }
     }
