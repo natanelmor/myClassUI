@@ -23,7 +23,7 @@ class ClassesList extends Component {
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
-                myclass={myclass} />)
+                myclass={myclass} user={this.props.user} />)
         )
     }
 

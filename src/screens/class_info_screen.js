@@ -1,15 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, userState } from 'react';
 import {
+    SafeAreaView,
     StyleSheet,
     ScrollView,
     View,
     Text,
+    TextInput,
+    StatusBar,
+    Button,
     TouchableOpacity,
     Image,
-    ImageBackground,
-    TouchableHighlight
+    FlatList,
+    ImageBackground,	    
+    TouchableHighlight,
+    AppState,
 } from 'react-native';
 import { Linking } from 'expo';
+import axios from 'axios';
 import Modal from 'react-native-modal';
 import DisplayGrade from '../components/DisplayGrade';
 import ClassInfo from '../components/ClassInfo';
@@ -17,36 +24,31 @@ import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
 import Participants from '../components/Participants';
 
-
 export default class class_info_screen extends Component {
 
     constructor(props) {
         super(props);
 
+       // console.log(this.props.navigation.getParam('user'))
         this.state = {
+           // user : this.props.navigation.getParam('user'),
+           // id : this.props.navigation.getParam('key'),
+            appState: AppState.currentState,
+            totalTime: null,
+            start: null,
             messages: [
                 { content: 'Welcome!' },
                 { content: 'Education is the movement from darkness to light.\n ~Allan Bloom~' },
                 { content: 'I wish you to be inspired by the school,  \n \n to explore things with curiosity and the eyes wide open, \n \n to listen attentively and then you will discover a whole new world!' },
                 { content: 'Be successful and have a lot fun at school!' },
             ],
-            participants: [
-                { name: 'student #1' },
-                { name: 'student #2' },
-                { name: 'student #3' },
-                { name: 'student #4' },
-                { name: 'student #5' },
-                { name: 'student #6' },
-                { name: 'student #7' },
-                { name: 'student #8' },
-                { name: 'student #9' },
-            ],
-            name: 'Science',
-            icon: require('../../assets/science.jpg'),
-            id: '1111',
-            teacher: 'classTeacher',
-            time: 'Sun, 9:00',
-            location: 'classLocation',
+            participants: [],
+            name: null,
+            icon: null,
+            id: null,
+            teacher: null,
+            time: null,
+            location: null,
             items: [
                 { id: '1', type: 'file', source: '', name: 'File' },
                 { id: '2', type: 'file', source: '', name: 'File' },
@@ -74,11 +76,51 @@ export default class class_info_screen extends Component {
             ],
             quizes: 'https://play.kahoot.it/v2/lobby?quizId=ff490155-b7f8-40cc-92b3-4243b6b9487f',
             modalVisible: false,
-
         }
     }
 
-    setModalVisible(visible) {
+    componentWillMount() {
+        AppState.addEventListener('change', this._handleAppStateChange);
+        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
+        .then(res => {
+            this.setState({
+                name: res.data.name,
+                teacher: res.data.teacher,
+                time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                location: res.data.location,
+                icon: res.data.icon,
+                participants: res.data.students
+            });
+        console.log(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+     }
+    
+    
+      componentWillUnmount() {
+        AppState.removeEventListener('change', this._handleAppStateChange);
+      }
+    
+      _handleAppStateChange = (nextAppState) => {
+        let newtime = null;
+        if (
+          this.state.appState.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+            this.setState({start: Date.now()});
+            console.log('App has come to the foreground!');
+        }
+        else{
+           newtime = (Date.now() -  this.state.start) + this.state.totalTime ;
+           this.setState({totalTime: newtime});
+            console.log('App has come to the background!');
+        }
+        this.setState({appState: nextAppState});
+        console.log(this.state.totalTime);
+      };
+      setModalVisible(visible) {
         this.setState({ modalVisible: visible });
     }
 
@@ -97,7 +139,7 @@ export default class class_info_screen extends Component {
         return (
             <ClassInfo
                 icon={this.state.icon}
-                classIcon={require('../../assets/classIcon.png')}
+                classIcon={this.state.icon}
                 name={this.state.name}
                 time={this.state.time}
                 location={this.state.location}

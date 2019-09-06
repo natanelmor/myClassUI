@@ -19,11 +19,13 @@ const navigator = createStackNavigator(
     addClassButton : AddClassButton,
     login_screen: login_screen,
     register_screen: register_screen,
+    //app_state_screen : app_state_screen
   },
   {
     initialRouteName: 'login_screen',
     defaultNavigationOptions: {
-      header:null
+      title : 'check'
+      //header:null
     }
   }
 );
