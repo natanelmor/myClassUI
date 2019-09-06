@@ -39,7 +39,7 @@ class add_classes_screen_teacher extends Component {
       //icon: this.state.icon,
     };
 
-    axios.post('https://2c1b4030.ngrok.io/class',  newClass)
+    axios.post('https://myclass-backend.herokuapp.com/class',  newClass)
     .catch((err) => {
       console.log(err);
     });

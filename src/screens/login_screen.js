@@ -35,7 +35,7 @@ export default class login_screen extends Component {
       password: this.state.password
     }
 
-    axios.get('https://2c1b4030.ngrok.io/user?email='+this.state.email)
+    axios.get('https://myclass-backend.herokuapp.com/user?email='+this.state.email)
     .then(res => {
       console.log(res.data);
       if(this.validateCredentials(res.data)){

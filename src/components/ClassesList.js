@@ -12,16 +12,12 @@ class ClassesList extends Component {
     
     componentWillMount(){
         console.log(this.props.user);
-        axios.get('https://2c1b4030.ngrok.io/classesOfUser?email='+this.props.user.email)
+        axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
         .then(response => {
             console.log('response.data:    ',response.data);
             this.setState({classes: response.data});
             console.log('this.state.classes:    ',this.state.classes);
-        }
-        );
-
-            
-            
+        });
     }
 
     renderClasses(){

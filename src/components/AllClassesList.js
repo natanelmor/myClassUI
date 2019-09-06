@@ -11,7 +11,7 @@ class AllClassesList extends Component {
     }
     
     componentWillMount(){
-        axios.get('https://2c1b4030.ngrok.io/classes')
+        axios.get('https://myclass-backend.herokuapp.com/classes')
         .then(response => {
             console.log('response.data:    ',response.data);
             this.setState({classes: response.data});
