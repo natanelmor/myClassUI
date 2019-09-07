@@ -27,8 +27,8 @@ const navigator = createStackNavigator(
   {
     initialRouteName: 'login_screen',
     defaultNavigationOptions: {
-      title : 'check'
-      //header:null
+      //title : 'check'
+      header:null
     }
   }
 );

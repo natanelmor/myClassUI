@@ -45,7 +45,6 @@ export default class class_register_screen extends Component {
             teacher: null,
             time: null,
             location: null,
-        
             modalVisible: false,
         }
     }
@@ -55,12 +54,14 @@ export default class class_register_screen extends Component {
         axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
         .then(res => {
             this.setState({
+                class : res.data, 
+                id: this.props.navigation.getParam('key'), 
                 name: res.data.name,
                 teacher: res.data.teacher,
                 time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
                 location: res.data.location,
                 icon: res.data.icon,
-                participants: res.data.students
+                
             });
         console.log(res.data);
         })
@@ -75,9 +76,19 @@ export default class class_register_screen extends Component {
     }
     
     register(){
-       // axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.props.user.email)
+       
+        user.classes.push(this.state.id);
+        axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
+        passClass = this.state.class;
+        passClass.students.push(user.email);
 
-        console.log( 'register: ' + this.user);
+        //this.setState({class : this.state.class.participants.push(user.email)});
+
+        console.log(this.state.participants);
+        axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
+
+        this.props.navigation.navigate('my_profile',{user: user});
+        
     }
 
     renderRegisterPopUp() {

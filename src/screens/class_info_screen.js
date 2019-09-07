@@ -30,8 +30,11 @@ export default class class_info_screen extends Component {
         super(props);
 
         this.state = {
+<<<<<<< HEAD
             // user : this.props.navigation.getParam('user'),
             // id : this.props.navigation.getParam('key'),
+=======
+>>>>>>> d35d820edee0e411a3ececf8b73ea6b447d5d464
             appState: AppState.currentState,
             totalTime: null,
             start: null,
@@ -57,21 +60,9 @@ export default class class_info_screen extends Component {
                 { id: '6', type: 'link', source: '', name: 'Link' },
                 { id: '7', type: 'file', source: '', name: 'File' },
                 { id: '8', type: 'file', source: '', name: 'File' },
-                { id: '9', type: 'link', source: '', name: 'Link' },
             ],
             grades: [
                 { subject: 'Math', grade: '91' },
-                { subject: 'Science', grade: '90' },
-                { subject: 'Literature', grade: '82' },
-                { subject: 'Sport', grade: '100' },
-                { subject: 'Math1', grade: '91' },
-                { subject: 'Science1', grade: '90' },
-                { subject: 'Literature1', grade: '82' },
-                { subject: 'Sport1', grade: '100' },
-                { subject: 'Math2', grade: '91' },
-                { subject: 'Science2', grade: '90' },
-                { subject: 'Literature2', grade: '82' },
-                { subject: 'Sport2', grade: '100' },
             ],
             quizes: 'https://create.kahoot.it/share/sport-class/6e43fa4e-499f-48a7-80a2-383cb0e064a3',
             modalVisible: false,
@@ -94,9 +85,20 @@ export default class class_info_screen extends Component {
             .catch(err => {
                 console.log(err);
             });
+<<<<<<< HEAD
     }
 
 
+=======
+    })
+    .catch(err => {
+      console.log(err);
+    });
+        const user = this.props.navigation.getParam('user')
+    }
+    
+    
+>>>>>>> d35d820edee0e411a3ececf8b73ea6b447d5d464
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
     }
