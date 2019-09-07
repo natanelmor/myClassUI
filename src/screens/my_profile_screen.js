@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
 
   container: {
     alignItems: 'center',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    top: 20
   }
 });

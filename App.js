@@ -8,6 +8,8 @@ import login_screen from './src/screens/login_screen';
 import register_screen from './src/screens/register_screen'; 
 import add_classes_screen_teacher from './src/screens/add_class_screen_teacher';
 import class_register_screen from './src/screens/class_register_screen'
+import QuizIndex from "./src/screens/QuizIndex";
+import Quiz from "./src/screens/Quiz";
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
 
@@ -21,8 +23,24 @@ const navigator = createStackNavigator(
     addClassButton : AddClassButton,
     login_screen: login_screen,
     register_screen: register_screen,
-    //app_state_screen : app_state_screen
-    class_register: class_register_screen
+    class_register: class_register_screen,
+    QuizIndex: {
+      screen: QuizIndex,
+      navigationOptions: {
+        headerTitle: "Quizzes"
+      }
+    },
+    Quiz: {
+      screen: Quiz,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: navigation.getParam("title"),
+        headerTintColor: "#fff",
+        headerStyle: {
+          backgroundColor: navigation.getParam("color"),
+          borderBottomColor: navigation.getParam("color")
+        }
+      })
+    }
   },
   {
     initialRouteName: 'login_screen',

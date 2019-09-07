@@ -28,9 +28,6 @@ const Messages = (props) => {
 const styles = StyleSheet.create({
     containerMessages: {
         height: 180,
-        borderWidth: 4,
-        borderColor: 'black',
-        borderRadius: 5
     },
     messageInput: {
         flex: 1,

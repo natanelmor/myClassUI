@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         flexDirection: 'column',
+        top: 20,
        // backgroundColor : '../../assets/green-school-board-background.jpg',
     },
 

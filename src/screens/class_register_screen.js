@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        top: 20,
     },
     userIcon: {
         width: 50,

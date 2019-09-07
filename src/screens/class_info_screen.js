@@ -13,8 +13,12 @@ import {
     FlatList,
     ImageBackground,
     TouchableHighlight,
-    AppState,
+    AppState
 } from 'react-native';
+import spaceQuestions from "../data/space";
+import westernsQuestions from "../data/westerns";
+import computerQuestions from "../data/computers";
+import { RowItem } from "../components/RowItem";
 import { Linking } from 'expo';
 import axios from 'axios';
 import Modal from 'react-native-modal';
@@ -31,8 +35,10 @@ export default class class_info_screen extends Component {
 
         this.state = {
             appState: AppState.currentState,
-            totalTime: null,
-            start: null,
+            totalTime: 0,
+            start: 0,
+            timer: null,
+            startDisable: false,
             messages: [
                 { content: 'Welcome!' },
                 { content: 'Education is the movement from darkness to light.\n ~Allan Bloom~' },
@@ -59,12 +65,13 @@ export default class class_info_screen extends Component {
             grades: [
                 { subject: 'Math', grade: '91' },
             ],
-            quizes: 'https://create.kahoot.it/share/sport-class/6e43fa4e-499f-48a7-80a2-383cb0e064a3',
             modalVisible: false,
+            startAttendance: false,
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
         axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.props.navigation.getParam('key'))
             .then(res => {
@@ -84,208 +91,228 @@ export default class class_info_screen extends Component {
     }
     
     componentWillUnmount() {
-                    AppState.removeEventListener('change', this._handleAppStateChange);
-                }
-
+        AppState.removeEventListener('change', this._handleAppStateChange);
+    }
+    
     _handleAppStateChange = (nextAppState) => {
-                    let newtime = null;
-                    if (
-                        this.state.appState.match(/inactive|background/) &&
-                        nextAppState === 'active'
-                    ) {
-                        this.setState({ start: Date.now() });
-                    }
-                    else {
-                        newtime = (Date.now() - this.state.start) + this.state.totalTime;
-                        this.setState({ totalTime: newtime });
-                    }
-                    this.setState({ appState: nextAppState });
-                };
-        setModalVisible(visible) {
-            this.setState({ modalVisible: visible });
-        }
-
-        renderGrades() {
-            return (
-                this.state.grades.map(grades =>
-                    <DisplayGrade
-                        key={grades.subject}
-                        grades={grades}
-                    />
-                )
-            )
-        }
-
-        renderClassInfo() {
-            return (
-                <ClassInfo
-                    icon={this.state.icon}
-                    classIcon={this.state.icon}
-                    name={this.state.name}
-                    time={this.state.time}
-                    location={this.state.location}
-                    teacher={this.state.teacher}
-                />
-            )
-        }
-
-        renderMessages() {
-            return (
-                <Messages
-                    messages={this.state.messages}
-                />
-            )
-        }
-
-        renderResources() {
-            return (
-                <ResourceFiles
-                    data={this.state.items}
-                />
-            )
-        }
-
-        renderParticipants() {
-            return (
-                <Participants
-                    data={this.state.participants}
-                />
-            )
-        }
-
-        render() {
-            return (
-                <ImageBackground
-                    source={require('../../assets/background.jpeg')}
-                    style={{ width: '100%', height: '100%' }}>
-                    <View>
-                        <ScrollView
-                            showsVerticalScrollIndicator={false}
-                        >
-                            <View>{this.renderClassInfo()}</View>
-                            <View>{this.renderMessages()}</View>
-                            <View>{this.renderResources()}</View>
-
-                            <View style={{ flexDirection: 'row', }}>
-                                <View style={{ flex: 1, alignSelf: 'flex-start' }}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            Linking.openURL(this.state.quizes).catch((err) => console.error('An error occurred', err));
-                                        }}>
-                                        <View>
-                                            <Image
-                                                style={styles.classIcon}
-                                                source={require('../../assets/credit-kahoot.png')}
-                                            />
-                                        </View>
-                                    </TouchableOpacity></View>
-
-                                <View style={{ flex: 1, alignSelf: 'flex-end' }}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            this.setModalVisible(!this.state.modalVisible);
-                                        }}
-                                    >
-                                        <View>
-                                            <Image
-                                                style={styles.classIcon}
-                                                source={require('../../assets/grades-icon.png')}
-                                            />
-                                        </View>
-                                    </TouchableOpacity></View>
-                            </View>
-
-                            <View style={{ flex: 1 }}>
-
-                                <Modal
-                                    scroll inside the modal
-                                    isVisible={this.state.modalVisible}
-                                >
-                                    <View style={{
-                                        backgroundColor: '#f0f8ff', borderRadius: 15,
-                                        height: 500
-                                    }}>
-
-                                        <View style={styles.headerStyle}>
-                                            <Text style={styles.headerTextStyle}>Grades</Text>
-                                        </View>
-                                        <ScrollView
-                                            showsVerticalScrollIndicator={false}
-                                            nestedScrollEnabled
-                                        >
-                                            <View>
-                                                {this.renderGrades()}
-                                            </View>
-                                        </ScrollView>
-                                        <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
-                                            <TouchableHighlight
-                                                style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                                onPress={() => {
-                                                    this.setModalVisible(!this.state.modalVisible);
-                                                }}>
-                                                <Text style={{ fontSize: 18 }}>Close</Text>
-                                            </TouchableHighlight></View>
-
-                                    </View>
-                                </Modal>
-                            </View>
-
-                            <View>{this.renderParticipants()}</View>
-                        </ScrollView>
-                    </View >
-                </ImageBackground >
-            );
-        }
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+        this.stopTimer();
+    }
+    else{
+        this.startTimer();
+    }
+    this.setState({appState: nextAppState});
     }
 
-    const styles = StyleSheet.create({
-        textStyle: {
-            marginHorizontal: 15,
-            fontSize: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: 'blue'
-        },
-        containerFiles: {
-            justifyContent: 'center',
-            alignItems: 'center'
-        },
-        containerMessages: {
-            height: 180,
-            borderWidth: 4,
-            borderColor: 'black',
-            borderRadius: 5
-        },
-        messageInput: {
-            flex: 1,
-            margin: 10,
-            height: 180
-        },
-        container: {
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row'
-        },
-        userIcon: {
-            width: 50,
-            height: 50,
-            justifyContent: 'center'
-        },
-        classIcon: {
-            width: 200,
-            height: 200
-        },
-        headerTextStyle: {
-            marginHorizontal: 15,
-            fontSize: 25,
-            justifyContent: 'center',
-            alignItems: 'center',
-            color: '#fff8dc',
-            fontWeight: 'bold'
-        },
-        headerStyle: {
-            backgroundColor: '#696969',
-            borderRadius: 15,
-            marginBottom: 5
-        },
-    });
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+
+    setStartAttendanceVisible(visible) {
+        this.setState({ startAttendance: visible });
+    }
+
+    
+startTimer(){
+
+    let timer = setInterval(() => {
+      this.setState({
+        start : this.state.start +1
+      });
+    }, 1000);
+    this.setState({timer})
+    this.setState({startDisable : true})
+    console.log("start: ", this.getTimeString(this.state.totalTime))
+  }
+
+
+stopTimer(){
+    this.setState({
+        totalTime : this.state.start + this.state.totalTime,
+        start : 0,
+        startDisable : false
+      });
+    clearInterval(this.state.timer);
+    console.log("stop: ", this.getTimeString(this.state.totalTime))
+}
+
+
+   getTimeString(timeInSec) {
+        var delim = ":";
+        var hours = Math.floor(timeInSec / (60 * 60) % 60);
+        var minutes = Math.floor(timeInSec / (60) % 60);
+        var seconds = Math.floor(timeInSec % 60);
+      
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        return hours + delim + minutes + delim + seconds;
+    }
+
+    renderGrades() {
+        return (
+            this.state.grades.map(grades =>
+                <DisplayGrade
+                    key={grades.subject}
+                    grades={grades}/>
+        ))}
+
+    renderClassInfo() {
+        return (
+            <ClassInfo
+                icon={this.state.icon}
+                classIcon={this.state.icon}
+                name={this.state.name}
+                time={this.state.time}
+                location={this.state.location}
+                teacher={this.state.teacher}/>
+        )}
+
+    renderMessages() {
+        return (
+            <Messages messages={this.state.messages}/>)
+    }
+
+    renderResources() {
+        return (
+            <ResourceFiles data={this.state.items}/>)
+    }
+
+    renderParticipants() {
+        return (
+            <Participants data={this.state.participants}/>)
+    }
+
+    render() {
+        return (
+            <ImageBackground
+                source={require('../../assets/background.jpeg')}
+                style={{ width: '100%', height: '100%' }}>
+                <View>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        <View>{this.renderClassInfo()}</View>
+                        <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
+                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' ,{id: this.props.navigation.getParam('key'), user : this.props.navigation.getParam('user')})}>
+                                <View>
+                                     <Image
+                                            style={styles.classIcon}
+                                            source={{uri: 'https://cdn3.iconfinder.com/data/icons/quiz/96/quiz_09-512.png'}}/>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
+                                    <View>
+                                        <Image
+                                            style={styles.classIcon}
+                                            source={require('../../assets/grades-icon.png')}/>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
+                                <View>
+                                     <Image
+                                            style={styles.classIcon}
+                                            source={{uri: 'https://icon-library.net/images/student-attendance-icon/student-attendance-icon-2.jpg'}}/>
+                                    </View>
+                                </TouchableOpacity>
+                        </View>
+                        <View>{this.renderMessages()}</View>
+                        <View>{this.renderResources()}</View>
+                        <View>{this.renderParticipants()}</View>
+                        <View style={{ flex: 1 }}>
+                            <Modal
+                                scroll inside the modal
+                                isVisible={this.state.modalVisible}>
+                                <View style={{
+                                    backgroundColor: '#f0f8ff', borderRadius: 15,
+                                    height: 500}}>
+                                    <View style={styles.headerStyle}>
+                                        <Text style={styles.headerTextStyle}>Grades</Text>
+                                    </View>
+                                    <ScrollView
+                                        showsVerticalScrollIndicator={false}
+                                        nestedScrollEnabled>
+                                        <View>
+                                            {this.renderGrades()}
+                                        </View>
+                                    </ScrollView>
+                                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
+                                        <TouchableHighlight
+                                            style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                            onPress={() => {
+                                                this.setModalVisible(!this.state.modalVisible);
+                                            }}>
+                                            <Text style={{ fontSize: 18 }}>Close</Text>
+                                        </TouchableHighlight></View>
+                                </View>
+                            </Modal>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Modal scroll inside the modal isVisible={this.state.startAttendance}>
+                                <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500}}>
+                                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
+                                    <Text style={{ fontSize: 18 }}>Time in class: {this.getTimeString(this.state.totalTime)}</Text>
+                                        <TouchableHighlight
+                                            style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                            onPress={() => {this.setStartAttendanceVisible(!this.state.startAttendance);}}>
+                                           <Text style={{ fontSize: 18 }}>Close</Text>
+                                        </TouchableHighlight></View>
+                                </View>
+                            </Modal>
+                        </View>
+                    </ScrollView>
+                </View >
+            </ImageBackground >
+        );
+    }
+}
+const styles = StyleSheet.create({
+    textStyle: {
+        marginHorizontal: 15,
+        fontSize: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'blue'
+    },
+    containerFiles: {
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    containerMessages: {
+        height: 180,
+        borderWidth: 4,
+        borderColor: 'black',
+        borderRadius: 5
+    },
+    messageInput: {
+        flex: 1,
+        margin: 10,
+        height: 180
+    },
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        top: 20
+    },
+    userIcon: {
+        width: 50,
+        height: 50,
+        justifyContent: 'center'
+    },
+    classIcon: {
+        width: 70,
+        height: 70
+    },
+    headerTextStyle: {
+        marginHorizontal: 15,
+        fontSize: 25,
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: '#fff8dc',
+        fontWeight: 'bold'
+    },
+    headerStyle: {
+        backgroundColor: '#696969',
+        borderRadius: 15,
+    },
+});

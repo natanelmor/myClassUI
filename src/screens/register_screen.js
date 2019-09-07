@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#DCDCDC',
+    top: 20
   },
   inputContainer: {
       borderBottomColor: '#F5FCFF',
