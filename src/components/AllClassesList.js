@@ -23,7 +23,8 @@ class AllClassesList extends Component {
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
-                myclass={myclass} />)
+                myclass={myclass}
+                nextPage= 'class_register' />)
         )
     }
 

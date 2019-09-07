@@ -25,7 +25,6 @@ class AddClassButton extends Component {
     };
 
     render(){
-        //{this.navigateAddClassByType()}
         return (
             <View style={styles.container}>
                 
