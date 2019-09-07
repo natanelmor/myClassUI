@@ -1,18 +1,14 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
 
-const ClassInfo = (props) => {
+const UserInfo = (props) => {
     return (
         <View style={styles.container} >
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'flex-start' }}>
                 <Image
                     style={styles.userIcon}
-                    source={{uri: props.icon}}
-                />
-                <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.name}</Text>
-                <Text>Time: {props.time}</Text>
-                <Text>Location: {props.location}</Text>
-                <Text>Teacher: {props.teacher}</Text>
+                    source={{uri: props.picture}}/>
+                <Text>Your upcoming class is {props.className}, at {props.classLocation} {props.classTime}.</Text>
             </View>
         </View>
     )
@@ -21,15 +17,13 @@ const ClassInfo = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        alignItems: 'center',
         flexDirection: 'row',
         marginTop: 10
     },
     userIcon: {
         width: 50,
         height: 50,
-        justifyContent: 'center'
+        justifyContent: 'flew-start'
     },
     classIcon: {
         width: 200,

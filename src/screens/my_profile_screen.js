@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, ImageBackground, Image } from 'react-native';
-import userInfo from '../components/userInfo';
-import { ScrollView } from 'react-native-gesture-handler';
-import { userInfo } from 'os';
+import { Text, StyleSheet, View, ScrollView, ImageBackground, Image } from 'react-native';
+import axios from 'axios';
+import ClassesList from '../components/ClassesList';
+import AddClassButton from '../components/AddClassButton';
 
 export default class my_profile_screen extends Component {
-  days = {
-    1: "Monday",
-    2: "Tuesday",
-    3: "Wednesday",
-    4: "Thursday",
-    5: "Friday",
-    6: "Saturday",
-    7: "Sunday"
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -35,8 +26,6 @@ export default class my_profile_screen extends Component {
     return (
       <userInfo
         picture={this.state.user.picture}
-        className={this.state.}
-        classLocation={this.state.}
       />
     )
   }
@@ -56,17 +45,16 @@ export default class my_profile_screen extends Component {
   render() {
     return (
       <ImageBackground
-        source={require('../../assets/background.jpeg')}
-        style={{ width: '100%', height: '100%' }}>
-        <View style={styles.container}>
-          <Image 
-            style={{alignSelf: 'center'}}
-            source={require('../../assets/logo.png')} />
-          <Text style={styles.text}>Hello {this.state.user.name}!</Text>
-          <View>{this.renderUserInfo()}</View>
-          <View>{this.renderJoinClass()}</View>
-          <View>{this.renderMyClasses()}</View>
-        </View>
+        source= {require('../../assets/background.jpeg')} 
+        style={{width:'100%', height:'100%' }}>
+      <View style={styles.container}>
+      <Image source={require('../../assets/logo.png')}/>
+      <Text style={styles.text}>Hello {this.state.user.name}!</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+              <ClassesList user= {this.state.user}/>
+              <AddClassButton user= {this.state.user}/>
+        </ScrollView>
+      </View>
       </ImageBackground>
     )
   };

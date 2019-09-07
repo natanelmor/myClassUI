@@ -30,11 +30,6 @@ export default class class_info_screen extends Component {
         super(props);
 
         this.state = {
-<<<<<<< HEAD
-            // user : this.props.navigation.getParam('user'),
-            // id : this.props.navigation.getParam('key'),
-=======
->>>>>>> d35d820edee0e411a3ececf8b73ea6b447d5d464
             appState: AppState.currentState,
             totalTime: null,
             start: null,
@@ -80,228 +75,217 @@ export default class class_info_screen extends Component {
                     location: res.data.location,
                     icon: res.data.icon,
                     participants: res.data.students
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-<<<<<<< HEAD
-    }
-
-
-=======
-    })
-    .catch(err => {
-      console.log(err);
-    });
-        const user = this.props.navigation.getParam('user')
+                })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                const user = this.props.navigation.getParam('user')
+        });
     }
     
-    
->>>>>>> d35d820edee0e411a3ececf8b73ea6b447d5d464
     componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange);
-    }
+                    AppState.removeEventListener('change', this._handleAppStateChange);
+                }
 
     _handleAppStateChange = (nextAppState) => {
-        let newtime = null;
-        if (
-            this.state.appState.match(/inactive|background/) &&
-            nextAppState === 'active'
-        ) {
-            this.setState({ start: Date.now() });
+                    let newtime = null;
+                    if (
+                        this.state.appState.match(/inactive|background/) &&
+                        nextAppState === 'active'
+                    ) {
+                        this.setState({ start: Date.now() });
+                    }
+                    else {
+                        newtime = (Date.now() - this.state.start) + this.state.totalTime;
+                        this.setState({ totalTime: newtime });
+                    }
+                    this.setState({ appState: nextAppState });
+                };
+        setModalVisible(visible) {
+            this.setState({ modalVisible: visible });
         }
-        else {
-            newtime = (Date.now() - this.state.start) + this.state.totalTime;
-            this.setState({ totalTime: newtime });
-        }
-        this.setState({ appState: nextAppState });
-    };
-    setModalVisible(visible) {
-        this.setState({ modalVisible: visible });
-    }
 
-    renderGrades() {
-        return (
-            this.state.grades.map(grades =>
-                <DisplayGrade
-                    key={grades.subject}
-                    grades={grades}
+        renderGrades() {
+            return (
+                this.state.grades.map(grades =>
+                    <DisplayGrade
+                        key={grades.subject}
+                        grades={grades}
+                    />
+                )
+            )
+        }
+
+        renderClassInfo() {
+            return (
+                <ClassInfo
+                    icon={this.state.icon}
+                    classIcon={this.state.icon}
+                    name={this.state.name}
+                    time={this.state.time}
+                    location={this.state.location}
+                    teacher={this.state.teacher}
                 />
             )
-        )
-    }
+        }
 
-    renderClassInfo() {
-        return (
-            <ClassInfo
-                icon={this.state.icon}
-                classIcon={this.state.icon}
-                name={this.state.name}
-                time={this.state.time}
-                location={this.state.location}
-                teacher={this.state.teacher}
-            />
-        )
-    }
+        renderMessages() {
+            return (
+                <Messages
+                    messages={this.state.messages}
+                />
+            )
+        }
 
-    renderMessages() {
-        return (
-            <Messages
-                messages={this.state.messages}
-            />
-        )
-    }
+        renderResources() {
+            return (
+                <ResourceFiles
+                    data={this.state.items}
+                />
+            )
+        }
 
-    renderResources() {
-        return (
-            <ResourceFiles
-                data={this.state.items}
-            />
-        )
-    }
+        renderParticipants() {
+            return (
+                <Participants
+                    data={this.state.participants}
+                />
+            )
+        }
 
-    renderParticipants() {
-        return (
-            <Participants
-                data={this.state.participants}
-            />
-        )
-    }
+        render() {
+            return (
+                <ImageBackground
+                    source={require('../../assets/background.jpeg')}
+                    style={{ width: '100%', height: '100%' }}>
+                    <View>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                        >
+                            <View>{this.renderClassInfo()}</View>
+                            <View>{this.renderMessages()}</View>
+                            <View>{this.renderResources()}</View>
 
-    render() {
-        return (
-            <ImageBackground
-                source={require('../../assets/background.jpeg')}
-                style={{ width: '100%', height: '100%' }}>
-                <View>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                    >
-                        <View>{this.renderClassInfo()}</View>
-                        <View>{this.renderMessages()}</View>
-                        <View>{this.renderResources()}</View>
+                            <View style={{ flexDirection: 'row', }}>
+                                <View style={{ flex: 1, alignSelf: 'flex-start' }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            Linking.openURL(this.state.quizes).catch((err) => console.error('An error occurred', err));
+                                        }}>
+                                        <View>
+                                            <Image
+                                                style={styles.classIcon}
+                                                source={require('../../assets/credit-kahoot.png')}
+                                            />
+                                        </View>
+                                    </TouchableOpacity></View>
 
-                        <View style={{ flexDirection: 'row', }}>
-                            <View style={{ flex: 1, alignSelf: 'flex-start' }}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        Linking.openURL(this.state.quizes).catch((err) => console.error('An error occurred', err));
-                                    }}>
-                                    <View>
-                                        <Image
-                                            style={styles.classIcon}
-                                            source={require('../../assets/credit-kahoot.png')}
-                                        />
-                                    </View>
-                                </TouchableOpacity></View>
-
-                            <View style={{ flex: 1, alignSelf: 'flex-end' }}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.setModalVisible(!this.state.modalVisible);
-                                    }}
-                                >
-                                    <View>
-                                        <Image
-                                            style={styles.classIcon}
-                                            source={require('../../assets/grades-icon.png')}
-                                        />
-                                    </View>
-                                </TouchableOpacity></View>
-                        </View>
-
-                        <View style={{ flex: 1 }}>
-
-                            <Modal
-                                scroll inside the modal
-                                isVisible={this.state.modalVisible}
-                            >
-                                <View style={{
-                                    backgroundColor: '#f0f8ff', borderRadius: 15,
-                                    height: 500
-                                }}>
-
-                                    <View style={styles.headerStyle}>
-                                        <Text style={styles.headerTextStyle}>Grades</Text>
-                                    </View>
-                                    <ScrollView
-                                        showsVerticalScrollIndicator={false}
-                                        nestedScrollEnabled
+                                <View style={{ flex: 1, alignSelf: 'flex-end' }}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.setModalVisible(!this.state.modalVisible);
+                                        }}
                                     >
                                         <View>
-                                            {this.renderGrades()}
+                                            <Image
+                                                style={styles.classIcon}
+                                                source={require('../../assets/grades-icon.png')}
+                                            />
                                         </View>
-                                    </ScrollView>
-                                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
-                                        <TouchableHighlight
-                                            style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                            onPress={() => {
-                                                this.setModalVisible(!this.state.modalVisible);
-                                            }}>
-                                            <Text style={{ fontSize: 18 }}>Close</Text>
-                                        </TouchableHighlight></View>
+                                    </TouchableOpacity></View>
+                            </View>
 
-                                </View>
-                            </Modal>
-                        </View>
+                            <View style={{ flex: 1 }}>
 
-                        <View>{this.renderParticipants()}</View>
-                    </ScrollView>
-                </View >
-            </ImageBackground >
-        );
+                                <Modal
+                                    scroll inside the modal
+                                    isVisible={this.state.modalVisible}
+                                >
+                                    <View style={{
+                                        backgroundColor: '#f0f8ff', borderRadius: 15,
+                                        height: 500
+                                    }}>
+
+                                        <View style={styles.headerStyle}>
+                                            <Text style={styles.headerTextStyle}>Grades</Text>
+                                        </View>
+                                        <ScrollView
+                                            showsVerticalScrollIndicator={false}
+                                            nestedScrollEnabled
+                                        >
+                                            <View>
+                                                {this.renderGrades()}
+                                            </View>
+                                        </ScrollView>
+                                        <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
+                                            <TouchableHighlight
+                                                style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                                onPress={() => {
+                                                    this.setModalVisible(!this.state.modalVisible);
+                                                }}>
+                                                <Text style={{ fontSize: 18 }}>Close</Text>
+                                            </TouchableHighlight></View>
+
+                                    </View>
+                                </Modal>
+                            </View>
+
+                            <View>{this.renderParticipants()}</View>
+                        </ScrollView>
+                    </View >
+                </ImageBackground >
+            );
+        }
     }
-}
 
-const styles = StyleSheet.create({
-    textStyle: {
-        marginHorizontal: 15,
-        fontSize: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: 'blue'
-    },
-    containerFiles: {
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    containerMessages: {
-        height: 180,
-        borderWidth: 4,
-        borderColor: 'black',
-        borderRadius: 5
-    },
-    messageInput: {
-        flex: 1,
-        margin: 10,
-        height: 180
-    },
-    container: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-    userIcon: {
-        width: 50,
-        height: 50,
-        justifyContent: 'center'
-    },
-    classIcon: {
-        width: 200,
-        height: 200
-    },
-    headerTextStyle: {
-        marginHorizontal: 15,
-        fontSize: 25,
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: '#fff8dc',
-        fontWeight: 'bold'
-    },
-    headerStyle: {
-        backgroundColor: '#696969',
-        borderRadius: 15,
-        marginBottom: 5
-    },
-});
+    const styles = StyleSheet.create({
+        textStyle: {
+            marginHorizontal: 15,
+            fontSize: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: 'blue'
+        },
+        containerFiles: {
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        containerMessages: {
+            height: 180,
+            borderWidth: 4,
+            borderColor: 'black',
+            borderRadius: 5
+        },
+        messageInput: {
+            flex: 1,
+            margin: 10,
+            height: 180
+        },
+        container: {
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
+        },
+        userIcon: {
+            width: 50,
+            height: 50,
+            justifyContent: 'center'
+        },
+        classIcon: {
+            width: 200,
+            height: 200
+        },
+        headerTextStyle: {
+            marginHorizontal: 15,
+            fontSize: 25,
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#fff8dc',
+            fontWeight: 'bold'
+        },
+        headerStyle: {
+            backgroundColor: '#696969',
+            borderRadius: 15,
+            marginBottom: 5
+        },
+    });
