@@ -11,7 +11,7 @@ class AllClassesList extends Component {
     }
     
     componentWillMount(){
-        axios.get('https://myclass-backend.herokuapp.com/classes')
+        axios.get('https://myclass-backend.herokuapp.com/classesUserCanRegister?email='+this.props.user.email)
         .then(response => {
             this.setState({classes: response.data});
         }
@@ -22,7 +22,7 @@ class AllClassesList extends Component {
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
-                myclass={myclass}
+                myclass={myclass} user={this.props.user}
                 nextPage= 'class_register' />)
         )
     }

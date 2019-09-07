@@ -10,14 +10,12 @@ class ClassesList extends Component {
 
     }
     
-    componentWillMount(){
+    renderClasses(){
         axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
         .then(response => {
             this.setState({classes: response.data});
         });
-    }
-
-    renderClasses(){
+        
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}

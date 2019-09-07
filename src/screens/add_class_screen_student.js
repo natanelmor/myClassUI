@@ -4,7 +4,9 @@ import ClassButton from '../components/ClassButton';
 import SearchBar from '../components/SearchBar';
 import AllClassesList from '../components/AllClassesList'
 
-const add_classes_screen_student = () => {
+const add_classes_screen_student = (props) => {
+    const myUser = props.navigation.getParam('user');
+
     const [term, setTerm] = useState('') ;
     const [results , setResults] = useState([]) ;
 
@@ -24,7 +26,7 @@ const add_classes_screen_student = () => {
             <Text>we found {results.length}</Text>
         </View>
         <View style={styles.container}>
-        <AllClassesList/>
+        <AllClassesList user= {myUser}/>
         </View>
         </View>
         );
