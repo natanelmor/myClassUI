@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Image,
     FlatList,
-    ImageBackground,	    
+    ImageBackground,
     TouchableHighlight,
     AppState,
 } from 'react-native';
@@ -30,8 +30,8 @@ export default class class_info_screen extends Component {
         super(props);
 
         this.state = {
-           // user : this.props.navigation.getParam('user'),
-           // id : this.props.navigation.getParam('key'),
+            // user : this.props.navigation.getParam('user'),
+            // id : this.props.navigation.getParam('key'),
             appState: AppState.currentState,
             totalTime: null,
             start: null,
@@ -80,42 +80,42 @@ export default class class_info_screen extends Component {
 
     componentWillMount() {
         AppState.addEventListener('change', this._handleAppStateChange);
-        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
-        .then(res => {
-            this.setState({
-                name: res.data.name,
-                teacher: res.data.teacher,
-                time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
-                location: res.data.location,
-                icon: res.data.icon,
-                participants: res.data.students
+        axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.props.navigation.getParam('key'))
+            .then(res => {
+                this.setState({
+                    name: res.data.name,
+                    teacher: res.data.teacher,
+                    time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                    location: res.data.location,
+                    icon: res.data.icon,
+                    participants: res.data.students
+                });
+            })
+            .catch(err => {
+                console.log(err);
             });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-     }
-    
-    
-      componentWillUnmount() {
+    }
+
+
+    componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
-      }
-    
-      _handleAppStateChange = (nextAppState) => {
+    }
+
+    _handleAppStateChange = (nextAppState) => {
         let newtime = null;
         if (
-          this.state.appState.match(/inactive|background/) &&
-          nextAppState === 'active'
+            this.state.appState.match(/inactive|background/) &&
+            nextAppState === 'active'
         ) {
-            this.setState({start: Date.now()});
+            this.setState({ start: Date.now() });
         }
-        else{
-           newtime = (Date.now() -  this.state.start) + this.state.totalTime ;
-           this.setState({totalTime: newtime});
+        else {
+            newtime = (Date.now() - this.state.start) + this.state.totalTime;
+            this.setState({ totalTime: newtime });
         }
-        this.setState({appState: nextAppState});
-      };
-      setModalVisible(visible) {
+        this.setState({ appState: nextAppState });
+    };
+    setModalVisible(visible) {
         this.setState({ modalVisible: visible });
     }
 
