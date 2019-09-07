@@ -11,7 +11,6 @@ class ClassesList extends Component {
     }
     
     componentWillMount(){
-        console.log(this.props.user);
         axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
         .then(response => {
             this.setState({classes: response.data});
@@ -33,9 +32,7 @@ class ClassesList extends Component {
             <View style={styles.classes}>
                 {this.renderClasses()}
             </View>
-
-        );
-    }
+        );}
 }
 
 const styles = StyleSheet.create({

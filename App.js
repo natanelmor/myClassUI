@@ -8,7 +8,6 @@ import login_screen from './src/screens/login_screen';
 import register_screen from './src/screens/register_screen'; 
 import add_classes_screen_teacher from './src/screens/add_class_screen_teacher';
 import class_register_screen from './src/screens/class_register_screen'
-import Theme from './src/components/Theme'
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
 
@@ -28,8 +27,8 @@ const navigator = createStackNavigator(
   {
     initialRouteName: 'login_screen',
     defaultNavigationOptions: {
-      title : 'check'
-      //header:null
+      //title : 'check'
+      header:null
     }
   }
 );

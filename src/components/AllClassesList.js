@@ -16,7 +16,6 @@ class AllClassesList extends Component {
             this.setState({classes: response.data});
         }
         );
-
     }
 
     renderClasses(){
