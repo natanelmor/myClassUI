@@ -5,7 +5,6 @@ import {withNavigation} from 'react-navigation';
 const ClassButton = (props)=> {
     const {name , icon, id} = props.myclass; 
     var src =icon;
-    console.log(icon);
     return (
         <View style={styles.container}>
             <TouchableOpacity 
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         elevation: 2, 
         justifyContent: 'center',
-
+        flexWrap: 'nowrap'
     },
     container: {
         alignItems: 'center',

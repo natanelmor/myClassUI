@@ -29,7 +29,6 @@ export default class class_info_screen extends Component {
     constructor(props) {
         super(props);
 
-       // console.log(this.props.navigation.getParam('user'))
         this.state = {
            // user : this.props.navigation.getParam('user'),
            // id : this.props.navigation.getParam('key'),
@@ -91,7 +90,6 @@ export default class class_info_screen extends Component {
                 icon: res.data.icon,
                 participants: res.data.students
             });
-        console.log(res.data);
     })
     .catch(err => {
       console.log(err);
@@ -110,15 +108,12 @@ export default class class_info_screen extends Component {
           nextAppState === 'active'
         ) {
             this.setState({start: Date.now()});
-            console.log('App has come to the foreground!');
         }
         else{
            newtime = (Date.now() -  this.state.start) + this.state.totalTime ;
            this.setState({totalTime: newtime});
-            console.log('App has come to the background!');
         }
         this.setState({appState: nextAppState});
-        console.log(this.state.totalTime);
       };
       setModalVisible(visible) {
         this.setState({ modalVisible: visible });

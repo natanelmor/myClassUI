@@ -2,7 +2,6 @@ import React, {Component}  from 'react';
 import {View, StyleSheet} from 'react-native';
 import axios from 'axios';
 import ClassButton from '../components/ClassButton';
-import { ScrollView } from 'react-native-gesture-handler';
 
 class ClassesList extends Component {
     constructor(props) {

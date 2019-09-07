@@ -14,7 +14,6 @@ class AddClassButton extends Component {
     
 
     navigateAddClassByType(){
-        console.log('navigateAddClassByType: ');
         if(this.props.user.type=='Student'){
             this.props.navigation.navigate('add_class_student') ;
         }

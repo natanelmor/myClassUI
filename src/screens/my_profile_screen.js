@@ -1,10 +1,8 @@
 import React from 'react';
-import { Text, StyleSheet, View, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import { Text, StyleSheet, View, ImageBackground, Image} from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import AddClassButton from '../components/AddClassButton';
 import ClassesList from '../components/ClassesList';
-import { Row, Col } from 'native-base';
-
+import AddClassButton from '../components/AddClassButton';
 
 const my_profile_screen = ({navigation}) => {
   const passUser = navigation.getParam('user');
@@ -17,13 +15,8 @@ const my_profile_screen = ({navigation}) => {
     <Image source={require('../../assets/logo.png')}/>
     <Text style={styles.text}>Hello {passUser.name}!</Text>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.classes}>
             <ClassesList user= {passUser}/>
             <AddClassButton user= {passUser}/>
-        </View>
-        <TouchableOpacity style={styles.touchOp} onPress ={() => navigation.navigate('my_classes',{ user : passUser} ) }  >
-          <Text>classes </Text>
-        </TouchableOpacity>
       </ScrollView>
     </View>
     </ImageBackground>
@@ -32,7 +25,8 @@ const my_profile_screen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 30
+    fontSize: 30,
+    alignItems: 'flex-start'
   },
   touchOp: {
     
