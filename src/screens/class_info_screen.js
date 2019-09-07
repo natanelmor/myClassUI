@@ -33,6 +33,8 @@ export default class class_info_screen extends Component {
     constructor(props) {
         super(props);
 
+        user = this.props.navigation.getParam('user');
+
         this.state = {
             appState: AppState.currentState,
             totalTime: 0,
@@ -67,27 +69,29 @@ export default class class_info_screen extends Component {
             ],
             modalVisible: false,
             startAttendance: false,
+            unRegisterVisible : false,
         }
     }
 
     componentDidMount() {
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
-        axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.props.navigation.getParam('key'))
-            .then(res => {
-                this.setState({
-                    name: res.data.name,
-                    teacher: res.data.teacher,
-                    time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
-                    location: res.data.location,
-                    icon: res.data.icon,
-                    participants: res.data.students
-                })
-                    .catch(err => {
-                        console.log(err);
-                    });
-                const user = this.props.navigation.getParam('user')
-        });
+        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
+        .then(res => {
+            this.setState({
+                class : res.data,
+                name: res.data.name,
+                teacher: res.data.teacher,
+                time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                location: res.data.location,
+                icon: res.data.icon,
+                participants: res.data.students
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        const user = this.props.navigation.getParam('user')
     }
     
     componentWillUnmount() {
@@ -95,16 +99,51 @@ export default class class_info_screen extends Component {
     }
     
     _handleAppStateChange = (nextAppState) => {
-    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-        this.stopTimer();
-    }
-    else{
-        this.startTimer();
-    }
-    this.setState({appState: nextAppState});
+        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+            this.stopTimer();
+        }
+        else{
+            this.startTimer();
+        }
+        this.setState({appState: nextAppState});
     }
 
-    setModalVisible(visible) {
+    setUnRegisterVisible(visible) {
+        this.setState({ unRegisterVisible: visible });
+    }
+
+    unRegister(){       
+        var index = user.classes.indexOf(this.state.id);
+        if (index !== -1) {
+            user.classes.splice(index, 1);
+            axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
+        }
+
+        
+        passClass = this.state.class;
+
+        //this.setState({class : this.state.class.participants.push(user.email)});
+        index = passClass.students.indexOf(user.email);
+        if (index !== -1) {
+            passClass.students.splice(index, 1);
+            axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
+        }
+
+        console.log(this.state.participants);
+        
+
+        this.props.navigation.navigate('my_profile',{user: user});
+        
+    };
+
+    renderUnRegisterPopUp(){
+        return (
+            <Text>Are you sure you bitch?</Text>
+            )
+        
+    }
+
+    setModalVisible(visible){
         this.setState({ modalVisible: visible });
     }
 
@@ -113,28 +152,28 @@ export default class class_info_screen extends Component {
     }
 
     
-startTimer(){
+    startTimer(){
 
-    let timer = setInterval(() => {
-      this.setState({
-        start : this.state.start +1
-      });
-    }, 1000);
-    this.setState({timer})
-    this.setState({startDisable : true})
-    console.log("start: ", this.getTimeString(this.state.totalTime))
-  }
+        let timer = setInterval(() => {
+            this.setState({
+            start : this.state.start +1
+            });
+        }, 1000);
+        this.setState({timer})
+        this.setState({startDisable : true})
+        console.log("start: ", this.getTimeString(this.state.totalTime))
+    }
 
 
-stopTimer(){
-    this.setState({
-        totalTime : this.state.start + this.state.totalTime,
-        start : 0,
-        startDisable : false
-      });
-    clearInterval(this.state.timer);
-    console.log("stop: ", this.getTimeString(this.state.totalTime))
-}
+    stopTimer(){
+        this.setState({
+            totalTime : this.state.start + this.state.totalTime,
+            start : 0,
+            startDisable : false
+        });
+        clearInterval(this.state.timer);
+        console.log("stop: ", this.getTimeString(this.state.totalTime))
+    }
 
 
    getTimeString(timeInSec) {
@@ -221,7 +260,8 @@ stopTimer(){
                         <View style={{ flex: 1 }}>
                             <Modal
                                 scroll inside the modal
-                                isVisible={this.state.modalVisible}>
+                                isVisible={this.state.modalVisible}
+                            >
                                 <View style={{
                                     backgroundColor: '#f0f8ff', borderRadius: 15,
                                     height: 500}}>
@@ -255,10 +295,68 @@ stopTimer(){
                                             style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                             onPress={() => {this.setStartAttendanceVisible(!this.state.startAttendance);}}>
                                            <Text style={{ fontSize: 18 }}>Close</Text>
-                                        </TouchableHighlight></View>
+                                        </TouchableHighlight>
+                                    </View>
                                 </View>
                             </Modal>
                         </View>
+
+                        
+                        
+                        <View style={{ flex: 1, alignSelf: 'flex-end' }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                this.setUnRegisterVisible(!this.state.unRegisterVisible);
+                                }}
+                            >
+                                <View>
+                                    <Image
+                                        style={{width: 100,
+                                        height: 50}}
+                                        source={ {uri :'http://www.clker.com/cliparts/O/6/3/C/g/l/cancel-button-hi.png'}}
+                                    />
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                                <View style={{flex: 1 }}>
+                                    <Modal scroll inside the modal isVisible={this.state.unRegisterVisible}>
+                                        <View style={{
+                                            backgroundColor: '#f0f8ff', borderRadius: 15,
+                                            height: 500
+                                            }}
+                                        >
+
+                                            <View style={styles.headerStyle}>
+                                                <Text style={styles.headerTextStyle}>Unregister</Text>
+                                            </View>
+                                            <ScrollView
+                                                showsVerticalScrollIndicator={false}
+                                                nestedScrollEnabled
+                                            >
+                                                <View>{this.renderUnRegisterPopUp()}</View>
+                                            </ScrollView>
+                                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' , flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10 , alignContent:'space-between'}}>
+                                                <TouchableHighlight
+                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                                    onPress={() => {
+                                                        this.setUnRegisterVisible(!this.state.unRegisterVisible);
+                                                        this.unRegister();
+                                                    }}>
+                                                    <Text style={{ fontSize: 18 }}>  unsign</Text>
+                                                </TouchableHighlight>
+                                                <TouchableHighlight
+                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                                    onPress={() => {
+                                                        this.setUnRegisterVisible(!this.state.unRegisterVisible);
+                                            
+                                                    }}>
+                                                    <Text style={{ fontSize: 18 }}>cancle  </Text>
+                                                </TouchableHighlight>
+                                            </View>
+
+                                        </View>
+                                    </Modal>
+                                </View>
                     </ScrollView>
                 </View >
             </ImageBackground >

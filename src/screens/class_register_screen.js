@@ -45,7 +45,8 @@ export default class class_register_screen extends Component {
             teacher: null,
             time: null,
             location: null,
-            modalVisible: false,
+            registerVisible: false,
+            
         }
     }
     
@@ -71,8 +72,12 @@ export default class class_register_screen extends Component {
         });
     }
     
-    setModalVisible(visible) {
-        this.setState({ modalVisible: visible });
+    setRegisterVisible(visible) {
+        this.setState({ registerVisible: visible });
+    }
+
+    setUnRegisterVisible(visible) {
+        this.setState({ unRegisterVisible: visible });
     }
     
     register(){
@@ -97,6 +102,8 @@ export default class class_register_screen extends Component {
             )
         
     }
+
+    
 
     renderClassInfo() {
         return (
@@ -125,16 +132,14 @@ export default class class_register_screen extends Component {
                 source={require('../../assets/background.jpeg')}
                 style={{ width: '100%', height: '100%' }}>
                 <View>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                    >
+                    <ScrollView showsVerticalScrollIndicator={false}>
                         <View>{this.renderClassInfo()}</View>
                         <View>{this.renderMessages()}</View>
 
                             <View style={{ flex: 1, alignSelf: 'flex-end' }}>
                                 <TouchableOpacity
                                     onPress={() => {
-                                        this.setModalVisible(!this.state.modalVisible);
+                                        this.setRegisterVisible(!this.state.registerVisible);
                                     }}
                                 >
                                 <View>
@@ -145,11 +150,12 @@ export default class class_register_screen extends Component {
                                 </View>
                                 </TouchableOpacity>
                             </View>
+                            
 
                         <View style={{flex: 1 }}>
                             <Modal
                                 scroll inside the modal
-                                isVisible={this.state.modalVisible}
+                                isVisible={this.state.registerVisible}
                             >
                                 <View style={{
                                     backgroundColor: '#f0f8ff', borderRadius: 15,
@@ -172,7 +178,7 @@ export default class class_register_screen extends Component {
                                     <TouchableHighlight
                                         style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                         onPress={() => {
-                                            this.setModalVisible(!this.state.modalVisible);
+                                            this.setRegisterVisible(!this.state.registerVisible);
                                             this.register();
                                         }}>
                                         <Text style={{ fontSize: 18 }}>  sign</Text>
@@ -180,7 +186,7 @@ export default class class_register_screen extends Component {
                                     <TouchableHighlight
                                         style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                         onPress={() => {
-                                            this.setModalVisible(!this.state.modalVisible);
+                                            this.setRegisterVisible(!this.state.registerVisible);
                                             
                                         }}>
                                         <Text style={{ fontSize: 18 }}>cancle  </Text>
