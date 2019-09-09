@@ -12,14 +12,15 @@ export default class my_profile_screen extends Component {
       date: new Date(),
       nextClass: ""
     }
-  }
-
-  componentWillMount() {
     axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
     .then(response => {
         this.setState({nextClass: response.data});
     });  
 
+  }
+
+  componentDidMount() {
+    
   }
 
   renderUserInfo() {

@@ -7,15 +7,14 @@ class ClassesList extends Component {
     constructor(props) {
         super(props);
     this.state ={classes:[]};
-
+    
+    axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
+    .then(response => {
+        this.setState({classes: response.data});
+    });
     }
     
     renderClasses(){
-        axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.props.user.email)
-        .then(response => {
-            this.setState({classes: response.data});
-        });
-        
         return( 
             this.state.classes.map(myclass => 
             <ClassButton key={myclass.id}
