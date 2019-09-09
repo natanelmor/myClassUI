@@ -34,7 +34,7 @@ export default class class_info_screen extends Component {
         super(props);
 
         user = this.props.navigation.getParam('user');
-
+         
         this.state = {
             appState: AppState.currentState,
             totalTime: 0,
@@ -50,7 +50,7 @@ export default class class_info_screen extends Component {
             participants: [],
             name: null,
             icon: null,
-            id: null,
+            id: this.props.navigation.getParam('key'),
             teacher: null,
             time: null,
             location: null,
@@ -76,7 +76,7 @@ export default class class_info_screen extends Component {
     componentDidMount() {
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
-        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
+        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.state.id)
         .then(res => {
             this.setState({
                 class : res.data,
@@ -112,17 +112,16 @@ export default class class_info_screen extends Component {
         this.setState({ unRegisterVisible: visible });
     }
 
-    unRegister(){       
+    unRegister(){
+
         var index = user.classes.indexOf(this.state.id);
         if (index !== -1) {
             user.classes.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
         }
-
-        
+                
         passClass = this.state.class;
 
-        //this.setState({class : this.state.class.participants.push(user.email)});
         index = passClass.students.indexOf(user.email);
         if (index !== -1) {
             passClass.students.splice(index, 1);
@@ -300,9 +299,7 @@ export default class class_info_screen extends Component {
                                 </View>
                             </Modal>
                         </View>
-
-                        
-                        
+  
                         <View style={{ flex: 1, alignSelf: 'flex-end' }}>
                             <TouchableOpacity
                                 onPress={() => {
