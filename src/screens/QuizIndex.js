@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StatusBar, Image, ImageBackground, StyleSheet, View , Text} from "react-native";
+import { ScrollView, StatusBar, Image, ImageBackground, StyleSheet, View , Text, FlatList} from "react-native";
 
 import spaceQuestions from "../data/space";
 import westernsQuestions from "../data/westerns";
@@ -9,46 +9,32 @@ import { RowItem } from "../components/RowItem";
 
 export default ({ navigation }) => (
 <ImageBackground
-  source= {require('../../assets/background.jpeg')} 
+  source= {require('../../assets/background.jpeg')}
   style={{width:'100%', height:'100%' }}>
 <Image  style={{width:'100%', height:'20%', top:20 }} source={require('../../assets/quiz.jpg')}/>
 <View style={styles.container}>
-
   <ScrollView>
     <StatusBar barStyle="dark-content" />
-    <RowItem
-      name="Space"
-      color="#36b1f0"
-      onPress={() =>
-        navigation.navigate("Quiz", {
-          title: "Space",
-          questions: spaceQuestions,
-          color: "#36b1f0"
-        })
-      }
-    />
-    <RowItem
-      name="Westerns"
-      color="#799496"
-      onPress={() =>
-        navigation.navigate("Quiz", {
-          title: "Westerns",
-          questions: westernsQuestions,
-          color: "#799496"
-        })
-      }
-    />
-    <RowItem
-      name="Computers"
-      color="#49475B"
-      onPress={() =>
-        navigation.navigate("Quiz", {
-          title: "Computers",
-          questions: computerQuestions,
-          color: "#49475B"
-        })
-      }
-    />
+    <FlatList
+      keyExtractor={(file) => file._id}
+      data={navigation.getParam('quizes')}
+      renderItem={({ item }) => {
+          return (
+            <View>
+            <RowItem
+              name={item.quiz_name}
+              color="#36b1f0"
+              onPress={() =>
+                navigation.navigate("Quiz", {
+                  title: item.quiz_name,
+                  questions: item.questions,
+                  color: "#36b1f0"
+                })
+              }
+            />
+            </View>);
+  }}
+            />
     </ScrollView>
   </View>
 </ImageBackground>

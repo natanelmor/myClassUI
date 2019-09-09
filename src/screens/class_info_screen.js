@@ -34,7 +34,6 @@ export default class class_info_screen extends Component {
         super(props);
 
         user = this.props.navigation.getParam('user');
-         
         this.state = {
             appState: AppState.currentState,
             totalTime: 0,
@@ -64,6 +63,7 @@ export default class class_info_screen extends Component {
                 { id: '7', type: 'file', source: '', name: 'File' },
                 { id: '8', type: 'file', source: '', name: 'File' },
             ],
+            quizes: null,
             grades: [
                 { subject: 'Math', grade: '91' },
             ],
@@ -85,7 +85,8 @@ export default class class_info_screen extends Component {
                 time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
                 location: res.data.location,
                 icon: res.data.icon,
-                participants: res.data.students
+                participants: res.data.students,
+                quizes: res.data.quizes
                 });
             })
             .catch(err => {
@@ -93,11 +94,11 @@ export default class class_info_screen extends Component {
             });
         const user = this.props.navigation.getParam('user')
     }
-    
+
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
     }
-    
+
     _handleAppStateChange = (nextAppState) => {
         if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
             this.stopTimer();
@@ -119,7 +120,7 @@ export default class class_info_screen extends Component {
             user.classes.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
         }
-                
+
         passClass = this.state.class;
 
         index = passClass.students.indexOf(user.email);
@@ -129,17 +130,17 @@ export default class class_info_screen extends Component {
         }
 
         console.log(this.state.participants);
-        
+
 
         this.props.navigation.navigate('my_profile',{user: user});
-        
+
     };
 
     renderUnRegisterPopUp(){
         return (
             <Text>Are you sure you bitch?</Text>
             )
-        
+
     }
 
     setModalVisible(visible){
@@ -150,7 +151,7 @@ export default class class_info_screen extends Component {
         this.setState({ startAttendance: visible });
     }
 
-    
+
     startTimer(){
 
         let timer = setInterval(() => {
@@ -180,7 +181,7 @@ export default class class_info_screen extends Component {
         var hours = Math.floor(timeInSec / (60 * 60) % 60);
         var minutes = Math.floor(timeInSec / (60) % 60);
         var seconds = Math.floor(timeInSec % 60);
-      
+
         hours = hours < 10 ? '0' + hours : hours;
         minutes = minutes < 10 ? '0' + minutes : minutes;
         seconds = seconds < 10 ? '0' + seconds : seconds;
@@ -226,23 +227,24 @@ export default class class_info_screen extends Component {
             <ImageBackground
                 source={require('../../assets/background.jpeg')}
                 style={{ width: '100%', height: '100%' }}>
-                <View>
+                <View style={{marginTop: 15}}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View>{this.renderClassInfo()}</View>
                         <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
-                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' ,{id: this.props.navigation.getParam('key'), user : this.props.navigation.getParam('user')})}>
+                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.props.navigation.getParam('key'), user : this.props.navigation.getParam('user'), quizes: this.state.quizes})}>
                                 <View>
                                      <Image
                                             style={styles.classIcon}
                                             source={{uri: 'https://cdn3.iconfinder.com/data/icons/quiz/96/quiz_09-512.png'}}/>
-                                    </View>
+                                            </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
                                     <View>
                                         <Image
                                             style={styles.classIcon}
                                             source={require('../../assets/grades-icon.png')}/>
+                                            
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
@@ -250,6 +252,7 @@ export default class class_info_screen extends Component {
                                      <Image
                                             style={styles.classIcon}
                                             source={{uri: 'https://icon-library.net/images/student-attendance-icon/student-attendance-icon-2.jpg'}}/>
+
                                     </View>
                                 </TouchableOpacity>
                         </View>
@@ -299,7 +302,7 @@ export default class class_info_screen extends Component {
                                 </View>
                             </Modal>
                         </View>
-  
+
                         <View style={{ flex: 1, alignSelf: 'flex-end' }}>
                             <TouchableOpacity
                                 onPress={() => {
@@ -345,7 +348,7 @@ export default class class_info_screen extends Component {
                                                     style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                                     onPress={() => {
                                                         this.setUnRegisterVisible(!this.state.unRegisterVisible);
-                                            
+
                                                     }}>
                                                     <Text style={{ fontSize: 18 }}>cancle  </Text>
                                                 </TouchableHighlight>

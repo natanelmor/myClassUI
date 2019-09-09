@@ -55,7 +55,7 @@ class Quiz extends React.Component {
 
   nextQuestion = () => {
     this.setState(state => {
-      
+
       const nextIndex = state.activeQuestionIndex + 1;
 
       if (nextIndex >= state.totalCount) {
@@ -67,7 +67,7 @@ class Quiz extends React.Component {
           answered: false
         };
       }
-   
+
     });
   };
 
@@ -89,8 +89,8 @@ class Quiz extends React.Component {
             <ButtonContainer>
               {question.answers.map(answer => (
                 <Button
-                  key={answer.id}
-                  text={answer.text}
+                  key={answer._id}
+                  text={answer.answer}
                   onPress={() => this.answer(answer.correct)}
                 />
               ))}
