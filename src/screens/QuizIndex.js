@@ -19,6 +19,10 @@ export default ({ navigation }) => (
       keyExtractor={(file) => file._id}
       data={navigation.getParam('quizes')}
       renderItem={({ item }) => {
+        const res = navigation.getParam('user').grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == navigation.getParam('id'))));
+        //console.log("res: " + res);
+        if(!res){
+        //console.log("item.quiz_name: " + item.quiz_name);
           return (
             <View>
             <RowItem
@@ -34,7 +38,8 @@ export default ({ navigation }) => (
                 })
               }
             />
-            </View>);
+            </View>)}
+            return(<View></View>);
   }}
             />
     </ScrollView>
