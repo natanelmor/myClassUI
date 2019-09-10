@@ -28,7 +28,9 @@ export default ({ navigation }) => (
                 navigation.navigate("Quiz", {
                   title: item.quiz_name,
                   questions: item.questions,
-                  color: "#36b1f0"
+                  color: "#36b1f0",
+                  user: navigation.getParam('user'),
+                  id: navigation.getParam('id'),
                 })
               }
             />

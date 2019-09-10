@@ -3,6 +3,7 @@ import { View, StyleSheet, StatusBar, Text, SafeAreaView } from "react-native";
 
 import { Button, ButtonContainer } from "../components/Button";
 import { Alert } from "../components/Alert";
+import axios from 'axios';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +31,10 @@ class Quiz extends React.Component {
     totalCount: this.props.navigation.getParam("questions", []).length,
     activeQuestionIndex: 0,
     answered: false,
-    answerCorrect: false
+    answerCorrect: false,
+    user: this.props.navigation.getParam('user'),
+    quizId: this.props.navigation.getParam('title'),
+    claddId: this.props.navigation.getParam('id'),
   };
 
   answer = correct => {
@@ -70,6 +74,14 @@ class Quiz extends React.Component {
 
     });
   };
+  componentWillUnmount(){
+    const _id = this.props.navigation.getParam("id");
+    this.state.user.grades.push({"class_id": "" + _id ,
+		"quiz_id": this.state.quizId,
+		"value": "" + (100 / this.state.totalCount * this.state.correctCount)});
+    //console.log("this.state.user.grades:" + JSON.stringify(this.state.user.grades));
+    axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, user);
+  }
 
   render() {
     const questions = this.props.navigation.getParam("questions", []);
