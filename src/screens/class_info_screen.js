@@ -191,7 +191,8 @@ export default class class_info_screen extends Component {
     renderGrades() {
         return (
                 <DisplayGrade
-                    data={this.state.grades}/>
+                    data={this.state.grades}
+                    id={this.state.id}/>
         )}
 
     renderClassInfo() {

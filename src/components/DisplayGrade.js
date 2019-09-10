@@ -9,12 +9,16 @@ const DisplayGrade = (props) => {
           keyExtractor={(grade) => grade.quiz_id}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => {
+            if(item.class_id == props.id)
+            {
               return (
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
             <View style={styles.leftBorderStyle}>
                 <Text style={styles.textStyle}>{item.quiz_id}</Text></View>
             <View style={styles.rightBorderStyle}><Text style={styles.textStyle}>{item.value}</Text></View></View>
-          )}}/>
+          )
+          return(<View></View>)
+        }}}/>
         </View>
     )
 }
