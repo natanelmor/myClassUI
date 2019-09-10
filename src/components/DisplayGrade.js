@@ -1,13 +1,20 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 const DisplayGrade = (props) => {
-    const { subject, grade } = props.grades;
     return (
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
+      <View>
+        <FlatList
+          data={props.data}
+          keyExtractor={(grade) => grade.quiz_id}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => {
+              return (
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
             <View style={styles.leftBorderStyle}>
-                <Text style={styles.textStyle}>{subject}</Text></View>
-            <View style={styles.rightBorderStyle}><Text style={styles.textStyle}>{grade}</Text></View>
+                <Text style={styles.textStyle}>{item.quiz_id}</Text></View>
+            <View style={styles.rightBorderStyle}><Text style={styles.textStyle}>{item.value}</Text></View></View>
+          )}}/>
         </View>
     )
 }

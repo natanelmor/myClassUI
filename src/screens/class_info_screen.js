@@ -64,9 +64,7 @@ export default class class_info_screen extends Component {
                 { id: '8', type: 'file', source: '', name: 'File' },
             ],
             quizes: null,
-            grades: [
-                { subject: 'Math', grade: '91' },
-            ],
+            grades: null,
             modalVisible: false,
             startAttendance: false,
             unRegisterVisible : false,
@@ -76,6 +74,7 @@ export default class class_info_screen extends Component {
     componentDidMount() {
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
+        const user = this.props.navigation.getParam('user');
         axios.get('https://myclass-backend.herokuapp.com/class?id='+this.state.id)
         .then(res => {
             this.setState({
@@ -86,13 +85,14 @@ export default class class_info_screen extends Component {
                 location: res.data.location,
                 icon: res.data.icon,
                 participants: res.data.students,
-                quizes: res.data.quizes
+                quizes: res.data.quizes,
+                grades: user.grades,
                 });
             })
             .catch(err => {
                 console.log(err);
             });
-        const user = this.props.navigation.getParam('user')
+
     }
 
     componentWillUnmount() {
@@ -190,11 +190,9 @@ export default class class_info_screen extends Component {
 
     renderGrades() {
         return (
-            this.state.grades.map(grades =>
                 <DisplayGrade
-                    key={grades.subject}
-                    grades={grades}/>
-        ))}
+                    data={this.state.grades}/>
+        )}
 
     renderClassInfo() {
         return (
@@ -244,7 +242,7 @@ export default class class_info_screen extends Component {
                                         <Image
                                             style={styles.classIcon}
                                             source={require('../../assets/grades-icon.png')}/>
-                                            
+
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
