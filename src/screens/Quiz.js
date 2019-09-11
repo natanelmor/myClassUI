@@ -79,7 +79,7 @@ class Quiz extends React.Component {
     this.state.user.grades.push({"class_id": "" + _id ,
 		"quiz_id": this.state.quizId,
 		"value": "" + (100 / this.state.totalCount * this.state.correctCount)});
-    axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, user);
+    axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, this.state.user);
   }
 
   render() {

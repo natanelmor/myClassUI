@@ -33,11 +33,12 @@ export default class class_info_screen extends Component {
     constructor(props) {
         super(props);
 
-        user = this.props.navigation.getParam('user');
+        
         this.state = {
             appState: AppState.currentState,
             totalTime: 0,
             start: 0,
+            curr: 0,
             timer: null,
             startDisable: false,
             messages: [
@@ -49,6 +50,7 @@ export default class class_info_screen extends Component {
             participants: [],
             name: null,
             icon: null,
+            user : this.props.navigation.getParam('user'),
             id: this.props.navigation.getParam('key'),
             teacher: null,
             time: null,
@@ -69,12 +71,15 @@ export default class class_info_screen extends Component {
             startAttendance: false,
             unRegisterVisible : false,
         }
+
+        this.startTimer = this.startTimer.bind(this);
+        this.stopTimer = this.stopTimer.bind(this);
+        this.getTimeString = this.getTimeString.bind(this);
     }
 
     componentDidMount() {
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
-        const user = this.props.navigation.getParam('user');
         axios.get('https://myclass-backend.herokuapp.com/class?id='+this.state.id)
         .then(res => {
             this.setState({
@@ -86,7 +91,7 @@ export default class class_info_screen extends Component {
                 icon: res.data.icon,
                 participants: res.data.students,
                 quizes: res.data.quizes,
-                grades: user.grades,
+                grades: this.state.user.grades,
                 });
             })
             .catch(err => {
@@ -97,14 +102,25 @@ export default class class_info_screen extends Component {
 
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
+        this.updateAttendance();
+    }
+
+    updateAttendance(){
+        this.state.user.attendance.push({
+            "class_id": "" + this.state.id,
+            "date": Date.now(),
+            "time": Math.floor(this.state.totalTime / 60 )});
+        axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, this.state.user)
+        .then(response => {}
+        ).catch(e => {console.log(e)}) 
     }
 
     _handleAppStateChange = (nextAppState) => {
-        if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
-            this.stopTimer();
+        if (this.state.appState.match(/background/) && nextAppState === 'active') {
+            this.startTimer();
         }
         else{
-            this.startTimer();
+            this.stopTimer();
         }
         this.setState({appState: nextAppState});
     }
@@ -115,15 +131,15 @@ export default class class_info_screen extends Component {
 
     unRegister(){
 
-        var index = user.classes.indexOf(this.state.id);
+        var index = this.state.user.classes.indexOf(this.state.id);
         if (index !== -1) {
-            user.classes.splice(index, 1);
-            axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
+            this.state.user.classes.splice(index, 1);
+            axios.patch('https://myclass-backend.herokuapp.com/user?email='+ this.state.user.email, this.state.user);
         }
 
         passClass = this.state.class;
 
-        index = passClass.students.indexOf(user.email);
+        index = passClass.students.indexOf(this.state.user.email);
         if (index !== -1) {
             passClass.students.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
@@ -132,7 +148,7 @@ export default class class_info_screen extends Component {
         console.log(this.state.participants);
 
 
-        this.props.navigation.navigate('my_profile',{user: user});
+        this.props.navigation.navigate('my_profile',{user: this.state.user});
 
     };
 
@@ -153,10 +169,10 @@ export default class class_info_screen extends Component {
 
 
     startTimer(){
-
-        let timer = setInterval(() => {
+         let timer = setInterval(() => {
             this.setState({
-            start : this.state.start +1
+            start : this.state.start +1,
+            curr:  this.state.start + this.state.totalTime
             });
         }, 1000);
         this.setState({timer})
@@ -231,7 +247,7 @@ export default class class_info_screen extends Component {
                         <View>{this.renderClassInfo()}</View>
                         <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
-                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.props.navigation.getParam('key'), user : this.props.navigation.getParam('user'), quizes: this.state.quizes})}>
+                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
                                 <View>
                                      <Image
                                             style={styles.classIcon}
@@ -291,7 +307,7 @@ export default class class_info_screen extends Component {
                             <Modal scroll inside the modal isVisible={this.state.startAttendance}>
                                 <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500}}>
                                     <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
-                                    <Text style={{ fontSize: 18 }}>Time in class: {this.getTimeString(this.state.totalTime)}</Text>
+                                    <Text style={{ fontSize: 18 }}>Time in class: {this.getTimeString(this.state.curr)}</Text>
                                         <TouchableHighlight
                                             style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                             onPress={() => {this.setStartAttendanceVisible(!this.state.startAttendance);}}>
