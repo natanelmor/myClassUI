@@ -31,7 +31,6 @@ class add_classes_screen_teacher extends Component {
 
   onCreate = (viewId) => {
     const newClass = {
-        id: '222',
       name: this.state.name,
       time: this.state.time,
       location: this.state.location,

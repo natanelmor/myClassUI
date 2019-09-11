@@ -21,7 +21,7 @@ class AllClassesList extends Component {
     renderClasses(){
         return( 
             this.state.classes.map(myclass => 
-            <ClassButton key={myclass.id}
+            <ClassButton key={myclass._id}
                 myclass={myclass} user={this.props.user}
                 nextPage= 'class_register' />)
         )

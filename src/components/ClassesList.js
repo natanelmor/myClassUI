@@ -16,11 +16,12 @@ class ClassesList extends Component {
     
     renderClasses(){
         return( 
-            this.state.classes.map(myclass => 
-            <ClassButton key={myclass.id}
+            this.state.classes.map(myclass =>
+            <ClassButton key={myclass._id}
                 myclass={myclass} user={this.props.user}
                 nextPage= 'class_info' />)
         )
+        
     }
 
     render(){
