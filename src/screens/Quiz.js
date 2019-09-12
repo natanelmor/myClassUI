@@ -1,31 +1,12 @@
-import React from "react";
+import React, {Component} from "react";
 import { View, StyleSheet, StatusBar, Text, SafeAreaView } from "react-native";
 
 import { Button, ButtonContainer } from "../components/Button";
 import { Alert } from "../components/Alert";
 import axios from 'axios';
+import { withNavigation } from 'react-navigation';
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#36B1F0",
-    flex: 1,
-    paddingHorizontal: 20
-  },
-  text: {
-    color: "#fff",
-    fontSize: 25,
-    textAlign: "center",
-    letterSpacing: -0.02,
-    fontWeight: "600"
-  },
-  safearea: {
-    flex: 1,
-    marginTop: 100,
-    justifyContent: "space-between"
-  }
-});
-
-class Quiz extends React.Component {
+class Quiz extends Component {
   state = {
     correctCount: 0,
     totalCount: this.props.navigation.getParam("questions", []).length,
@@ -63,7 +44,7 @@ class Quiz extends React.Component {
       const nextIndex = state.activeQuestionIndex + 1;
 
       if (nextIndex >= state.totalCount) {
-        this.props.navigation.navigate('QuizIndex')
+        this.props.navigation.navigate('class_info', { key: this.props.navigation.getParam('id'), user: this.state.user });
       }
       else{
         return {
@@ -121,4 +102,26 @@ class Quiz extends React.Component {
   }
 }
 
-export default Quiz;
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#36B1F0",
+    flex: 1,
+    paddingHorizontal: 20
+  },
+  text: {
+    color: "#fff",
+    fontSize: 25,
+    textAlign: "center",
+    letterSpacing: -0.02,
+    fontWeight: "600"
+  },
+  safearea: {
+    flex: 1,
+    marginTop: 100,
+    justifyContent: "space-between"
+  }
+});
+
+
+export default withNavigation(Quiz);

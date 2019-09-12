@@ -3,8 +3,9 @@ import { Text, StyleSheet, View, ScrollView, ImageBackground, Image } from 'reac
 import axios from 'axios';
 import ClassesList from '../components/ClassesList';
 import AddClassButton from '../components/AddClassButton';
+import { withNavigation } from 'react-navigation';
 
-export default class my_profile_screen extends Component {
+class my_profile_screen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,16 +13,24 @@ export default class my_profile_screen extends Component {
       date: new Date(),
       nextClass: ""
     }
-    axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
-    .then(response => {
-        this.setState({nextClass: response.data});
-    });  
+    
 
   }
 
   componentDidMount() {
-    
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {
+      console.log('rerendr: ');
+      axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
+        .then(response => {
+          this.setState({nextClass: response.data });
+        }); 
+        console.log(this.statenextClass); 
+    });
   }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+}
 
   renderUserInfo() {
     return (
@@ -83,3 +92,5 @@ const styles = StyleSheet.create({
     top: 20
   }
 });
+
+export default withNavigation(my_profile_screen);

@@ -40,7 +40,7 @@ class add_classes_screen_teacher extends Component {
     .catch((err) => {
       console.log(err);
     });
-    this.props.navigation.navigate('my_classes');
+    this.props.navigation.navigate('my_profile');
   }
 
   updateTimeFromSelectDay(timeArr) {

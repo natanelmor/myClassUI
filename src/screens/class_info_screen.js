@@ -27,10 +27,14 @@ import ClassInfo from '../components/ClassInfo';
 import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
 import Participants from '../components/Participants';
+<<<<<<< HEAD
 import Feed from './feed_screen'
 import{AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
+=======
+import { withNavigation } from 'react-navigation';
+>>>>>>> rerender for class list and quizes
 
-export default class class_info_screen extends Component {
+class class_info_screen extends Component {
 
     constructor(props) {
         super(props);
@@ -80,31 +84,35 @@ export default class class_info_screen extends Component {
     }
 
     componentDidMount() {
-        this.startTimer();
-        AppState.addEventListener('change', this._handleAppStateChange);
-        axios.get('https://myclass-backend.herokuapp.com/class?id='+this.state.id)
-        .then(res => {
-            this.setState({
-                class : res.data,
-                name: res.data.name,
-                teacher: res.data.teacher,
-                time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
-                location: res.data.location,
-                icon: res.data.icon,
-                participants: res.data.students,
-                quizes: res.data.quizes,
-                grades: this.state.user.grades,
+       // this.focusListener = this.props.navigation.addListener('didFocus', () => {
+       // });
+        axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
+            .then(res => {
+                this.setState({
+                    class: res.data,
+                    name: res.data.name,
+                    teacher: res.data.teacher,
+                    //time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                    location: res.data.location,
+                    icon: res.data.icon,
+                    participants: res.data.students,
+                    quizes: res.data.quizes,
+                    grades: this.state.user.grades,
                 });
             })
             .catch(err => {
                 console.log(err);
             });
-
+        this.startTimer();
+        AppState.addEventListener('change', this._handleAppStateChange);
+                    console.log('missing params in class info:   ');
+            console.log(this.state);
     }
 
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
         this.updateAttendance();
+        //this.focusListener.remove();
     }
 
     updateAttendance(){
@@ -419,3 +427,5 @@ const styles = StyleSheet.create({
         borderRadius: 15,
     },
 });
+
+export default withNavigation(class_info_screen);

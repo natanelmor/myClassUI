@@ -7,7 +7,7 @@ const ClassInfo = (props) => {
             <View style={{ alignItems: 'center' }}>
                 <Image
                     style={styles.userIcon}
-                    source={{uri: props.icon}}
+                    source={{ uri: props.icon === null ? '../../assets/bible.png' : props.icon }}
                 />
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.name}</Text>
                 <Text>Time: {props.time}</Text>

@@ -8,7 +8,7 @@ import login_screen from './src/screens/login_screen';
 import register_screen from './src/screens/register_screen'; 
 import add_classes_screen_teacher from './src/screens/add_class_screen_teacher';
 import class_register_screen from './src/screens/class_register_screen'
-import QuizIndex from "./src/screens/QuizIndex";
+import QuizIndex from "./src/screens/quiz_time_screen";
 import Quiz from "./src/screens/Quiz";
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
@@ -19,19 +19,14 @@ const navigator = createStackNavigator(
     feed : Feed,
     my_profile: my_profile_screen,
     my_classes: my_classes_screen,
-    add_class_student : add_class_screen_student,
-    add_class_teacher : add_classes_screen_teacher,
-    class_info : class_info_screen,
-    addClassButton : AddClassButton,
+    add_class_student: add_class_screen_student,
+    add_class_teacher: add_classes_screen_teacher,
+    class_info: class_info_screen,
+    addClassButton: AddClassButton,
     login_screen: login_screen,
     register_screen: register_screen,
     class_register: class_register_screen,
-    QuizIndex: {
-      screen: QuizIndex,
-      navigationOptions: {
-        headerTitle: "Quizzes"
-      }
-    },
+    QuizIndex: QuizIndex,
     Quiz: {
       screen: Quiz,
       navigationOptions: ({ navigation }) => ({

@@ -1,4 +1,4 @@
-import React, {Component}  from 'react';
+import React, { Component } from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import{Feather} from '@expo/vector-icons';
 import {withNavigation} from 'react-navigation';
