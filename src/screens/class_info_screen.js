@@ -27,18 +27,14 @@ import ClassInfo from '../components/ClassInfo';
 import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
 import Participants from '../components/Participants';
-<<<<<<< HEAD
 import Feed from './feed_screen'
 import{AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
-=======
 import { withNavigation } from 'react-navigation';
->>>>>>> rerender for class list and quizes
 
 class class_info_screen extends Component {
 
     constructor(props) {
         super(props);
-
         
         this.state = {
             appState: AppState.currentState,
