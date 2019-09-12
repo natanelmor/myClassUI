@@ -12,9 +12,11 @@ import QuizIndex from "./src/screens/QuizIndex";
 import Quiz from "./src/screens/Quiz";
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
+import Feed from "./src/screens/feed_screen";
 
 const navigator = createStackNavigator(
   {
+    feed : Feed,
     my_profile: my_profile_screen,
     my_classes: my_classes_screen,
     add_class_student : add_class_screen_student,

@@ -27,6 +27,8 @@ import ClassInfo from '../components/ClassInfo';
 import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
 import Participants from '../components/Participants';
+import Feed from './feed_screen'
+import{AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 
 export default class class_info_screen extends Component {
 
@@ -224,7 +226,7 @@ export default class class_info_screen extends Component {
 
     renderMessages() {
         return (
-            <Messages messages={this.state.messages}/>)
+            <Feed></Feed> )
     }
 
     renderResources() {
@@ -247,31 +249,19 @@ export default class class_info_screen extends Component {
                         <View>{this.renderClassInfo()}</View>
                         <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
-                            <TouchableOpacity onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
-                                <View>
-                                     <Image
-                                            style={styles.classIcon}
-                                            source={{uri: 'https://cdn3.iconfinder.com/data/icons/quiz/96/quiz_09-512.png'}}/>
-                                            </View>
+                            <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
+                                    <AntDesign  size={30} name ="form"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
-                                    <View>
-                                        <Image
-                                            style={styles.classIcon}
-                                            source={require('../../assets/grades-icon.png')}/>
-
-                                    </View>
+                                <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
+                                    <MaterialCommunityIcons  size={30} name ="format-annotation-plus"/>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
-                                <View>
-                                     <Image
-                                            style={styles.classIcon}
-                                            source={{uri: 'https://icon-library.net/images/student-attendance-icon/student-attendance-icon-2.jpg'}}/>
-
-                                    </View>
+                                <TouchableOpacity style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
+                                    <MaterialCommunityIcons  size={30}  name ="clock-outline"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => this.props.navigation.navigate('feed' , {id: this.state.id, user : this.state.user})}>
+                                    <MaterialCommunityIcons  size={30} name ="forum-outline"/>
                                 </TouchableOpacity>
                         </View>
-                        <View>{this.renderMessages()}</View>
                         <View>{this.renderResources()}</View>
                         <View>{this.renderParticipants()}</View>
                         <View style={{ flex: 1 }}>
