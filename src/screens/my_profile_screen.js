@@ -69,7 +69,9 @@ class my_profile_screen extends Component {
           /></View>
       <View style={{marginLeft: 20, flexDirection: 'row',}}>
       <Text style={styles.text}>Hello {this.state.user.name}!</Text>
-      <TouchableOpacity><Feather name = "edit" style={styles.iconStyle}/></TouchableOpacity></View></View>
+      <TouchableOpacity style={{ marginLeft: 10 ,justifyContent: 'center', alignItems: 'center',}}>
+        <Feather name = "edit" style={styles.iconStyle}/>
+      </TouchableOpacity></View></View>
 
       <View style={{
         flexDirection: 'column',
@@ -119,7 +121,6 @@ const styles = StyleSheet.create({
   },
   iconStyle:{
       fontSize: 20,
-      alignSelf:'flex-end',
       color: 'rgba(100, 100, 100, 0.8)'
   },
   userIcon: {
