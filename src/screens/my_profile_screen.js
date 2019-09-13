@@ -53,6 +53,14 @@ class my_profile_screen extends Component {
     )
   }
 
+  editProfile() {
+    return(
+      <EditProfile
+        user={this.state.user}
+      />
+    )
+  }
+
   render() {
     return (
       <View>
@@ -69,9 +77,7 @@ class my_profile_screen extends Component {
           /></View>
       <View style={{marginLeft: 20, flexDirection: 'row',}}>
       <Text style={styles.text}>Hello {this.state.user.name}!</Text>
-      <TouchableOpacity style={{ marginLeft: 10 ,justifyContent: 'center', alignItems: 'center',}}>
-        <Feather name = "edit" style={styles.iconStyle}/>
-      </TouchableOpacity></View></View>
+      </View></View>
 
       <View style={{
         flexDirection: 'column',
