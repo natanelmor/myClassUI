@@ -11,7 +11,7 @@ class AddClassButton extends Component {
     this.state ={};
 
     }
-    
+
 
     navigateAddClassByType(){
         if(this.props.user.type=='Student'){
@@ -26,18 +26,18 @@ class AddClassButton extends Component {
 
     render(){
         return (
-            <View style={styles.container}>
-                
-                <TouchableOpacity 
-                style={styles.touchOp} 
+            <View>
+
+                <TouchableOpacity
+                style={styles.touchOp}
                 onPress ={() => this.navigateAddClassByType()}>
                     <Feather name ="plus"/>
                     <Text> add class </Text>
-                </TouchableOpacity>  
+                </TouchableOpacity>
             </View>
             );
     }
-};  
+};
 
 const styles = StyleSheet.create({
     touchOp: {
@@ -46,9 +46,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#DDDDDD',
         padding: 10,
         backgroundColor: '#fff',
-        elevation: 2, 
         justifyContent: 'center',
-
+        backgroundColor: 'rgba(100, 100, 100, 0.8)'
     },
     container: {
         alignItems: 'center',
@@ -60,6 +59,6 @@ const styles = StyleSheet.create({
 
 
 
-}); 
+});
 
 export default withNavigation(AddClassButton);

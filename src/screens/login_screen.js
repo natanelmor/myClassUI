@@ -21,6 +21,7 @@ export default class login_screen extends Component {
       classes: [],
       grades: [],
       attendance: [],
+      name: '',
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -32,7 +33,7 @@ export default class login_screen extends Component {
     return this.state.password === user['password'];
   }
 
-  onLogin = (viewId) => { 
+  onLogin = (viewId) => {
     const userCredentials = {
       email: this.state.email,
       password: this.state.password
@@ -45,7 +46,9 @@ export default class login_screen extends Component {
           type:res.data.type,
           classes: res.data.classes ,
           grades: res.data.grades,
-          attendance: res.data.attendance 
+          attendance: res.data.attendance,
+          email: res.data.email,
+          name: res.data.name,
         });
         this.props.navigation.navigate('my_profile',{user: this.state});
       }
@@ -56,7 +59,7 @@ export default class login_screen extends Component {
   }
 
   onRestorePassword = (viewId) => {
-  
+
   }
 
   onRegister = (viewId) => {
@@ -76,7 +79,7 @@ export default class login_screen extends Component {
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
         </View>
-        
+
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}

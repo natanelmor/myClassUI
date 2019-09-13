@@ -13,7 +13,7 @@ class my_profile_screen extends Component {
       date: new Date(),
       nextClass: ""
     }
-    
+
 
   }
 
@@ -23,8 +23,8 @@ class my_profile_screen extends Component {
       axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
         .then(response => {
           this.setState({nextClass: response.data });
-        }); 
-        console.log(this.statenextClass); 
+        });
+        console.log(this.statenextClass);
     });
   }
 
@@ -54,18 +54,40 @@ class my_profile_screen extends Component {
 
   render() {
     return (
+      <View>
       <ImageBackground
-        source= {require('../../assets/background.jpeg')} 
+        source= {require('../../assets/background.jpeg')}
         style={{width:'100%', height:'100%' }}>
       <View style={styles.container}>
-      <Image source={require('../../assets/logo.png')}/>
-      <Text style={styles.text}>Hello {this.state.user.name}!</Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-              <ClassesList user= {this.state.user}/>
-              <AddClassButton user= {this.state.user}/>
-        </ScrollView>
+        <Image source={require('../../assets/logo.png')}/>
       </View>
+      <View style={{marginLeft: 10, width: 300}}>
+          <View style={{marginLeft: 40}}><Image
+              style={styles.userIcon}
+              source={require('../../assets/user.png')}
+          /></View>
+      <View style={{marginLeft: 20}}><Text style={styles.text}>Hello {this.state.user.name}!</Text></View></View>
+
+      <View style={{
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+      }}>
+      <View style={{minHeight: '10%',
+    maxHeight: 350}}>
+      <ScrollView
+      nestedScrollEnabled
+      showsVerticalScrollIndicator={false}>
+
+      <ClassesList user= {this.state.user}/>
+
+
+      </ScrollView></View>
+      <View style={{height: 50, alignSelf: 'stretch'}}>
+      <AddClassButton user= {this.state.user}/>
+      </View></View>
       </ImageBackground>
+      </View>
     )
   };
 }
@@ -73,7 +95,8 @@ class my_profile_screen extends Component {
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    fontWeight: 'bold',
   },
   touchOp: {
 
@@ -89,8 +112,12 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'column',
-    top: 20
-  }
+    marginBottom: 10,
+  },
+  userIcon: {
+      width: 70,
+      height: 70,
+  },
 });
 
 export default withNavigation(my_profile_screen);

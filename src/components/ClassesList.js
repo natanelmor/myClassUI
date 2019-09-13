@@ -7,7 +7,11 @@ import { withNavigation } from 'react-navigation';
 class ClassesList extends Component {
     constructor(props) {
         super(props);
-    this.state = { classes: [] };
+    this.state = { classes: [],
+    classComponent: [],
+    time: [],
+    location: '',
+    teacher: '', };
     }
 
     componentDidMount() {
@@ -22,21 +26,22 @@ class ClassesList extends Component {
     componentWillUnmount() {
         this.focusListener.remove();
     }
-    
+
     renderClasses() {
-        return ( 
+        return (
             this.state.classes.map(myclass =>
-            <ClassButton 
-                key={myclass._id}
-                myclass={myclass} user={this.props.user}
-                nextPage = 'class_info' />)
+              <ClassButton
+                  key={myclass._id}
+                  myclass={myclass} user={this.props.user}
+                  nextPage = 'class_info' />
+            )
         )
-        
+
     }
 
     render() {
         return (
-            <View style={styles.classes}>
+            <View>
                 {this.renderClasses()}
             </View>
         );
