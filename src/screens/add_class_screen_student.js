@@ -3,6 +3,8 @@ import {Text, StyleSheet, View, ScrollView, Dimensions} from 'react-native';
 import ClassButton from '../components/ClassButton';
 import SearchBar from '../components/SearchBar';
 import AllClassesList from '../components/AllClassesList';
+import CoverImage from '../components/CoverImage';
+
 
 const add_classes_screen_student = (props) => {
     const myUser = props.navigation.getParam('user');
@@ -16,22 +18,20 @@ const add_classes_screen_student = (props) => {
 
 
     return (
-       <View style={{marginTop: 15}}>
-       <View>
+      <View style={{ flex: 1, backgroundColor: '#fff', flexDirection:'column' }}>
+        <CoverImage/>
            <SearchBar
                 term={term}
                 onTermChange ={(newTerm) => setTerm(newTerm)}
                 onTermSubmit={()=> console.log('term was submitted')}
                 />
-            <Text>we found {results.length}</Text>
-        </View>
-        <View style={{height: height * .87}}>
+
         <ScrollView
         nestedScrollEnabled
         showsVerticalScrollIndicator={false}>
         <AllClassesList user= {myUser}/></ScrollView>
         </View>
-        </View>
+ 
         );
 };
 

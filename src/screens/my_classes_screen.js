@@ -9,23 +9,20 @@ const my_classes_screen = ({navigation}) => {
 
 
     return (
-        <ImageBackground
-      source= {require('../../assets/background.jpeg')} 
-      style={{width:'100%', height:'100%' }}>
         <View style={styles.container}>
             <ClassesList user= {passUser}/>
             <AddClassButton user= {passUser}/>
         </View>
-        </ImageBackground>
         );
 };
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1, 
+        backgroundColor: '#e6e6fa',
         alignItems: 'center',
         flexDirection: 'column',
         top: 20,
-       // backgroundColor : '../../assets/green-school-board-background.jpg',
     },
 
 }); 

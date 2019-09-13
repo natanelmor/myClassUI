@@ -10,6 +10,7 @@ import {
   Alert
 } from 'react-native';
 import axios from 'axios';
+import CoverImage from '../components/CoverImage';
 
 export default class login_screen extends Component {
   constructor(props) {
@@ -70,11 +71,12 @@ export default class login_screen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <CoverImage/>
         <Image source={require('../../assets/logo.png')}/>
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/20-512.png'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Email"
+              placeholder=" Email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
@@ -83,7 +85,7 @@ export default class login_screen extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Password"
+              placeholder=" Password"
               secureTextEntry={true}
               underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#fff',
     top: 20,
   },
   inputContainer: {
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
     borderRadius:30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
+    backgroundColor: "black",
   },
   loginText: {
     color: 'white',

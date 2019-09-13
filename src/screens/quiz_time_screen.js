@@ -46,9 +46,7 @@ setAddQuizVisible() {
 
     render() {
       return (
-    <ImageBackground
-      source= {require('../../assets/background.jpeg')}
-      style={{width:'100%', height:'100%' }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <Image  style={{width:'100%', height:'20%', top:20 }} source={require('../../assets/quiz.jpg')}/>
       <View style={styles.container}>
         <ScrollView>
@@ -96,7 +94,7 @@ setAddQuizVisible() {
         </TouchableOpacity>  
         </View>
       </View>
-    </ImageBackground>
+      </View>
       );
   }
 }

@@ -5,7 +5,6 @@ import {withNavigation} from 'react-navigation';
 const ClassButton = (props)=> {
     const {name , icon, _id, time, location, teacher} = props.myclass;
     const next = props.nextPage;
-    console.log(time);
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return (
@@ -13,7 +12,7 @@ const ClassButton = (props)=> {
             <TouchableOpacity
                 onPress ={() => props.navigation.navigate(next, { key: _id , user : props.user})}
                 >
-                <View style={{height: 100, backgroundColor: 'skyblue', flexDirection: 'row',
+                <View style={{height: 100, backgroundColor: '#e6e6fa', flexDirection: 'row',
                 borderRadius: 5, marginBottom: 2}}>
                     <View style={{width: 120 ,marginLeft: 20, justifyContent: 'center',}}>
                         <Image
@@ -44,9 +43,8 @@ const styles = StyleSheet.create({
     touchOp: {
         alignItems: 'center',
         fontSize: 30,
-        backgroundColor: '#DDDDDD',
+        backgroundColor: '#e6e6fa',
         padding: 10,
-        backgroundColor: '#fff',
         elevation: 2,
         justifyContent: 'center',
         flexWrap: 'nowrap'

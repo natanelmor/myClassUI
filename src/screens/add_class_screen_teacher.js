@@ -34,7 +34,6 @@ class add_classes_screen_teacher extends Component {
       teacher: this.passUser.email,
     };
 
-    console.log(newClass);
 
     axios.post('https://myclass-backend.herokuapp.com/class', newClass)
     .catch((err) => {
@@ -44,17 +43,7 @@ class add_classes_screen_teacher extends Component {
   }
 
   updateTimeFromSelectDay(timeArr) {
-    console.log('time in add class: ');
-    //const myTime = timearr;
-    console.log(timeArr);
     this.setState({ time: timeArr });
-    
-    
-    console.log(this.state.time);
-    //console.log(this.state.time);
-
-    //this.setState({ icon: this.state.name });
-    //console.log(this);
   }
 
   render() {

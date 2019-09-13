@@ -1,12 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import LargeHeading from './LargeHeading'
 
 const Participants = (props) => {
     return (
         <View>
-            <View style={styles.headerStyle}>
-                <Text style={styles.textStyle}>Participants</Text>
-            </View>
+                <LargeHeading>Students</LargeHeading>          
             <View>
                 <FlatList
                     keyExtractor={(student) => student}

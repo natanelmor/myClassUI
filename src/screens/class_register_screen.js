@@ -64,7 +64,7 @@ export default class class_register_screen extends Component {
                 icon: res.data.icon,
 
             });
-        console.log(res.data);
+       // console.log(res.data);
         })
 
         .catch(err => {
@@ -89,7 +89,7 @@ export default class class_register_screen extends Component {
 
         //this.setState({class : this.state.class.participants.push(user.email)});
 
-        console.log(this.state.participants);
+       // console.log(this.state.participants);
         axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
 
         this.props.navigation.navigate('my_profile',{user: user});
@@ -128,10 +128,7 @@ export default class class_register_screen extends Component {
 
     render() {
         return (
-            <ImageBackground
-                source={require('../../assets/background.jpeg')}
-                style={{ width: '100%', height: '100%' }}>
-                <View>
+                <View style={{ flex: 1, backgroundColor: '#fff' }}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View>{this.renderClassInfo()}</View>
                         <View>{this.renderMessages()}</View>
@@ -198,7 +195,6 @@ export default class class_register_screen extends Component {
                         </View>
                     </ScrollView>
                 </View >
-            </ImageBackground >
         );
     }
 }

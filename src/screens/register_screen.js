@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { CheckBox } from 'native-base';
 import axios from 'axios';
+import CoverImage from '../components/CoverImage';
 
 export default class register_screen extends Component {
 
@@ -44,15 +45,11 @@ export default class register_screen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <CoverImage/>
         <Image source={require('../../assets/logo.png')}/>
-        <Text style={styles.loginText}>Teacher</Text>
-            <CheckBox
-             onPress={() => this.setState({ isTeacher: !this.state.isTeacher})}
-            checked={this.state.isTeacher}/>
-
         <View style={styles.inputContainer}>
           <TextInput style={styles.inputs}
-              placeholder="User Name"
+              placeholder=" User Name"
               underlineColorAndroid='transparent'
               onChangeText={(name) => this.setState({name})}/>
         </View>
@@ -60,7 +57,7 @@ export default class register_screen extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/20-512.png'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Email"
+              placeholder=" Email"
               keyboardType="email-address"
               underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
@@ -69,15 +66,19 @@ export default class register_screen extends Component {
         <View style={styles.inputContainer}>
           <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
           <TextInput style={styles.inputs}
-              placeholder="Password"
+              placeholder=" Password"
               secureTextEntry={true}
               underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
         </View> 
-
+        <Text style={styles.teacherText}>Teacher</Text>
+            <CheckBox color="black" style={{marginBottom:15}}
+             onPress={() => this.setState({ isTeacher: !this.state.isTeacher})}
+            checked={this.state.isTeacher}/>
         <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onRegister('register')}>
           <Text style={styles.loginText}>Submit</Text>
         </TouchableHighlight>
+       
       </View>
     );
   }
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#DCDCDC',
+    backgroundColor: '#fff',
     top: 20
   },
   inputContainer: {
@@ -124,9 +125,12 @@ const styles = StyleSheet.create({
     borderRadius:30,
   },
   loginButton: {
-    backgroundColor: "#00b5ec",
+    backgroundColor: "black",
   },
   loginText: {
     color: 'white',
+  },
+  teacherText: {
+    color: 'black',
   }
 });

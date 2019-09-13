@@ -30,6 +30,9 @@ import Participants from '../components/Participants';
 import Feed from './feed_screen'
 import{AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
+import LargeHeading from '../components/LargeHeading';
+import CoverImage from '../components/CoverImage';
+
 
 class class_info_screen extends Component {
 
@@ -43,12 +46,6 @@ class class_info_screen extends Component {
             curr: 0,
             timer: null,
             startDisable: false,
-            messages: [
-                { content: 'Welcome!' },
-                { content: 'Education is the movement from darkness to light.\n ~Allan Bloom~' },
-                { content: 'I wish you to be inspired by the school,  \n \n to explore things with curiosity and the eyes wide open, \n \n to listen attentively and then you will discover a whole new world!' },
-                { content: 'Be successful and have a lot fun at school!' },
-            ],
             participants: [],
             name: null,
             icon: null,
@@ -102,7 +99,7 @@ class class_info_screen extends Component {
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
                     console.log('missing params in class info:   ');
-            console.log(this.state);
+            //console.log(this.state);
     }
 
     componentWillUnmount() {
@@ -151,7 +148,7 @@ class class_info_screen extends Component {
             axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
         }
 
-        console.log(this.state.participants);
+      //  console.log(this.state.participants);
 
 
         this.props.navigation.navigate('my_profile',{user: this.state.user});
@@ -183,7 +180,7 @@ class class_info_screen extends Component {
         }, 1000);
         this.setState({timer})
         this.setState({startDisable : true})
-        console.log("start: ", this.getTimeString(this.state.totalTime))
+       // console.log("start: ", this.getTimeString(this.state.totalTime))
     }
 
 
@@ -194,7 +191,7 @@ class class_info_screen extends Component {
             startDisable : false
         });
         clearInterval(this.state.timer);
-        console.log("stop: ", this.getTimeString(this.state.totalTime))
+      //  console.log("stop: ", this.getTimeString(this.state.totalTime))
     }
 
 
@@ -226,6 +223,7 @@ class class_info_screen extends Component {
                 time={this.state.time}
                 location={this.state.location}
                 teacher={this.state.teacher}/>
+                
         )}
 
     renderMessages() {
@@ -242,9 +240,7 @@ class class_info_screen extends Component {
         return (
             <Participants data={this.state.participants}/>)
     }
-//  <EditClassInfo
-//    id={this.state.id}
-//  />
+
     editClassInfo() {
       if(this.state.user.type == "Teacher"){
         return(
@@ -254,30 +250,53 @@ class class_info_screen extends Component {
       return(<View></View>)
     }
 
+    renderTools(){
+        return(
+            <View>
+            <LargeHeading>Tools</LargeHeading>
+            <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center', padding:15}}>
+                <TouchableOpacity  style={styles.card_container} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
+                <Image
+                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <View style={styles.card_overlay} />
+                        <AntDesign  style={styles.card_icon} color="white"  size={30} name ="form"/>
+                        <Text style={styles.card_name}>Quizes</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.card_container} onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
+                    <Image
+                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <View style={styles.card_overlay} />
+                        <MaterialCommunityIcons style={styles.card_icon}  size={30} color="white" name ="format-annotation-plus"/>
+                        <Text style={styles.card_name}>Grades</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.card_container} onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
+                    <Image
+                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <View style={styles.card_overlay} />
+                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name ="clock-outline"/>
+                        <Text style={styles.card_name}>Check-in</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  style={styles.card_container} onPress ={() => this.props.navigation.navigate('feed' , {id: this.state.id, user : this.state.user})}>
+                    <Image
+                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <View style={styles.card_overlay} />
+                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name ="forum-outline"/>
+                        <Text style={styles.card_name}>Feed</Text>
+                    </TouchableOpacity>
+            </View>
+            </View>
+        )
+    }
+
     render() {
         return (
-            <ImageBackground
-                source={require('../../assets/background.jpeg')}
-                style={{ width: '100%', height: '100%' }}>
-                <View style={{marginTop: 15}}>
+                <View style={{ flex: 1, backgroundColor: '#fff', marginTop: 15 }} >
+                    <CoverImage/>
                     <ScrollView showsVerticalScrollIndicator={false}>
+
                         <View>{this.renderClassInfo()}</View>
                         <View>{this.editClassInfo()}</View>
-                        <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
-                            <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
-                                    <AntDesign  size={30} name ="form"/>
-                                </TouchableOpacity>
-                                <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
-                                    <MaterialCommunityIcons  size={30} name ="format-annotation-plus"/>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
-                                    <MaterialCommunityIcons  size={30}  name ="clock-outline"/>
-                                </TouchableOpacity>
-                                <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => this.props.navigation.navigate('feed' , {id: this.state.id, user : this.state.user})}>
-                                    <MaterialCommunityIcons  size={30} name ="forum-outline"/>
-                                </TouchableOpacity>
-                        </View>
+                        <View>{this.renderTools()}</View>
                         <View>{this.renderResources()}</View>
                         <View>{this.renderParticipants()}</View>
                         <View style={{ flex: 1 }}>
@@ -380,7 +399,6 @@ class class_info_screen extends Component {
                                 </View>
                     </ScrollView>
                 </View >
-            </ImageBackground >
         );
     }
 }
@@ -434,6 +452,38 @@ const styles = StyleSheet.create({
         backgroundColor: '#696969',
         borderRadius: 15,
     },
+    card_container: {
+        width: 80,
+        height: 80,
+        borderRadius: 6,
+        backgroundColor: '#ccc',
+        overflow: 'hidden',
+        padding: 15,
+        flexDirection: 'column',
+        justifyContent: 'flex-end',
+        marginRight:15
+      },
+      card_background: {
+        width: 80,
+        height: 80,
+        position: 'absolute',
+      },
+      card_overlay: {
+        width: 80,
+        height: 80,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        position: 'absolute',
+      },
+      card_name: {
+        color: 'white',
+        fontSize: 10,
+        fontWeight: '600',
+        marginTop: 7,
+      },
+      card_icon: {
+        width: 32,
+        height: 32,
+      },
 });
 
 export default withNavigation(class_info_screen);

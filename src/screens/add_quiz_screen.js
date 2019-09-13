@@ -37,7 +37,7 @@ class add_quiz_screen extends Component {
       teacher: this.passUser.email,
     };
 
-    console.log(newClass);
+    //console.log(newClass);
 
     axios.post('https://myclass-backend.herokuapp.com/class', newClass)
     .catch((err) => {
@@ -47,13 +47,13 @@ class add_quiz_screen extends Component {
   }
 
   updateTimeFromSelectDay(timeArr) {
-    console.log('time in add class: ');
+    //console.log('time in add class: ');
     //const myTime = timearr;
-    console.log(timeArr);
+    //console.log(timeArr);
     this.setState({ time: timeArr });
     
     
-    console.log(this.state.time);
+    //console.log(this.state.time);
     //console.log(this.state.time);
 
     //this.setState({ icon: this.state.name });

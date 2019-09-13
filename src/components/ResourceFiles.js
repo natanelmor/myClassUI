@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import LargeHeading from './LargeHeading'
 
 const ResourceFiles = (props) => {
     return (
         <View>
-            <View style={styles.headerStyle}><Text style={styles.textStyle}>Resources</Text></View>
+            <LargeHeading>Resources</LargeHeading>
             <View style={styles.containerFiles}>
                 <FlatList
                     numColumns={4}
