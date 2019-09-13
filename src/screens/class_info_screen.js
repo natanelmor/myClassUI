@@ -35,7 +35,7 @@ class class_info_screen extends Component {
 
     constructor(props) {
         super(props);
-        
+
         this.state = {
             appState: AppState.currentState,
             totalTime: 0,
@@ -118,7 +118,7 @@ class class_info_screen extends Component {
             "time": Math.floor(this.state.totalTime / 60 )});
         axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, this.state.user)
         .then(response => {}
-        ).catch(e => {console.log(e)}) 
+        ).catch(e => {console.log(e)})
     }
 
     _handleAppStateChange = (nextAppState) => {
@@ -242,6 +242,17 @@ class class_info_screen extends Component {
         return (
             <Participants data={this.state.participants}/>)
     }
+//  <EditClassInfo
+//    id={this.state.id}
+//  />
+    editClassInfo() {
+      if(this.state.user.type == "Teacher"){
+        return(
+        <View></View>
+        )
+      }
+      return(<View></View>)
+    }
 
     render() {
         return (
@@ -251,6 +262,7 @@ class class_info_screen extends Component {
                 <View style={{marginTop: 15}}>
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View>{this.renderClassInfo()}</View>
+                        <View>{this.editClassInfo()}</View>
                         <View style={styles.headerStyle}><Text style={styles.headerTextStyle}>Achievements</Text></View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center'}}>
                             <TouchableOpacity  style={{ paddingLeft:10 , paddingRight:10 }} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>

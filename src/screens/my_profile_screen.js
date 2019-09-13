@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, ScrollView, ImageBackground, Image } from 'react-native';
+import { Text, StyleSheet, View, ScrollView, ImageBackground, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import ClassesList from '../components/ClassesList';
 import AddClassButton from '../components/AddClassButton';
 import { withNavigation } from 'react-navigation';
+import{Feather} from '@expo/vector-icons';
 
 class my_profile_screen extends Component {
   constructor(props) {
@@ -66,7 +67,9 @@ class my_profile_screen extends Component {
               style={styles.userIcon}
               source={require('../../assets/user.png')}
           /></View>
-      <View style={{marginLeft: 20}}><Text style={styles.text}>Hello {this.state.user.name}!</Text></View></View>
+      <View style={{marginLeft: 20, flexDirection: 'row',}}>
+      <Text style={styles.text}>Hello {this.state.user.name}!</Text>
+      <TouchableOpacity><Feather name = "edit" style={styles.iconStyle}/></TouchableOpacity></View></View>
 
       <View style={{
         flexDirection: 'column',
@@ -113,6 +116,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column',
     marginBottom: 10,
+  },
+  iconStyle:{
+      fontSize: 20,
+      alignSelf:'flex-end',
+      color: 'rgba(100, 100, 100, 0.8)'
   },
   userIcon: {
       width: 70,

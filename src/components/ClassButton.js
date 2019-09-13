@@ -1,16 +1,18 @@
 import React from 'react';
-import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import {Text, StyleSheet, View, TouchableOpacity, Image, FlatList } from 'react-native';
 import {withNavigation} from 'react-navigation';
 
 const ClassButton = (props)=> {
-    const {name , icon, _id} = props.myclass;
+    const {name , icon, _id, time, location, teacher} = props.myclass;
     const next = props.nextPage;
+
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return (
         <View>
             <TouchableOpacity
                 onPress ={() => props.navigation.navigate(next, { key: _id , user : props.user})}
                 >
-                <View style={{height: 100, backgroundColor: 'skyblue', alignSelf: 'stretch', flexDirection: 'row',
+                <View style={{height: 100, backgroundColor: 'skyblue', flexDirection: 'row',
                 borderRadius: 5, marginBottom: 2}}>
                     <View style={{width: 120 ,marginLeft: 20, justifyContent: 'center',}}>
                         <Image
@@ -19,10 +21,17 @@ const ClassButton = (props)=> {
                         />
                         <Text style={{fontSize: 18, fontWeight: 'bold',}}> {name} </Text>
                     </View>
-                    <View style={{ alignSelf: 'center', marginLeft: 10}}>
-                      <Text>Time:  - </Text>
-                      <Text>Location: </Text>
-                      <Text>Teacher: </Text>
+                    <View>
+                    <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
+                      <FlatList
+                          keyExtractor={(time) => time._id}
+                          data={time}
+                          renderItem={({ item }) => {
+                              return (
+                                <View style={{justifyContent: 'center', alignSelf: 'center' }}><Text>{days[item.day - 1]}, {item.from} - {item.until}</Text></View>
+                              )}}
+                      />
+                      <View style={{justifyContent: 'center', alignSelf: 'center' }}><Text>{location}</Text></View></View>
                     </View>
                 </View>
             </TouchableOpacity>
