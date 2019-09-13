@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text } from 'react-native';
+import { View, Image, StyleSheet, Text, FlatList } from 'react-native';
 
 const ClassInfo = (props) => {
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return (
         <View style={styles.container} >
             <View style={{ alignItems: 'center' }}>
@@ -10,7 +11,14 @@ const ClassInfo = (props) => {
                     source={{ uri: props.icon === null ? '../../assets/bible.png' : props.icon }}
                 />
                 <Text style={{ fontSize: 25, fontWeight: 'bold' }}>{props.name}</Text>
-                <Text>Time: {props.time}</Text>
+                <FlatList
+                    keyExtractor={(time) => time._id}
+                    data={props.time}
+                    renderItem={({ item }) => {
+                        return (
+                          <Text>{days[item.day - 1]}, {item.from} - {item.until}</Text>
+                        )}}
+                />
                 <Text>Location: {props.location}</Text>
                 <Text>Teacher: {props.teacher}</Text>
             </View>

@@ -55,7 +55,7 @@ class class_info_screen extends Component {
             user : this.props.navigation.getParam('user'),
             id: this.props.navigation.getParam('key'),
             teacher: null,
-            time: null,
+            time: [],
             location: null,
             items: [
                 { id: '1', type: 'file', source: '', name: 'File' },
@@ -88,7 +88,7 @@ class class_info_screen extends Component {
                     class: res.data,
                     name: res.data.name,
                     teacher: res.data.teacher,
-                    //time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                    time: res.data.time,
                     location: res.data.location,
                     icon: res.data.icon,
                     participants: res.data.students,
