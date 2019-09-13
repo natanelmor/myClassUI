@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Image,
     FlatList,
-    ImageBackground,	    
+    ImageBackground,
     TouchableHighlight,
     AppState,
 } from 'react-native';
@@ -46,23 +46,23 @@ export default class class_register_screen extends Component {
             time: null,
             location: null,
             registerVisible: false,
-            
+
         }
     }
-    
+
 
     componentWillMount() {
         axios.get('https://myclass-backend.herokuapp.com/class?id='+this.props.navigation.getParam('key'))
         .then(res => {
             this.setState({
-                class : res.data, 
-                id: this.props.navigation.getParam('key'), 
+                class : res.data,
+                id: this.props.navigation.getParam('key'),
                 name: res.data.name,
                 teacher: res.data.teacher,
-                time: res.data.time[0].day + ' ' + res.data.time[0].from + ' - ' + res.data.time[0].until,
+                time: res.data.time,
                 location: res.data.location,
                 icon: res.data.icon,
-                
+
             });
         console.log(res.data);
         })
@@ -71,7 +71,7 @@ export default class class_register_screen extends Component {
         console.log(err);
         });
     }
-    
+
     setRegisterVisible(visible) {
         this.setState({ registerVisible: visible });
     }
@@ -79,9 +79,9 @@ export default class class_register_screen extends Component {
     setUnRegisterVisible(visible) {
         this.setState({ unRegisterVisible: visible });
     }
-    
+
     register(){
-       
+
         user.classes.push(this.state.id);
         axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
         passClass = this.state.class;
@@ -93,17 +93,17 @@ export default class class_register_screen extends Component {
         axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
 
         this.props.navigation.navigate('my_profile',{user: user});
-        
+
     }
 
     renderRegisterPopUp() {
         return (
             <Text>Are you sure you bitch?</Text>
             )
-        
+
     }
 
-    
+
 
     renderClassInfo() {
         return (
@@ -150,7 +150,7 @@ export default class class_register_screen extends Component {
                                 </View>
                                 </TouchableOpacity>
                             </View>
-                            
+
 
                         <View style={{flex: 1 }}>
                             <Modal
@@ -187,7 +187,7 @@ export default class class_register_screen extends Component {
                                         style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                         onPress={() => {
                                             this.setRegisterVisible(!this.state.registerVisible);
-                                            
+
                                         }}>
                                         <Text style={{ fontSize: 18 }}>cancle  </Text>
                                     </TouchableHighlight>
