@@ -1,28 +1,46 @@
 import React, { Component } from "react";
 import { ScrollView, StatusBar, Image, ImageBackground, 
-        StyleSheet, View , Text, FlatList} from "react-native";
+        StyleSheet, View , Text, FlatList, TouchableOpacity } from "react-native";
 import spaceQuestions from "../data/space";
 import westernsQuestions from "../data/westerns";
 import computerQuestions from "../data/computers";
 import { RowItem } from "../components/RowItem";
 import { withNavigation } from 'react-navigation';
 import axios from 'axios';
+import{Feather} from '@expo/vector-icons';
+
+
 
 class QuizIndex extends Component { 
   constructor(props) {
     super(props);
     this.state = {
-      stam: '',
+      user: this.props.navigation.getParam('user'),
+      addQuizVisible: false,
+      id: '',
+      visibleOp: 0
     };
   }
 
   componentDidMount() {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
     });
+    this.setState({
+      user: this.props.navigation.getParam('user'), 
+      id: this.props.navigation.getParam('id'),
+      quizes: this.props.navigation.getParam('quizes'),
+    });
+    this.setAddQuizVisible();
   }
   
 componentWillUnmount() {
     this.focusListener.remove();
+}
+
+setAddQuizVisible() {
+  if (this.state.user.type =='Teacher') {
+        this.setState({ visibleOp: 1 });     
+  }
 }
 
 
@@ -37,9 +55,9 @@ componentWillUnmount() {
           <StatusBar barStyle="dark-content" />
             <FlatList
               keyExtractor={(file) => file._id}
-              data={this.props.navigation.getParam('quizes')}
+              data={this.state.quizes}
               renderItem={({ item }) => {
-              const res = this.props.navigation.getParam('user').grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == this.props.navigation.getParam('id'))));
+              const res = this.state.user.grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == this.state.id)));
                 if (!res) {
                   return (
                   <View>
@@ -48,11 +66,11 @@ componentWillUnmount() {
                       color="#36b1f0"
                       onPress={() =>
                         this.props.navigation.navigate("Quiz", {
-                        title: item.quiz_name,
-                        questions: item.questions,
-                        color: "#36b1f0",
-                        user: this.props.navigation.getParam('user'),
-                        id: this.props.navigation.getParam('id'),
+                          title: item.quiz_name,
+                          questions: item.questions,
+                          color: "#36b1f0",
+                          user: this.state.user,
+                          id: this.state.id,
                       })
                     }
                     />
@@ -65,6 +83,18 @@ componentWillUnmount() {
               }
             />
         </ScrollView>
+        <View 
+          style={{ opacity: this.state.visibleOp }}
+        > 
+          <TouchableOpacity 
+          
+          style={styles.touchOp } 
+          onPress ={() =>this.props.navigation.navigate('add_quiz')}
+          >
+            <Feather name="plus" />
+            <Text> add quiz </Text>
+        </TouchableOpacity>  
+        </View>
       </View>
     </ImageBackground>
       );
@@ -72,6 +102,14 @@ componentWillUnmount() {
 }
 
 const styles = StyleSheet.create({
+  touchOp: {
+    alignItems: 'center',
+    fontSize: 30,
+    padding: 10,
+    backgroundColor: '#fff',
+    elevation: 2, 
+    justifyContent: 'center',
+  },
   textStyle: {
       marginHorizontal: 15,
       fontSize: 25,

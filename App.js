@@ -13,7 +13,7 @@ import Quiz from "./src/screens/Quiz";
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import Feed from "./src/screens/feed_screen";
-
+import add_quiz_screen from "./src/screens/add_quiz_screen";
 const navigator = createStackNavigator(
   {
     feed : Feed,
@@ -37,7 +37,9 @@ const navigator = createStackNavigator(
           borderBottomColor: navigation.getParam("color")
         }
       })
-    }
+    },
+    add_quiz: add_quiz_screen,
+
   },
   {
     initialRouteName: 'login_screen',
