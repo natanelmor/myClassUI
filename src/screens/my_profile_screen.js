@@ -53,14 +53,6 @@ class my_profile_screen extends Component {
     )
   }
 
-  editProfile() {
-    return(
-      <EditProfile
-        user={this.state.user}
-      />
-    )
-  }
-
   render() {
     return (
       <View>

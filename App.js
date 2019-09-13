@@ -13,7 +13,6 @@ import Quiz from "./src/screens/Quiz";
 import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import Feed from "./src/screens/feed_screen";
-import EditProfile from "./src/components/EditProfile";
 
 const navigator = createStackNavigator(
   {
@@ -27,7 +26,6 @@ const navigator = createStackNavigator(
     login_screen: login_screen,
     register_screen: register_screen,
     class_register: class_register_screen,
-    edit_profile: EditProfile,
     QuizIndex: QuizIndex,
     Quiz: {
       screen: Quiz,
