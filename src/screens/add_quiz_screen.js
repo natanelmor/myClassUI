@@ -59,7 +59,7 @@ class add_quiz_screen extends Component {
                // console.log(this.state.class);
                 axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
                     .then(response => {}).catch(e => { console.log(e); });
-                this.props.navigation.navigate('my_profile');
+                this.props.navigation.navigate('quiz_time');
             
             
             
