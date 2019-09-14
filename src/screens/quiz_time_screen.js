@@ -30,6 +30,7 @@ class QuizIndex extends Component {
       id: this.props.navigation.getParam('id'),
       quizes: this.props.navigation.getParam('quizes'),
     });
+    
     this.setAddQuizVisible();
   }
   
@@ -55,6 +56,8 @@ setAddQuizVisible() {
               keyExtractor={(file) => file._id}
               data={this.state.quizes}
               renderItem={({ item }) => {
+               // console.log('quizes :');
+               // console.log(this.state.quizes);
               const res = this.state.user.grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == this.state.id)));
                 if (!res) {
                   return (
@@ -87,7 +90,7 @@ setAddQuizVisible() {
           <TouchableOpacity 
           
           style={styles.touchOp } 
-          onPress ={() =>this.props.navigation.navigate('add_quiz')}
+          onPress={() => this.props.navigation.navigate('add_quiz', { id: this.state.id, })}
           >
             <Feather name="plus" />
             <Text> add quiz </Text>

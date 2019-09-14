@@ -15,11 +15,21 @@ class add_quiz_screen extends Component {
     constructor(props) {
     super(props);
     this.state = {
-      id: this.props.navigation.getParam('id'),
-      new_question: {},
-      questions: [],
-      class_quizes: [],
-      addQuestionVisible: false,
+        id: this.props.navigation.getParam('id'),
+        new_question: {},
+        
+        class_quizes: [],
+        addQuestionVisible: false,
+
+        class: {},
+        questions: [],
+        answers: [],
+        quiz_name: '',
+        final_question: '',
+        final_correct_answer: '',
+        final_wrong_answer1: '',
+        final_wrong_answer2: '',
+        final_wrong_answer3: '',
     };
     this.onCreate = this.onCreate.bind(this);
 
@@ -27,112 +37,170 @@ class add_quiz_screen extends Component {
   }
 
   onCreate = () => {
-    axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
-            .then(res => {
-                this.setState({
-                    class_quizes: this.state.class.quizes,
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    console.log(this.state.class_quizes)
-    axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
-            .then(res => {
-                this.setState({
-                    class_quizes: this.state.class.quizes,
-                });
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    this.props.navigation.navigate('QuizIndex');
 
+    console.log('id :' + this.state.id);
+
+    const final_quiz = { 'quiz_name': this.state.quiz_name, 'questions': this.state.questions };
+
+    //console.log('final_quiz: ');
+    //console.log(final_quiz);
+
+    axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)//get the class
+            .then(res => {
+                //console.log(res);
+                this.setState({
+                    class: res.data,
+                });
+                
+                //console.log('class before : ');
+                //console.log(this.state.class);
+                this.state.class.quizes.push(final_quiz);
+                //console.log('class after : ');
+               // console.log(this.state.class);
+                axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
+                    .then(response => {}).catch(e => { console.log(e); });
+                this.props.navigation.navigate('my_profile');
+            
+            
+            
+            })
+            .catch(err => {
+                console.log(err);
+            }); 
+
+    //console.log('class before : ');
+    //console.log(this.state.class);
+
+
+    //console.log(this.state.class_quizes);
+
+   // this.state.class.quizes.push(final_quiz);
+
+    //console.log('class after : ');
+    //console.log(this.state.class);
+
+
+    //axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
+      //  .then(response => {}).catch(e => { console.log(e); });
+
+   // this.props.navigation.navigate('QuizIndex');
   }
 
-  renderAddQuestionPopUp(){
+  renderAddQuestionPopUp() {
     return (
-      <ScrollView
-          showsVerticalScrollIndicator={false}
-          nestedScrollEnabled>
-          <View style={styles.inputContainer}>
-              <TextInput
-                  style={styles.inputs}
-                  placeholder="Question:"
-                  underlineColorAndroid='transparent'
-                  onChangeText={(question) => {
-                    var get_question = this.state.new_question
-                    get_question.question = question
-                    this.setState({new_question: get_question}, () => {
-                      console.log(this.state.new_question)}                      
-                    )
-                  }
-                }
-              />
-          </View>
-          <View style={styles.inputContainer}>
-              <TextInput
-                  style={styles.inputs}
-                  placeholder="Answer A (The correct one):"
-                  underlineColorAndroid='transparent'
-                  onChangeText={(answer) => {
-                    var get_question = this.state.new_question
-                    var new_answer = { answer: answer, correct: true}
-                    if (!get_question.answers) {
-                      get_question.answers = []
-                    }
-                    get_question.answers.push(new_answer)
-                    console.log(get_question)
-                    this.state.new_question.setState(get_question)
-                    console.log(this.state.new_question.answers)
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            nestedScrollEnabled
+        >
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Question:"
+                    underlineColorAndroid='transparent'
+                    onChangeText={(question) => {
+                       // console.log(question); 
+                        this.setState({ final_question: question });
+                    //var get_question = this.state.new_question; 
+                    //get_question.question = question;
+                    //this.setState({ new_question: get_question }, () => {
+                    //  console.log(this.state.new_question)
+                    //});
+                  }}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Answer A (The correct one):"
+                    underlineColorAndroid='transparent'
+                    onChangeText={(answer) => {
+                        //console.log(answer);
+                        this.setState({ final_correct_answer: answer });
+
+                    //var get_question2 = this.state.new_question;
+                    //var new_answer = { answer: answer, correct: true };
+                    //if (!get_question2.answers) {
+                    //    get_question2.answers = [];
+                    //}
+                    //get_question2.answers.push(new_answer);
+                    //console.log(get_question2);
+                    //this.state.new_question.setState(get_question2);
+                    //console.log(this.state.new_question.answers);
                     //console.log('new_question:' + JSON.stringify(new_question.answers))
                   }}
                   
-              />
-          </View>
-          <View style={styles.inputContainer}>
-              <TextInput
-                  style={styles.inputs}
-                  placeholder="Answer B:"
-                  underlineColorAndroid='transparent'
-                  onChangeText={(text) => {
-                    var get_question = this.state.new_question
-                    get_question.answers.push({answer: text, correct: false})
-                    this.setState({new_question: get_question})}
-                  }
-              />
-          </View>
-          <View style={styles.inputContainer}>
-              <TextInput
-                  style={styles.inputs}
-                  placeholder="Answer C:"
-                  underlineColorAndroid='transparent'
-                  onChangeText={(text) => {
-                    var get_question = this.state.new_question
-                    get_question.answers.push({answer: text, correct: false})
-                    this.setState({new_question: get_question})}
-                  }
-              />
-          </View>
-          <View style={styles.inputContainer}>
-              <TextInput
-                  style={styles.inputs}
-                  placeholder="Answer D:"
-                  underlineColorAndroid='transparent'
-                  onChangeText={(text) => {
-                    var get_question = this.state.new_question
-                    get_question.answers.push({answer: text, correct: false})
-                    this.setState({new_question: get_question})}
-                  }
-              />
-          </View>
-      </ScrollView>
-    ) 
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Answer B:"
+                    underlineColorAndroid='transparent'
+                    onChangeText={(text) => {
+                       // console.log(text);
+                        this.setState({ final_wrong_answer1: text });
+                        
+                    //var get_question = this.state.new_question
+                    //get_question.answers.push({answer: text, correct: false})
+                    //this.setState({new_question: get_question})}
+                    }}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Answer C:"
+                    underlineColorAndroid='transparent'
+                    onChangeText={(text) => {
+                        //console.log(text);
+                        this.setState({ final_wrong_answer2: text });
+
+
+                    //var get_question = this.state.new_question
+                    //get_question.answers.push({answer: text, correct: false})
+                    //this.setState({new_question: get_question})}
+                  }}
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <TextInput
+                    style={styles.inputs}
+                    placeholder="Answer D:"
+                    underlineColorAndroid='transparent'
+                    onChangeText={(text) => {
+                        //console.log(text);
+                        this.setState({ final_wrong_answer3: text });
+
+                    //var get_question = this.state.new_question
+                   // get_question.answers.push({answer: text, correct: false})
+                    //this.setState({new_question: get_question})}
+                  }}
+                />
+            </View>
+        </ScrollView>
+    );
   }
 
+
   AddQuestion() {
-    this.state.questions.push(this.state.new_question)
-    console.log(this.state.questions)
+    const answers = [];
+    const correctAnswer = { 'answer_id': 0, 'answer': this.state.final_correct_answer, 'correct': true };
+    answers.push(correctAnswer);
+
+    const wrongAnswer1 = { 'answer_id': 1, 'answer': this.state.final_wrong_answer1, 'correct': false };
+    answers.push(wrongAnswer1);
+
+    const wrongAnswer2 = { 'answer_id': 2, 'answer': this.state.final_wrong_answer2, 'correct': false };
+    answers.push(wrongAnswer2);
+
+    const wrongAnswer3 = { 'answer_id': 3, 'answer': this.state.final_wrong_answer3, 'correct': false };
+    answers.push(wrongAnswer3);
+    
+    const question = { 'question': this.state.final_question, 'answers': answers };  
+
+    this.state.questions.push(question);
+
+    //console.log(this.state.questions);
   }
 
   setAddQuestionVisible(visible){
@@ -148,7 +216,7 @@ class add_quiz_screen extends Component {
               style={styles.inputs}
               placeholder="quiz name:"
               underlineColorAndroid='transparent'
-              onChangeText={(name) => this.setState({ name })}
+              onChangeText={(name) => this.setState({ quiz_name: name })}
           />
         </View>
         
