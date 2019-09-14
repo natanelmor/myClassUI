@@ -15,20 +15,39 @@ class add_quiz_screen extends Component {
     constructor(props) {
     super(props);
     this.state = {
-      new_question: {
-        answers: []
-      },
+      id: this.props.navigation.getParam('id'),
+      new_question: {},
       questions: [],
+      class_quizes: [],
       addQuestionVisible: false,
     };
-
     this.onCreate = this.onCreate.bind(this);
 
     this.passUser = this.props.navigation.getParam('user');
   }
 
   onCreate = () => {
+    axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
+            .then(res => {
+                this.setState({
+                    class_quizes: this.state.class.quizes,
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    console.log(this.state.class_quizes)
+    axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
+            .then(res => {
+                this.setState({
+                    class_quizes: this.state.class.quizes,
+                });
+            })
+            .catch(err => {
+                console.log(err);
+            });
     this.props.navigation.navigate('QuizIndex');
+
   }
 
   renderAddQuestionPopUp(){
@@ -44,9 +63,11 @@ class add_quiz_screen extends Component {
                   onChangeText={(question) => {
                     var get_question = this.state.new_question
                     get_question.question = question
-                    this.setState({new_question: get_question})
-                    console.log(this.state.new_question)}
+                    this.setState({new_question: get_question}, () => {
+                      console.log(this.state.new_question)}                      
+                    )
                   }
+                }
               />
           </View>
           <View style={styles.inputContainer}>
@@ -54,19 +75,18 @@ class add_quiz_screen extends Component {
                   style={styles.inputs}
                   placeholder="Answer A (The correct one):"
                   underlineColorAndroid='transparent'
-                  onTextChange={(text) => {
-                    console.log('do I even get here')
+                  onChangeText={(answer) => {
                     var get_question = this.state.new_question
-                    var new_answer = {
-                      answer: text,
-                      correct: true
+                    var new_answer = { answer: answer, correct: true}
+                    if (!get_question.answers) {
+                      get_question.answers = []
                     }
-                    console.log(new_answer)
                     get_question.answers.push(new_answer)
                     console.log(get_question)
-                    this.setState({new_question: get_question})
-                    console.log(this.state.new_question)}
-                  }
+                    this.state.new_question.setState(get_question)
+                    console.log(this.state.new_question.answers)
+                    //console.log('new_question:' + JSON.stringify(new_question.answers))
+                  }}
                   
               />
           </View>
@@ -75,11 +95,10 @@ class add_quiz_screen extends Component {
                   style={styles.inputs}
                   placeholder="Answer B:"
                   underlineColorAndroid='transparent'
-                  onChangeText={(answer) => {
+                  onChangeText={(text) => {
                     var get_question = this.state.new_question
-                    get_question.answers.push({answer: answer, correct: false})
-                    this.setState({new_question: get_question})
-                    console.log(this.state.questions)}
+                    get_question.answers.push({answer: text, correct: false})
+                    this.setState({new_question: get_question})}
                   }
               />
           </View>
@@ -88,9 +107,9 @@ class add_quiz_screen extends Component {
                   style={styles.inputs}
                   placeholder="Answer C:"
                   underlineColorAndroid='transparent'
-                  onChangeText={(answer) => {
+                  onChangeText={(text) => {
                     var get_question = this.state.new_question
-                    get_question.answers.push({answer: answer, correct: false})
+                    get_question.answers.push({answer: text, correct: false})
                     this.setState({new_question: get_question})}
                   }
               />
@@ -100,9 +119,9 @@ class add_quiz_screen extends Component {
                   style={styles.inputs}
                   placeholder="Answer D:"
                   underlineColorAndroid='transparent'
-                  onChangeText={(answer) => {
+                  onChangeText={(text) => {
                     var get_question = this.state.new_question
-                    get_question.answers.push({answer: answer, correct: false})
+                    get_question.answers.push({answer: text, correct: false})
                     this.setState({new_question: get_question})}
                   }
               />
