@@ -28,11 +28,10 @@ import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
 import Participants from '../components/Participants';
 import Feed from './feed_screen'
-import{AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
+import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
 import LargeHeading from '../components/LargeHeading';
 import CoverImage from '../components/CoverImage';
-
 
 class class_info_screen extends Component {
 
@@ -49,7 +48,7 @@ class class_info_screen extends Component {
             participants: [],
             name: null,
             icon: null,
-            user : this.props.navigation.getParam('user'),
+            user: this.props.navigation.getParam('user'),
             id: this.props.navigation.getParam('key'),
             teacher: null,
             time: [],
@@ -68,7 +67,7 @@ class class_info_screen extends Component {
             grades: null,
             modalVisible: false,
             startAttendance: false,
-            unRegisterVisible : false,
+            unRegisterVisible: false,
         }
 
         this.startTimer = this.startTimer.bind(this);
@@ -105,31 +104,73 @@ class class_info_screen extends Component {
     componentWillUnmount() {
         AppState.removeEventListener('change', this._handleAppStateChange);
         this.updateAttendance();
+        clearInterval(this.state.timer);
         //this.focusListener.remove();
     }
 
-    updateAttendance(){
+    setModalVisible(visible) {
+        this.setState({ modalVisible: visible });
+    }
+    
+    setUnRegisterVisible(visible) {
+        this.setState({ unRegisterVisible: visible });
+    }
+
+    setStartAttendanceVisible(visible) {
+        this.setState({ startAttendance: visible });
+    }
+
+    getTimeString(timeInSec) {
+        var delim = ":";
+        var hours = Math.floor(timeInSec / (60 * 60) % 60);
+        var minutes = Math.floor(timeInSec / (60) % 60);
+        var seconds = Math.floor(timeInSec % 60);
+
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        return hours + delim + minutes + delim + seconds;
+    }
+
+    stopTimer() {
+        this.setState({
+            totalTime: this.state.start + this.state.totalTime,
+            start: 0,
+            startDisable: false
+        });
+        clearInterval(this.state.timer);
+       // console.log("stop: ", this.getTimeString(this.state.totalTime))
+    }
+
+    startTimer() {
+        let timer = setInterval(() => {
+           this.setState({
+           start: this.state.start + 1,
+           curr: this.state.start + this.state.totalTime
+           });
+       }, 1000);
+       this.setState({ timer });
+       
+       this.setState({ startDisable: true });
+       //console.log("start: ", this.getTimeString(this.state.totalTime))
+   }
+
+   _handleAppStateChange = (nextAppState) => {
+        if (this.state.appState.match(/background/) && nextAppState === 'active') {
+            this.startTimer();
+        } else {
+            this.stopTimer();
+        }
+        this.setState({ appState: nextAppState });
+    }
+
+    updateAttendance() {
         this.state.user.attendance.push({
             "class_id": "" + this.state.id,
             "date": Date.now(),
             "time": Math.floor(this.state.totalTime / 60 )});
-        axios.patch('https://myclass-backend.herokuapp.com/user?email='+this.state.user.email, this.state.user)
-        .then(response => {}
-        ).catch(e => {console.log(e)})
-    }
-
-    _handleAppStateChange = (nextAppState) => {
-        if (this.state.appState.match(/background/) && nextAppState === 'active') {
-            this.startTimer();
-        }
-        else{
-            this.stopTimer();
-        }
-        this.setState({appState: nextAppState });
-    }
-
-    setUnRegisterVisible(visible) {
-        this.setState({ unRegisterVisible: visible });
+        axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user)
+            .then(response => {}).catch(e => { console.log(e); });
     }
 
     unRegister() {
@@ -151,8 +192,8 @@ class class_info_screen extends Component {
         index = -1;
         index = passClass.students.indexOf(this.state.user.email);
         console.log('index: ' + index);
-        console.log('students before: ' );
-        console.log( passClass.students);
+        console.log('students before: ');
+        console.log(passClass.students);
 
         if (index !== -1) {
             passClass.students.splice(index, 1);
@@ -167,64 +208,21 @@ class class_info_screen extends Component {
         this.props.navigation.navigate('my_profile', { user: this.state.user });
     }
 
-    renderUnRegisterPopUp() {
+    renderParticipants() {
         return (
-            <Text>Are you sure you bitch?</Text>
-            );
-
+            <Participants data={this.state.participants} />);
     }
 
-    setModalVisible(visible){
-        this.setState({ modalVisible: visible });
-    }
-
-    setStartAttendanceVisible(visible) {
-        this.setState({ startAttendance: visible });
-    }
-
-
-    startTimer(){
-         let timer = setInterval(() => {
-            this.setState({
-            start : this.state.start +1,
-            curr:  this.state.start + this.state.totalTime
-            });
-        }, 1000);
-        this.setState({timer})
-        this.setState({startDisable : true})
-        //console.log("start: ", this.getTimeString(this.state.totalTime))
-    }
-
-
-    stopTimer(){
-        this.setState({
-            totalTime : this.state.start + this.state.totalTime,
-            start : 0,
-            startDisable : false
-        });
-        clearInterval(this.state.timer);
-       // console.log("stop: ", this.getTimeString(this.state.totalTime))
-    }
-
-
-   getTimeString(timeInSec) {
-        var delim = ":";
-        var hours = Math.floor(timeInSec / (60 * 60) % 60);
-        var minutes = Math.floor(timeInSec / (60) % 60);
-        var seconds = Math.floor(timeInSec % 60);
-
-        hours = hours < 10 ? '0' + hours : hours;
-        minutes = minutes < 10 ? '0' + minutes : minutes;
-        seconds = seconds < 10 ? '0' + seconds : seconds;
-        return hours + delim + minutes + delim + seconds;
-    }
-
-    renderGrades() {
+    renderResources() {
         return (
-                <DisplayGrade
-                    data={this.state.grades}
-                    id={this.state.id}/>
-        )}
+            <ResourceFiles data={this.state.items} />);
+    }
+
+    renderMessages() {
+        return (
+            <Feed></Feed> 
+        );
+    }
 
     renderClassInfo() {
         return (
@@ -234,80 +232,68 @@ class class_info_screen extends Component {
                 name={this.state.name}
                 time={this.state.time}
                 location={this.state.location}
-                teacher={this.state.teacher}/>
-                
-        )}
+                teacher={this.state.teacher}
+            />     
+        );
+    }
 
-    renderMessages() {
+    renderGrades() {
         return (
-            <Feed></Feed> )
+                <DisplayGrade
+                    data={this.state.grades}
+                    id={this.state.id}
+                />
+        );
     }
 
-    renderResources() {
+    renderUnRegisterPopUp() {
         return (
-            <ResourceFiles data={this.state.items}/>)
+            <Text>Are you sure you bitch?</Text>
+            );
+
     }
 
-    renderParticipants() {
+    renderTools() {
         return (
-            <Participants data={this.state.participants}/>)
-    }
-
-    editClassInfo() {
-      if(this.state.user.type == "Teacher"){
-        return(
-        <View></View>
-        )
-      }
-      return(<View></View>)
-    }
-
-    renderTools(){
-        return(
             <View>
             <LargeHeading>Tools</LargeHeading>
-            <View style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center', padding:15}}>
-                <TouchableOpacity  style={styles.card_container} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
-                <Image
-                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 15 }}>
+                <TouchableOpacity style={styles.card_container} onPress={() => this.props.navigation.navigate('QuizIndex', { id: this.state.id, user: this.state.user, quizes: this.state.quizes })}>
+                <Image source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover" />
                     <View style={styles.card_overlay} />
-                        <AntDesign  style={styles.card_icon} color="white"  size={30} name ="form"/>
+                        <AntDesign style={styles.card_icon} color="white" size={30} name="form" />
                         <Text style={styles.card_name}>Quizes</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.card_container} onPress={() => {this.setModalVisible(!this.state.modalVisible);}}>
-                    <Image
-                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <TouchableOpacity style={styles.card_container} onPress={() => { this.setModalVisible(!this.state.modalVisible); }}>
+                    <Image source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover" />
                     <View style={styles.card_overlay} />
-                        <MaterialCommunityIcons style={styles.card_icon}  size={30} color="white" name ="format-annotation-plus"/>
+                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name="format-annotation-plus" />
                         <Text style={styles.card_name}>Grades</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.card_container} onPress ={() => {this.setStartAttendanceVisible(!this.state.startAttendance)}}>
-                    <Image
-                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <TouchableOpacity style={styles.card_container} onPress={() => { this.setStartAttendanceVisible(!this.state.startAttendance); }}>
+                    <Image source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover" />
                     <View style={styles.card_overlay} />
-                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name ="clock-outline"/>
+                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name ="clock-outline" />
                         <Text style={styles.card_name}>Check-in</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity  style={styles.card_container} onPress ={() => this.props.navigation.navigate('feed' , {id: this.state.id, user : this.state.user})}>
-                    <Image
-                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
+                    <TouchableOpacity style={styles.card_container} onPress={() => this.props.navigation.navigate('feed', { id: this.state.id, user: this.state.user })}>
+                    <Image source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover" />
                     <View style={styles.card_overlay} />
-                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name ="forum-outline"/>
+                        <MaterialCommunityIcons style={styles.card_icon} size={30} color="white" name="forum-outline" />
                         <Text style={styles.card_name}>Feed</Text>
                     </TouchableOpacity>
             </View>
             </View>
-        )
+        );
     }
 
     render() {
         return (
                 <View style={{ flex: 1, backgroundColor: '#fff', marginTop: 15 }} >
-                    <CoverImage/>
+                    <CoverImage />
                     <ScrollView showsVerticalScrollIndicator={false}>
 
                         <View>{this.renderClassInfo()}</View>
-                        <View>{this.editClassInfo()}</View>
                         <View>{this.renderTools()}</View>
                         <View>{this.renderResources()}</View>
                         <View>{this.renderParticipants()}</View>
@@ -316,15 +302,19 @@ class class_info_screen extends Component {
                                 scroll inside the modal
                                 isVisible={this.state.modalVisible}
                             >
-                                <View style={{
-                                    backgroundColor: '#f0f8ff', borderRadius: 15,
-                                    height: 500}}>
+                                <View 
+                                    style={{
+                                        backgroundColor: '#f0f8ff', 
+                                        borderRadius: 15,
+                                        height: 500 }}
+                                >
                                     <View style={styles.headerStyle}>
                                         <Text style={styles.headerTextStyle}>Grades</Text>
                                     </View>
                                     <ScrollView
                                         showsVerticalScrollIndicator={false}
-                                        nestedScrollEnabled>
+                                        nestedScrollEnabled
+                                    >
                                         <View>
                                             {this.renderGrades()}
                                         </View>
@@ -334,7 +324,8 @@ class class_info_screen extends Component {
                                             style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                             onPress={() => {
                                                 this.setModalVisible(!this.state.modalVisible);
-                                            }}>
+                                            }}
+                                        >
                                             <Text style={{ fontSize: 18 }}>Close</Text>
                                         </TouchableHighlight></View>
                                 </View>
@@ -342,12 +333,13 @@ class class_info_screen extends Component {
                         </View>
                         <View style={{ flex: 1 }}>
                             <Modal scroll inside the modal isVisible={this.state.startAttendance}>
-                                <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500}}>
+                                <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500 }}>
                                     <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
                                     <Text style={{ fontSize: 18 }}>Time in class: {this.getTimeString(this.state.curr)}</Text>
                                         <TouchableHighlight
                                             style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                            onPress={() => {this.setStartAttendanceVisible(!this.state.startAttendance);}}>
+                                            onPress={() => { this.setStartAttendanceVisible(!this.state.startAttendance); }}
+                                        >
                                            <Text style={{ fontSize: 18 }}>Close</Text>
                                         </TouchableHighlight>
                                     </View>
@@ -363,18 +355,20 @@ class class_info_screen extends Component {
                             >
                                 <View>
                                     <Image
-                                        style={{width: 100,
-                                        height: 50}}
-                                        source={ {uri :'http://www.clker.com/cliparts/O/6/3/C/g/l/cancel-button-hi.png'}}
+                                        style={{ width: 100,
+                                        height: 50 }}
+                                        source={{ uri: 'http://www.clker.com/cliparts/O/6/3/C/g/l/cancel-button-hi.png' }}
                                     />
                                 </View>
                             </TouchableOpacity>
                         </View>
-                                <View style={{flex: 1 }}>
+                                <View style={{ flex: 1 }}>
                                     <Modal scroll inside the modal isVisible={this.state.unRegisterVisible}>
-                                        <View style={{
-                                            backgroundColor: '#f0f8ff', borderRadius: 15,
-                                            height: 500
+                                        <View 
+                                            style={{
+                                                backgroundColor: '#f0f8ff', 
+                                                borderRadius: 15,
+                                                height: 500
                                             }}
                                         >
 
@@ -387,22 +381,23 @@ class class_info_screen extends Component {
                                             >
                                                 <View>{this.renderUnRegisterPopUp()}</View>
                                             </ScrollView>
-                                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' , flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10 , alignContent:'space-between'}}>
+                                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10, alignContent: 'space-between' }}>
                                                 <TouchableHighlight
                                                     style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                                     onPress={() => {
                                                         this.setUnRegisterVisible(!this.state.unRegisterVisible);
                                                         this.unRegister();
-                                                    }}>
+                                                    }}
+                                                >
                                                     <Text style={{ fontSize: 18 }}>  unsign</Text>
                                                 </TouchableHighlight>
                                                 <TouchableHighlight
                                                     style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                                                     onPress={() => {
                                                         this.setUnRegisterVisible(!this.state.unRegisterVisible);
-
-                                                    }}>
-                                                    <Text style={{ fontSize: 18 }}>cancle  </Text>
+                                                    }}
+                                                >
+                                                    <Text style={{ fontSize: 18 }}>cancle</Text>
                                                 </TouchableHighlight>
                                             </View>
 
