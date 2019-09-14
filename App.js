@@ -14,6 +14,7 @@ import React from 'react';
 import { Text, StyleSheet, View, Button, TouchableOpacity, ImageBackground, Image} from 'react-native';
 import Feed from "./src/screens/feed_screen";
 import add_quiz_screen from "./src/screens/add_quiz_screen";
+import quiz_time_screen from './src/screens/quiz_time_screen';
 const navigator = createStackNavigator(
   {
     feed : Feed,
@@ -39,7 +40,7 @@ const navigator = createStackNavigator(
       })
     },
     add_quiz: add_quiz_screen,
-
+    quiz_time: quiz_time_screen
   },
   {
     initialRouteName: 'login_screen',
