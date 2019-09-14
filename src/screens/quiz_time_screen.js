@@ -32,7 +32,6 @@ class QuizIndex extends Component {
       quizes: this.props.navigation.getParam('quizes'),
     });
 
-    this.setAddQuizVisible();
   }
 
   componentWillUnmount() {
