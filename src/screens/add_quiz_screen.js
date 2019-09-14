@@ -38,12 +38,12 @@ class add_quiz_screen extends Component {
 
   onCreate = () => {
 
-    console.log('id :' + this.state.id);
+    //console.log('id :' + this.state.id);
 
     const final_quiz = { 'quiz_name': this.state.quiz_name, 'questions': this.state.questions };
 
-    console.log('final_quiz: ');
-    console.log(final_quiz);
+    //console.log('final_quiz: ');
+    //console.log(final_quiz);
 
     axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)//get the class
             .then(res => {
@@ -52,16 +52,16 @@ class add_quiz_screen extends Component {
                     class: res.data,
                 });
                 
-                console.log('class before : ');
-                console.log(this.state.class);
+                //console.log('class before : ');
+                //console.log(this.state.class);
 
                 //var temp_class = this.state.class.quizes;
                 //temp_class.push(final_quiz);
                 this.state.class.quizes.push(final_quiz);
-                console.log('class after : ');
-                console.log(this.state.class);
+                //console.log('class after : ');
+                //console.log(this.state.class);
 
-                
+
                 axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
                     .then(response => {}).catch(e => { console.log(e); });
                 this.props.navigation.navigate('class_info');
