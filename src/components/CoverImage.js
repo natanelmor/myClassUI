@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
-import { LinearGradient as Gradient } from 'expo';
+import { LinearGradient as Gradient } from 'expo-linear-gradient';
 
 const CoverImage = ({ source, size }) => {
   return (
