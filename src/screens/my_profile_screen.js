@@ -24,9 +24,9 @@ class my_profile_screen extends Component {
      // console.log('rerendr: ');
       axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
         .then(response => {
-          this.setState({nextClass: response.data });
+          this.setState({ nextClass: response.data });
         });
-        //console.log(this.statenextClass);
+       // console.log(this.statenextClass);
     });
   }
 

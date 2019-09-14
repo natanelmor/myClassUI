@@ -98,8 +98,8 @@ class class_info_screen extends Component {
             });
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
-                    console.log('missing params in class info:   ');
-            //console.log(this.state);
+                   // console.log('missing params in class info:   ');
+           // console.log(this.state);
     }
 
     componentWillUnmount() {
@@ -125,40 +125,52 @@ class class_info_screen extends Component {
         else{
             this.stopTimer();
         }
-        this.setState({appState: nextAppState});
+        this.setState({appState: nextAppState });
     }
 
     setUnRegisterVisible(visible) {
         this.setState({ unRegisterVisible: visible });
     }
 
-    unRegister(){
+    unRegister() {
+        let passClass = this.state.class;
+        let index = this.state.user.classes.indexOf(this.state.id);
+        console.log('index: ' + index);
+        //console.log('classes: '+ this.state.user.classes);
+        console.log('user before : ');
+        console.log(this.state.user);
 
-        var index = this.state.user.classes.indexOf(this.state.id);
         if (index !== -1) {
             this.state.user.classes.splice(index, 1);
-            axios.patch('https://myclass-backend.herokuapp.com/user?email='+ this.state.user.email, this.state.user);
+            axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
         }
-
-        passClass = this.state.class;
-
+      //  console.log('classes: ' + this.state.user.classes);
+        console.log('user after: ');
+        console.log(this.state.user);
+       
+        index = -1;
         index = passClass.students.indexOf(this.state.user.email);
+        console.log('index: ' + index);
+        console.log('students before: ' );
+        console.log( passClass.students);
+
         if (index !== -1) {
             passClass.students.splice(index, 1);
-            axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
+            axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
         }
+        console.log('students after: ');
+        console.log(passClass.students);
+        //console.log(this.state.participants);
 
       //  console.log(this.state.participants);
 
+        this.props.navigation.navigate('my_profile', { user: this.state.user });
+    }
 
-        this.props.navigation.navigate('my_profile',{user: this.state.user});
-
-    };
-
-    renderUnRegisterPopUp(){
+    renderUnRegisterPopUp() {
         return (
             <Text>Are you sure you bitch?</Text>
-            )
+            );
 
     }
 
@@ -180,7 +192,7 @@ class class_info_screen extends Component {
         }, 1000);
         this.setState({timer})
         this.setState({startDisable : true})
-       // console.log("start: ", this.getTimeString(this.state.totalTime))
+        //console.log("start: ", this.getTimeString(this.state.totalTime))
     }
 
 
@@ -191,7 +203,7 @@ class class_info_screen extends Component {
             startDisable : false
         });
         clearInterval(this.state.timer);
-      //  console.log("stop: ", this.getTimeString(this.state.totalTime))
+       // console.log("stop: ", this.getTimeString(this.state.totalTime))
     }
 
 

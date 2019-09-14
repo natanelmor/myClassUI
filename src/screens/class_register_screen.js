@@ -28,8 +28,6 @@ export default class class_register_screen extends Component {
     constructor(props) {
         super(props);
 
-        user = this.props.navigation.getParam('user');
-
         this.state = {
             appState: AppState.currentState,
             totalTime: null,
@@ -46,8 +44,8 @@ export default class class_register_screen extends Component {
             time: null,
             location: null,
             registerVisible: false,
-
-        }
+            user: this.props.navigation.getParam('user'),
+        };
     }
 
 
@@ -80,19 +78,31 @@ export default class class_register_screen extends Component {
         this.setState({ unRegisterVisible: visible });
     }
 
-    register(){
+    register() {
+        console.log('register user before: ');
+        console.log(this.state.user);
 
-        user.classes.push(this.state.id);
-        axios.patch('https://myclass-backend.herokuapp.com/user?email='+user.email, user);
-        passClass = this.state.class;
-        passClass.students.push(user.email);
+        this.state.user.classes.push(this.state.id);
+        axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
+        console.log('register user after: ');
+        console.log(this.state.user);
+
+
+        console.log('register class before: ');
+        console.log(this.state.class);
+        this.state.class.students.push(this.state.user.email);
+
+        //passClass.students.push(this.state.user.email);
 
         //this.setState({class : this.state.class.participants.push(user.email)});
 
-       // console.log(this.state.participants);
-        axios.patch('https://myclass-backend.herokuapp.com/class?id='+this.state.id, passClass);
+        //console.log(this.state.participants);
+        axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class);
 
-        this.props.navigation.navigate('my_profile',{user: user});
+        console.log('register class after: ');
+        console.log(this.state.class);
+
+        this.props.navigation.navigate('my_profile', { user: this.state.user });
 
     }
 

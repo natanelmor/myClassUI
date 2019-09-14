@@ -18,18 +18,14 @@ const add_classes_screen_student = (props) => {
 
 
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff', flexDirection:'column' }}>
-        <CoverImage/>
-           <SearchBar
-                term={term}
-                onTermChange ={(newTerm) => setTerm(newTerm)}
-                onTermSubmit={()=> console.log('term was submitted')}
-                />
-
-        <ScrollView
-        nestedScrollEnabled
-        showsVerticalScrollIndicator={false}>
-        <AllClassesList user= {myUser}/></ScrollView>
+        <View style={{ flex: 1, backgroundColor: '#fff', flexDirection:'column' }}>
+            <CoverImage />
+            <ScrollView
+                nestedScrollEnabled
+                showsVerticalScrollIndicator={false}
+            >
+                <AllClassesList user={myUser} />
+            </ScrollView>
         </View>
  
         );

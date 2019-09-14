@@ -23,6 +23,7 @@ export default class login_screen extends Component {
       grades: [],
       attendance: [],
       name: '',
+      
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -40,18 +41,19 @@ export default class login_screen extends Component {
       password: this.state.password
     }
 
-    axios.get('https://myclass-backend.herokuapp.com/user?email='+this.state.email)
+    axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.email)
     .then(res => {
-      if(this.validateCredentials(res.data)){
+      if (this.validateCredentials(res.data)) {
         this.setState({
-          type:res.data.type,
-          classes: res.data.classes ,
+          user: res.data,
+          type: res.data.type,
+          classes: res.data.classes,
           grades: res.data.grades,
           attendance: res.data.attendance,
           email: res.data.email,
           name: res.data.name,
         });
-        this.props.navigation.navigate('my_profile',{user: this.state});
+        this.props.navigation.navigate('my_profile', { user: this.state.user });
       }
     })
     .catch(err => {
