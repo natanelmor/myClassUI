@@ -42,7 +42,6 @@ class QuizIndex extends Component {
     if (this.state.user.type == 'Teacher') {
       return (
         <TouchableOpacity
-
           style={styles.touchOp}
           onPress={() => this.props.navigation.navigate('add_quiz', { id: this.state.id, })}
         >
@@ -93,10 +92,8 @@ class QuizIndex extends Component {
               }
             />
           </ScrollView>
-          <View>
-            {this.renderAddQuizButton()}
-          </View>
         </View>
+        <View>{this.renderAddQuizButton()}</View>
       </View>
     );
   }
@@ -109,14 +106,16 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: '#fff',
     elevation: 2,
-    justifyContent: 'center',
   },
   textStyle: {
     marginHorizontal: 15,
     fontSize: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    color: 'blue'
+    color: 'blue',
+    position: 'absolute',
+    bottom:0,
+    alignSelf: 'center'
   },
   containerFiles: {
     justifyContent: 'center',
