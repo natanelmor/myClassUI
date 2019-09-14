@@ -54,10 +54,11 @@ class add_quiz_screen extends Component {
                 
                 //console.log('class before : ');
                 //console.log(this.state.class);
-                this.state.class.quizes.push(final_quiz);
+                var temp_class = this.state.class.quizes;
+                temp_class.push(final_quiz)
                 //console.log('class after : ');
                // console.log(this.state.class);
-                axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
+                axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, temp_class)//update the class
                     .then(response => {}).catch(e => { console.log(e); });
                 this.props.navigation.navigate('class_info');
             })

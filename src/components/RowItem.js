@@ -1,13 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-export const RowItem = ({ onPress = () => {}, name, color }) => (
-  <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+export const RowItem = ({ onPress = () => {}, name, color }) => {
+  console.log('rowItemQuizName:' + name)
+  return(
+   <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
     <View style={[styles.row, { backgroundColor: color }]}>
       <Text style={styles.text}>{name}</Text>
     </View>
-  </TouchableOpacity>
-);
+  </TouchableOpacity>  
+  )
+};
 
 const styles = StyleSheet.create({
   row: {

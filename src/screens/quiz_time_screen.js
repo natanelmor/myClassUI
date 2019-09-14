@@ -24,8 +24,7 @@ class QuizIndex extends Component {
   }
 
   componentDidMount() {
-    this.focusListener = this.props.navigation.addListener('didFocus', () => {
-    });
+    this.focusListener = this.props.navigation.addListener('didFocus', () => {});
     this.setState({
       user: this.props.navigation.getParam('user'),
       id: this.props.navigation.getParam('id'),
@@ -41,6 +40,7 @@ class QuizIndex extends Component {
   renderAddQuizButton() {
     if (this.state.user.type == 'Teacher') {
       return (
+        
         <TouchableOpacity
           style={styles.touchOp}
           onPress={() => this.props.navigation.navigate('add_quiz', { id: this.state.id, })}
@@ -67,7 +67,17 @@ class QuizIndex extends Component {
                 // console.log('quizes :');
                 // console.log(this.state.quizes);
                 const res = this.state.user.grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == this.state.id)));
-                if (!res) {
+                if(res && this.state.user.type === 'Student') {
+                  return (
+                    <View>
+                      <RowItem
+                        name={item.quiz_name}
+                        color="#a9a9a9"
+                      />
+                    </View>
+                  );
+                }
+                else {
                   return (
                     <View>
                       <RowItem
