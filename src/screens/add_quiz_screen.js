@@ -9,19 +9,17 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {withNavigation } from 'react-navigation';
-import MultiSelectDays from '../components/MultiSelectDays';
 import Modal from 'react-native-modal';
 
 class add_quiz_screen extends Component {
     constructor(props) {
     super(props);
     this.state = {
-        name: '', 
-        time: [],
-        location: '',
-        teacher: '',
-        icon: '',
-        addQuestionVisible: false,
+      new_question: {
+        answers: []
+      },
+      questions: [],
+      addQuestionVisible: false,
     };
 
     this.onCreate = this.onCreate.bind(this);
@@ -30,41 +28,92 @@ class add_quiz_screen extends Component {
   }
 
   onCreate = () => {
-    const newClass = {
-      name: this.state.name,
-     // time: this.state.time,
-      location: this.state.location,
-      teacher: this.passUser.email,
-    };
-
-    //console.log(newClass);
-
-    axios.post('https://myclass-backend.herokuapp.com/class', newClass)
-    .catch((err) => {
-      console.log(err);
-    });
     this.props.navigation.navigate('QuizIndex');
   }
 
-  updateTimeFromSelectDay(timeArr) {
-    //console.log('time in add class: ');
-    //const myTime = timearr;
-    //console.log(timeArr);
-    this.setState({ time: timeArr });
-    
-    
-    //console.log(this.state.time);
-    //console.log(this.state.time);
-
-    //this.setState({ icon: this.state.name });
-    //console.log(this);
-  }
   renderAddQuestionPopUp(){
-    
+    return (
+      <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled>
+          <View style={styles.inputContainer}>
+              <TextInput
+                  style={styles.inputs}
+                  placeholder="Question:"
+                  underlineColorAndroid='transparent'
+                  onChangeText={(question) => {
+                    var get_question = this.state.new_question
+                    get_question.question = question
+                    this.setState({new_question: get_question})
+                    console.log(this.state.new_question)}
+                  }
+              />
+          </View>
+          <View style={styles.inputContainer}>
+              <TextInput
+                  style={styles.inputs}
+                  placeholder="Answer A (The correct one):"
+                  underlineColorAndroid='transparent'
+                  onTextChange={(text) => {
+                    console.log('do I even get here')
+                    var get_question = this.state.new_question
+                    var new_answer = {
+                      answer: text,
+                      correct: true
+                    }
+                    console.log(new_answer)
+                    get_question.answers.push(new_answer)
+                    console.log(get_question)
+                    this.setState({new_question: get_question})
+                    console.log(this.state.new_question)}
+                  }
+                  
+              />
+          </View>
+          <View style={styles.inputContainer}>
+              <TextInput
+                  style={styles.inputs}
+                  placeholder="Answer B:"
+                  underlineColorAndroid='transparent'
+                  onChangeText={(answer) => {
+                    var get_question = this.state.new_question
+                    get_question.answers.push({answer: answer, correct: false})
+                    this.setState({new_question: get_question})
+                    console.log(this.state.questions)}
+                  }
+              />
+          </View>
+          <View style={styles.inputContainer}>
+              <TextInput
+                  style={styles.inputs}
+                  placeholder="Answer C:"
+                  underlineColorAndroid='transparent'
+                  onChangeText={(answer) => {
+                    var get_question = this.state.new_question
+                    get_question.answers.push({answer: answer, correct: false})
+                    this.setState({new_question: get_question})}
+                  }
+              />
+          </View>
+          <View style={styles.inputContainer}>
+              <TextInput
+                  style={styles.inputs}
+                  placeholder="Answer D:"
+                  underlineColorAndroid='transparent'
+                  onChangeText={(answer) => {
+                    var get_question = this.state.new_question
+                    get_question.answers.push({answer: answer, correct: false})
+                    this.setState({new_question: get_question})}
+                  }
+              />
+          </View>
+      </ScrollView>
+    ) 
   }
 
-  AddQuestion(){
-
+  AddQuestion() {
+    this.state.questions.push(this.state.new_question)
+    console.log(this.state.questions)
   }
 
   setAddQuestionVisible(visible){
@@ -93,49 +142,41 @@ class add_quiz_screen extends Component {
 
         <TouchableHighlight 
           style={[styles.buttonContainer, styles.loginButton]} 
-          onPress={() => this.onCreate('register')}
+          onPress={() => this.onCreate('QuizIndex')}
         >
           <Text style={styles.loginText}>create</Text>
         </TouchableHighlight>
         <View style={{flex: 1 }}>
-                                    <Modal scroll inside the modal isVisible={this.state.addQuestionVisible}>
-                                        <View style={{
-                                            backgroundColor: '#f0f8ff', borderRadius: 15,
-                                            height: 500
-                                            }}
-                                        >
-
-                                            <View style={styles.headerStyle}>
-                                                <Text style={styles.headerTextStyle}>Please add a question</Text>
-                                            </View>
-                                            <ScrollView
-                                                showsVerticalScrollIndicator={false}
-                                                nestedScrollEnabled
-                                            >
-                                                <View>{this.renderAddQuestionPopUp()}</View>
-                                            </ScrollView>
-                                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' , flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10 , alignContent:'space-between'}}>
-                                                <TouchableHighlight
-                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                                    onPress={() => {
-                                                        this.setAddQuestionVisible(!this.state.addQuestionVisible);
-                                                        this.AddQuestion();
-                                                    }}>
-                                                    <Text style={{ fontSize: 18 }}>  add</Text>
-                                                </TouchableHighlight>
-                                                <TouchableHighlight
-                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                                    onPress={() => {
-                                                        this.setAddQuestionVisible(!this.state.addQuestionVisible);
-
-                                                    }}>
-                                                    <Text style={{ fontSize: 18 }}>cancle  </Text>
-                                                </TouchableHighlight>
-                                            </View>
-
-                                        </View>
-                                    </Modal>
-                                </View>
+          <Modal scroll inside the modal isVisible={this.state.addQuestionVisible}>
+              <View style={{
+                  backgroundColor: '#f0f8ff', borderRadius: 15,
+                  height: 500
+                  }}
+              >
+                  <View style={styles.headerStyle}>
+                      <Text style={styles.headerTextStyle}>Please add a question</Text>
+                  </View>
+                  <View>{this.renderAddQuestionPopUp()}</View>
+                  <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' , flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10 , alignContent:'space-between'}}>
+                      <TouchableHighlight
+                          style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                          onPress={() => {
+                              this.setAddQuestionVisible(!this.state.addQuestionVisible);
+                              this.AddQuestion();
+                          }}>
+                          <Text style={{ fontSize: 18, margin: 3 }}>add</Text>
+                      </TouchableHighlight>
+                      <TouchableHighlight
+                          style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                          onPress={() => {
+                              this.setAddQuestionVisible(!this.state.addQuestionVisible);
+                          }}>
+                          <Text style={{ fontSize: 18, margin: 3 }}>cancel</Text>
+                      </TouchableHighlight>
+                  </View>
+              </View>
+          </Modal>
+      </View>
       </View>
     );
   }
