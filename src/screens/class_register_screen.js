@@ -21,6 +21,8 @@ import Modal from 'react-native-modal';
 import DisplayGrade from '../components/DisplayGrade';
 import ClassInfo from '../components/ClassInfo';
 import Messages from '../components/Messages';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
 
 
 export default class class_register_screen extends Component {
@@ -79,41 +81,17 @@ export default class class_register_screen extends Component {
     }
 
     register() {
-        console.log('register user before: ');
-        console.log(this.state.user);
-
         this.state.user.classes.push(this.state.id);
         axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
-        console.log('register user after: ');
-        console.log(this.state.user);
 
-
-        console.log('register class before: ');
-        console.log(this.state.class);
         this.state.class.students.push(this.state.user.email);
 
-        //passClass.students.push(this.state.user.email);
-
-        //this.setState({class : this.state.class.participants.push(user.email)});
-
-        //console.log(this.state.participants);
+ 
         axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class);
-
-        console.log('register class after: ');
-        console.log(this.state.class);
 
         this.props.navigation.navigate('my_profile', { user: this.state.user });
 
     }
-
-    renderRegisterPopUp() {
-        return (
-            <Text>Are you sure you bitch?</Text>
-            )
-
-    }
-
-
 
     renderClassInfo() {
         return (
@@ -138,77 +116,32 @@ export default class class_register_screen extends Component {
 
     render() {
         return (
-                <View style={{ flex: 1, backgroundColor: '#fff' }}>
-                    <ScrollView showsVerticalScrollIndicator={false}>
-                        <View>{this.renderClassInfo()}</View>
-                        <View>{this.renderMessages()}</View>
-
-                            <View style={{ flex: 1, alignSelf: 'flex-end' }}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        this.setRegisterVisible(!this.state.registerVisible);
-                                    }}
-                                >
-                                <View>
-                                    <Image
-                                        style={styles.classIcon}
-                                        source={ {uri :'https://www.giraffelaugh.org/wp-content/uploads/2017/12/register-button.png'}}
-                                    />
-                                </View>
-                                </TouchableOpacity>
-                            </View>
-
-
-                        <View style={{flex: 1 }}>
-                            <Modal
-                                scroll inside the modal
-                                isVisible={this.state.registerVisible}
-                            >
-                                <View style={{
-                                    backgroundColor: '#f0f8ff', borderRadius: 15,
-                                    height: 500
-                                }}
-                                >
-
-                                <View style={styles.headerStyle}>
-                                    <Text style={styles.headerTextStyle}>praivacy</Text>
-                                </View>
-                                <ScrollView
-                                    showsVerticalScrollIndicator={false}
-                                    nestedScrollEnabled
-                                >
-                                    <View>
-                                        {this.renderRegisterPopUp()}
-                                    </View>
-                                </ScrollView>
-                                <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end' , flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10 , alignContent:'space-between'}}>
-                                    <TouchableHighlight
-                                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                        onPress={() => {
-                                            this.setRegisterVisible(!this.state.registerVisible);
-                                            this.register();
-                                        }}>
-                                        <Text style={{ fontSize: 18 }}>  sign</Text>
-                                    </TouchableHighlight>
-                                    <TouchableHighlight
-                                        style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                        onPress={() => {
-                                            this.setRegisterVisible(!this.state.registerVisible);
-
-                                        }}>
-                                        <Text style={{ fontSize: 18 }}>cancle  </Text>
-                                    </TouchableHighlight>
-                                </View>
-
-                                </View>
-                            </Modal>
-                        </View>
-                    </ScrollView>
-                </View >
-        );
+    <View style={globalStyle.container}>
+    <ScrollView style={globalStyle.scrollContainer}>
+      <LinearGradient
+        style={globalStyle.header}
+        colors={['#6F86D6', '#48C6EF']}
+        start={{ x: 0.0, y: 0.25 }}
+        end={{ x: 0.5, y: 1.0 }}
+      />
+        <View style={globalStyle.marginTopValue}>
+       {this.renderClassInfo()}
+        {this.renderMessages()}
+        </View>
+      <TouchableOpacity onPress={() => {this.register()}}>
+         <View>
+            <Image
+                style={globalStyle.largeImage}
+                source={ {uri :'https://www.giraffelaugh.org/wp-content/uploads/2017/12/register-button.png'}}/>
+        </View>
+        </TouchableOpacity>
+ 
+    </ScrollView>
+  </View>
+          );
+        }
     }
-}
-
+ 
 const styles = StyleSheet.create({
     textStyle: {
         marginHorizontal: 15,

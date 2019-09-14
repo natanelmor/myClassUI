@@ -1,15 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
+import componentStyle from './style'
 
 const Messages = (props) => {
     return (
-        <View>
-            <View style={styles.headerStyle}><Text style={styles.textStyle}>Messages</Text></View>
-            <View style={styles.containerMessages}><View style={styles.messageInput}>
-                <ScrollView
-                    nestedScrollEnabled
-                    showsVerticalScrollIndicator={false}
-                >
+        <View style={[globalStyle.profileCard, globalStyle.padding20]}>
                     <FlatList
                         keyExtractor={(message) => message.content}
                         showsVerticalScrollIndicator
@@ -17,11 +14,11 @@ const Messages = (props) => {
                         showsVerticalScrollIndicator={false}
                         renderItem={({ item }) => {
                             return (
-                                <View><Text style={{ fontSize: 16 }}>{item.content + '\n'}</Text></View>
+                                <View><Text style={componentStyle.conversationText}>{item.content + '\n'}</Text></View>
                             );
-                        }}
-                    /></ScrollView>
-            </View></View></View>
+                        }}/>
+
+            </View>
     )
 }
 

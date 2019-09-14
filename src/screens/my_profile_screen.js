@@ -6,6 +6,8 @@ import AddClassButton from '../components/AddClassButton';
 import { withNavigation } from 'react-navigation';
 import{Feather} from '@expo/vector-icons';
 import CoverImage from '../components/CoverImage';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
 
 class my_profile_screen extends Component {
   constructor(props) {
@@ -21,12 +23,10 @@ class my_profile_screen extends Component {
 
   componentDidMount() {
     this.focusListener = this.props.navigation.addListener('didFocus', () => {
-     // console.log('rerendr: ');
       axios.get('https://myclass-backend.herokuapp.com/classesOfUser?email='+this.state.user.email)
         .then(response => {
           this.setState({ nextClass: response.data });
         });
-       // console.log(this.statenextClass);
     });
   }
 
@@ -54,41 +54,31 @@ class my_profile_screen extends Component {
     )
   }
 
+
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-      <View style={styles.container}>
-        <CoverImage/>
-        <Image source={require('../../assets/logo.png')}/>
-      </View>
-      <View style={{marginLeft: 10, width: 300}}>
-          <View style={{marginLeft: 40}}><Image
-              style={styles.userIcon}
-              source={require('../../assets/user.png')}
-          /></View></View>
-      <View style={{marginLeft: 20, flexDirection: 'row'}}>
-      <Text style={styles.text}>Hello {this.state.user.name}!</Text>
-      </View>
-
-      <View style={{
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'stretch',
-      }}>
-      <View style={{minHeight: '10%',
-maxHeight: 350}}>
-      <ScrollView
-      nestedScrollEnabled
-      showsVerticalScrollIndicator={false}>
-      <ClassesList user= {this.state.user}/>
-      </ScrollView></View>
-      <View style={{height: 50, alignSelf: 'stretch'}}>
-      <AddClassButton user= {this.state.user}/>
-      </View></View>
+      <View style={globalStyle.container}>
+        <ScrollView style={globalStyle.scrollContainer}>
+          <LinearGradient
+            style={globalStyle.header}
+            colors={['#6F86D6', '#48C6EF']}
+            start={{ x: 0.0, y: 0.25 }}
+            end={{ x: 0.5, y: 1.0 }}
+          >
+            <View style={globalStyle.titleContainer}>
+              <Text style={globalStyle.title}> Hello {this.state.user.name}! </Text>
+            </View>
+          </LinearGradient>
+          <View style={globalStyle.marginTopValue}>
+            <ClassesList user= {this.state.user}/>
+            <AddClassButton user= {this.state.user}/>
+          </View>
+        </ScrollView>
       </View>
     )
-  };
+  }
 }
+
 
 const styles = StyleSheet.create({
   text: {

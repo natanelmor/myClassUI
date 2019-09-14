@@ -1,6 +1,7 @@
 import React from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image, FlatList } from 'react-native';
 import {withNavigation} from 'react-navigation';
+import globalStyle from '../style'
 
 const ClassButton = (props)=> {
     const {name , icon, _id, time, location, teacher} = props.myclass;
@@ -9,34 +10,17 @@ const ClassButton = (props)=> {
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return (
-        <View>
-            <TouchableOpacity
-                onPress ={() => props.navigation.navigate(next, { key: _id , user : props.user})}
-                >
-                <View style={{height: 100, backgroundColor: '#e6e6fa', flexDirection: 'row',
-                borderRadius: 5, marginBottom: 2}}>
-                    <View style={{width: 120 ,marginLeft: 20, justifyContent: 'center',}}>
-                        <Image
-                          style={{width: 50, height: 50}}
-                          source={{uri: icon}}
-                        />
-                        <Text style={{fontSize: 18, fontWeight: 'bold',}}> {name} </Text>
-                    </View>
-                    <View>
-                    <View style={{justifyContent: 'center', alignItems: 'center', marginTop: 15 }}>
-                      <FlatList
-                          keyExtractor={(time) => time._id}
-                          data={time}
-                          renderItem={({ item }) => {
-                              return (
-                                <View style={{justifyContent: 'center', alignSelf: 'center' }}><Text>{days[item.day - 1]}, {item.from} - {item.until}</Text></View>
-                              )}}
-                      />
-                      <View style={{justifyContent: 'center', alignSelf: 'center' }}><Text>{location}</Text></View></View>
-                    </View>
+            <TouchableOpacity style={globalStyle.listItem} underlayColor="#f1f1f1"
+                onPress ={() => props.navigation.navigate(next, { key: _id , user : props.user})}>
+                <View>
+                <View style={globalStyle.row}>
+                        <Image style={globalStyle.thumb} source={{uri: icon}}/>
+                        <View style={globalStyle.text}>
+                        <Text style={[globalStyle.name]}> {name} </Text>
                 </View>
+              </View>
+            </View>
             </TouchableOpacity>
-        </View>
         );
 };
 

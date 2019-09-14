@@ -1,12 +1,12 @@
 import React from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image , ScrollView} from 'react-native';
 import LargeHeading from './LargeHeading'
-
+import globalStyle from '../style'
 const ResourceFiles = (props) => {
     return (
-        <View>
-            <LargeHeading>Resources</LargeHeading>
-            <View style={styles.containerFiles}>
+        <View style={globalStyle.recentlyPlayed}>
+              <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
+            <Text style={[globalStyle.name, globalStyle.paddingLeftValue]}>Resources</Text>
                 <FlatList
                     numColumns={4}
                     keyExtractor={(file) => file.id}
@@ -27,7 +27,8 @@ const ResourceFiles = (props) => {
                         );
                     }}
                 />
-            </View></View>
+                </ScrollView>
+            </View>
     )
 }
 

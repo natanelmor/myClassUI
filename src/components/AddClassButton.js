@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {Text, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import{Feather} from '@expo/vector-icons';
 import {withNavigation} from 'react-navigation';
+import globalStyle from '../style'
+import componentStyle from './style'
+
 
 const navigationPage= '';
 
@@ -26,15 +29,14 @@ class AddClassButton extends Component {
 
     render(){
         return (
-            <View>
-
+            <View style={globalStyle.centreItems}>
                 <TouchableOpacity
-                style={styles.touchOp}
+                style={[componentStyle.actionButton, componentStyle.mt10]}
+                underlayColor="#f1f1f1"
                 onPress ={() => this.navigateAddClassByType()}>
-                    <Feather name ="plus"/>
-                    <Text> add class </Text>
+                    <Feather style={{ justifyContent: 'center'}} size={30} color="white" name ="plus"/>
                 </TouchableOpacity>
-            </View>
+                </View>
             );
     }
 };

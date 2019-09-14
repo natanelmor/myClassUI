@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import LargeHeading from './LargeHeading'
+import globalStyle from '../style'
 
 const Participants = (props) => {
     return (
-        <View>
-                <LargeHeading>Students</LargeHeading>          
+        <View style={globalStyle.recentlyPlayed}>
+        <Text style={[globalStyle.name, globalStyle.paddingLeftValue]}>Students</Text>  
             <View>
                 <FlatList
                     keyExtractor={(student) => student}

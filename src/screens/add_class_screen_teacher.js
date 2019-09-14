@@ -5,11 +5,15 @@ import {
   View,
   TextInput,
   TouchableHighlight,
+  Image
 } from 'react-native';
 import axios from 'axios';
 import { withNavigation } from 'react-navigation';
 import MultiSelectDays from '../components/MultiSelectDays';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
+import componentStyle from '../components/style'
 
 class add_classes_screen_teacher extends Component {
     constructor(props) {
@@ -35,9 +39,6 @@ class add_classes_screen_teacher extends Component {
       location: this.state.location,
       teacher: this.passUser.email,
     };
-
-    console.log('newClass');
-    console.log(newClass);
 
     axios.post('https://myclass-backend.herokuapp.com/class', newClass)
     .catch((err) => {
@@ -97,34 +98,42 @@ class add_classes_screen_teacher extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={globalStyle.container}>
+         <LinearGradient
+          style={globalStyle.header}
+          colors={['#6F86D6', '#48C6EF']}
+          start={{ x: 0.0, y: 0.25 }}
+          end={{ x: 0.5, y: 1.0 }}
+        >
+        <Image source={require('../../assets/logo.png')}/>
+        </LinearGradient>
       
-        <View style={styles.inputContainer}>
+        
           <TextInput 
-              style={styles.inputs}
-              placeholder="class name:"
-              underlineColorAndroid='transparent'
+              underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}
+              placeholder="Class name"
               onChangeText={(name) => this.setState({ name })}
           />
-        </View>
+      
 
-        <View style={styles.inputContainer}>
+       
           <TextInput 
-              style={styles.inputs}
-              placeholder="location: "
-              underlineColorAndroid='transparent'
+             underlineColorAndroid="rgba(0,0,0,0)"
+             style={[componentStyle.inputField, componentStyle.shadow]}
+              placeholder="Location"
               onChangeText={(location) => this.setState({ location })}
           />
-        </View>
+   
 
         <View style={{width:'100%' }}>
-        <SectionedMultiSelect style={{width:'100%', height:'100%',alignItems :'center'}}
+        <SectionedMultiSelect style={[componentStyle.inputField, componentStyle.shadow]}
           items={items}
           uniqueKey="id"
           subKey="children"
           modalWithTouchable
           modalWithSafeAreaView
-          selectText="choose class time:"
+          selectText="Choose class time:"
           ref={SectionedMultiSelect  => this.SectionedMultiSelect = SectionedMultiSelect }
           showDropDowns={true}
           readOnlyHeadings={true}
@@ -138,10 +147,10 @@ class add_classes_screen_teacher extends Component {
        
         
         <TouchableHighlight 
-          style={[styles.buttonContainer, styles.loginButton]} 
+         style={componentStyle.buttonBordered} underlayColor="#f1f1f1" 
           onPress={() => this.onCreate('register')}
         >
-          <Text style={styles.loginText}>create</Text>
+          <Text style={componentStyle.buttonBorderedText}>Create Class</Text>
         </TouchableHighlight>
       </View>
     );

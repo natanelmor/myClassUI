@@ -1,5 +1,5 @@
 import React, {Component}  from 'react';
-import {View , Text} from 'react-native';
+import {View , Text, FlatList} from 'react-native';
 import axios from 'axios';
 import ClassButton from '../components/ClassButton';
 
@@ -18,24 +18,25 @@ class AllClassesList extends Component {
         );
     }
 
-    renderClasses(){
-        return( 
-            this.state.classes.map(myclass => 
-            <ClassButton key={myclass._id}
-                myclass={myclass} user={this.props.user}
-                nextPage= 'class_register' />)
-        )
-    }
-
-
-    render(){
+    renderClasses(rowData) {
+        const myclass = rowData
         return (
-            <View>
-                {this.renderClasses()}
-            </View>
-
-        );
+              <ClassButton
+                  key={myclass._id}
+                  myclass={myclass} user={this.props.user}
+                  nextPage = 'class_register' />
+            )
     }
+
+
+    render() {
+        return (
+            <FlatList  
+            keyExtractor={(time) => time._id}
+            data={this.state.classes}
+            renderItem={({ item }) => this.renderClasses(item)}/>
+        )
+}
 }
 
 export default AllClassesList;

@@ -1,5 +1,5 @@
 import React, { Component }  from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet,FlatList,  } from 'react-native';
 import axios from 'axios';
 import ClassButton from '../components/ClassButton';
 import { withNavigation } from 'react-navigation';
@@ -27,25 +27,27 @@ class ClassesList extends Component {
         this.focusListener.remove();
     }
 
-    renderClasses() {
+    renderClasses(rowData) {
+        const myclass = rowData
         return (
-            this.state.classes.map(myclass =>
               <ClassButton
                   key={myclass._id}
                   myclass={myclass} user={this.props.user}
                   nextPage = 'class_info' />
             )
-        )
-
     }
+
 
     render() {
+   // const ds = new .DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    //let dataSource =  ds.cloneWithRows(this.state.classes)
         return (
-            <View>
-                {this.renderClasses()}
-            </View>
-        );
-    }
+            <FlatList  
+            keyExtractor={(time) => time._id}
+            data={this.state.classes}
+            renderItem={({ item }) => this.renderClasses(item)}/>
+                )
+}
 }
 
 const styles = StyleSheet.create({

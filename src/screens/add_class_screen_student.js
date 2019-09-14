@@ -4,6 +4,8 @@ import ClassButton from '../components/ClassButton';
 import SearchBar from '../components/SearchBar';
 import AllClassesList from '../components/AllClassesList';
 import CoverImage from '../components/CoverImage';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
 
 
 const add_classes_screen_student = (props) => {
@@ -15,20 +17,26 @@ const add_classes_screen_student = (props) => {
    // const searchApi= async () => {
 
     //}
-
-
     return (
-        <View style={{ flex: 1, backgroundColor: '#fff', flexDirection:'column' }}>
-            <CoverImage />
-            <ScrollView
-                nestedScrollEnabled
-                showsVerticalScrollIndicator={false}
-            >
-                <AllClassesList user={myUser} />
-            </ScrollView>
+    <View style={globalStyle.container}>
+    <ScrollView style={globalStyle.scrollContainer}>
+      <LinearGradient
+        style={globalStyle.header}
+        colors={['#6F86D6', '#48C6EF']}
+        start={{ x: 0.0, y: 0.25 }}
+        end={{ x: 0.5, y: 1.0 }}
+      >
+        <View style={globalStyle.titleContainer}>
+          <Text style={globalStyle.title}> Choose Class </Text>
         </View>
- 
-        );
+      </LinearGradient>
+      <View style={globalStyle.marginTopValue}>
+        <AllClassesList user={myUser} />
+      </View>
+    </ScrollView>
+  </View>
+  )
+
 };
 
 const styles = StyleSheet.create({

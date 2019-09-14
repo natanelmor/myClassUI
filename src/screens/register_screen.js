@@ -12,6 +12,9 @@ import {
 import { CheckBox } from 'native-base';
 import axios from 'axios';
 import CoverImage from '../components/CoverImage';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
+import componentStyle from '../components/style'
 
 export default class register_screen extends Component {
 
@@ -44,41 +47,45 @@ export default class register_screen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <CoverImage/>
+      <View style={globalStyle.container}>
+        <LinearGradient
+          style={globalStyle.header}
+          colors={['#6F86D6', '#48C6EF']}
+          start={{ x: 0.0, y: 0.25 }}
+          end={{ x: 0.5, y: 1.0 }}
+        >
         <Image source={require('../../assets/logo.png')}/>
-        <View style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
+        </LinearGradient>
+        <View style={[globalStyle.marginTopValue]}>
+
+        <TextInput underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}  
               placeholder=" User Name"
               underlineColorAndroid='transparent'
               onChangeText={(name) => this.setState({name})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/20-512.png'}}/>
-          <TextInput style={styles.inputs}
+          
+          <TextInput   underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Email"
               keyboardType="email-address"
-              underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
-        </View>
-        
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
+      
+          <TextInput underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Password"
               secureTextEntry={true}
-              underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
-        </View> 
-        <Text style={styles.teacherText}>Teacher</Text>
-            <CheckBox color="black" style={{marginBottom:15}}
+
+            <View style={componentStyle.centreItems}>
+            <Text style={styles.teacherText}>Teacher</Text>
+            <CheckBox color="#2196f3" 
              onPress={() => this.setState({ isTeacher: !this.state.isTeacher})}
             checked={this.state.isTeacher}/>
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onRegister('register')}>
-          <Text style={styles.loginText}>Submit</Text>
+            </View>
+        <TouchableHighlight style={componentStyle.buttonBordered} underlayColor="#f1f1f1" onPress={() => this.onRegister('register')}>
+            <Text style={componentStyle.buttonBorderedText}>Submit</Text>
         </TouchableHighlight>
-       
+        </View>
       </View>
     );
   }

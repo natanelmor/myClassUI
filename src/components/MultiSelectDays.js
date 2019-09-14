@@ -23,17 +23,10 @@ export default class MultiSelectDays extends Component {
   };
   onSelectedItemObjectsChange = (selectedItemObjects) => {
     this.setState({selectedItemObjects });
-    //this.state.myarr.push(selectedItemObjects);
-    //console.log(selectedItemObjects);
+
   }
 
   onConfirm() {
-    
-
-   // this.setState({ myarr: this.atate.selectedItems });
-      console.log('press confirm: ');
-      console.log(this.state.selectedItemObjects);
-      //console.log(this.SectionedMultiSelect.props);
       const sendData = this.state.selectedItemObjects;
       this.props.updateTimeFromSelectDay(sendData);
       this.setState({selectedItemObjects: this.state.selectedItemObjects });

@@ -32,6 +32,8 @@ import {AntDesign, MaterialCommunityIcons} from '@expo/vector-icons';
 import { withNavigation } from 'react-navigation';
 import LargeHeading from '../components/LargeHeading';
 import CoverImage from '../components/CoverImage';
+import globalStyle from '../style'
+import componentStyle from '../components/style'
 
 class class_info_screen extends Component {
 
@@ -176,34 +178,19 @@ class class_info_screen extends Component {
     unRegister() {
         let passClass = this.state.class;
         let index = this.state.user.classes.indexOf(this.state.id);
-        console.log('index: ' + index);
-        //console.log('classes: '+ this.state.user.classes);
-        console.log('user before : ');
-        console.log(this.state.user);
-
         if (index !== -1) {
             this.state.user.classes.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
         }
-      //  console.log('classes: ' + this.state.user.classes);
-        console.log('user after: ');
-        console.log(this.state.user);
        
         index = -1;
         index = passClass.students.indexOf(this.state.user.email);
-        console.log('index: ' + index);
-        console.log('students before: ');
-        console.log(passClass.students);
 
         if (index !== -1) {
             passClass.students.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
         }
-        console.log('students after: ');
-        console.log(passClass.students);
-        //console.log(this.state.participants);
 
-      //  console.log(this.state.participants);
 
         this.props.navigation.navigate('my_profile', { user: this.state.user });
     }
@@ -252,14 +239,17 @@ class class_info_screen extends Component {
             );
 
     }
-
-    renderTools() {
-        return (
-            <View>
-            <LargeHeading>Tools</LargeHeading>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 15 }}>
-                <TouchableOpacity style={styles.card_container} onPress={() => this.props.navigation.navigate('QuizIndex', { id: this.state.id, user: this.state.user, quizes: this.state.quizes })}>
-                <Image source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover" />
+ 
+    renderTools(){
+        return(
+            <View style={globalStyle.recentlyPlayed}>
+            <Text style={[globalStyle.name, globalStyle.paddingLeftValue]}>Tools</Text>
+            <View   horizontal
+                    showsHorizontalScrollIndicator={false}
+             style={{ flexDirection: 'row', alignItems: 'center' , justifyContent: 'center', padding:20}}>
+                <TouchableOpacity  style={styles.card_container} onPress ={() => this.props.navigation.navigate('QuizIndex' , {id: this.state.id, user : this.state.user, quizes: this.state.quizes})}>
+                <Image
+                    source={require('../../assets/back_card.jpg')} style={styles.card_background} resizeMode="cover"/>
                     <View style={styles.card_overlay} />
                         <AntDesign style={styles.card_icon} color="white" size={30} name="form" />
                         <Text style={styles.card_name}>Quizes</Text>
@@ -302,15 +292,9 @@ class class_info_screen extends Component {
                                 scroll inside the modal
                                 isVisible={this.state.modalVisible}
                             >
-                                <View 
-                                    style={{
-                                        backgroundColor: '#f0f8ff', 
-                                        borderRadius: 15,
-                                        height: 500 }}
-                                >
-                                    <View style={styles.headerStyle}>
-                                        <Text style={styles.headerTextStyle}>Grades</Text>
-                                    </View>
+                                <View style={{
+                                    backgroundColor: '#f0f8ff', borderRadius: 15,
+                                    height: 500}}>
                                     <ScrollView
                                         showsVerticalScrollIndicator={false}
                                         nestedScrollEnabled
@@ -347,63 +331,9 @@ class class_info_screen extends Component {
                             </Modal>
                         </View>
 
-                        <View style={{ flex: 1, alignSelf: 'flex-end' }}>
-                            <TouchableOpacity
-                                onPress={() => {
-                                this.setUnRegisterVisible(!this.state.unRegisterVisible);
-                                }}
-                            >
-                                <View>
-                                    <Image
-                                        style={{ width: 100,
-                                        height: 50 }}
-                                        source={{ uri: 'http://www.clker.com/cliparts/O/6/3/C/g/l/cancel-button-hi.png' }}
-                                    />
-                                </View>
-                            </TouchableOpacity>
-                        </View>
-                                <View style={{ flex: 1 }}>
-                                    <Modal scroll inside the modal isVisible={this.state.unRegisterVisible}>
-                                        <View 
-                                            style={{
-                                                backgroundColor: '#f0f8ff', 
-                                                borderRadius: 15,
-                                                height: 500
-                                            }}
-                                        >
-
-                                            <View style={styles.headerStyle}>
-                                                <Text style={styles.headerTextStyle}>Unregister</Text>
-                                            </View>
-                                            <ScrollView
-                                                showsVerticalScrollIndicator={false}
-                                                nestedScrollEnabled
-                                            >
-                                                <View>{this.renderUnRegisterPopUp()}</View>
-                                            </ScrollView>
-                                            <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', flexDirection: 'row', marginTop: 15, marginRight: 10, marginBottom: 10, alignContent: 'space-between' }}>
-                                                <TouchableHighlight
-                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                                    onPress={() => {
-                                                        this.setUnRegisterVisible(!this.state.unRegisterVisible);
-                                                        this.unRegister();
-                                                    }}
-                                                >
-                                                    <Text style={{ fontSize: 18 }}>  unsign</Text>
-                                                </TouchableHighlight>
-                                                <TouchableHighlight
-                                                    style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                                    onPress={() => {
-                                                        this.setUnRegisterVisible(!this.state.unRegisterVisible);
-                                                    }}
-                                                >
-                                                    <Text style={{ fontSize: 18 }}>cancle</Text>
-                                                </TouchableHighlight>
-                                            </View>
-
-                                        </View>
-                                    </Modal>
-                                </View>
+                        <TouchableHighlight  style={componentStyle.buttonBordered} underlayColor="#f1f1f1"  onPress={() => {this.unRegister();}}>
+                                <Text style={componentStyle.buttonBorderedText}>Unregister</Text>
+                        </TouchableHighlight>
                     </ScrollView>
                 </View >
         );
@@ -468,7 +398,7 @@ const styles = StyleSheet.create({
         padding: 15,
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        marginRight:15
+        marginRight:5
       },
       card_background: {
         width: 80,

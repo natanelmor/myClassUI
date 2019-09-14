@@ -7,10 +7,15 @@ import {
   Button,
   TouchableHighlight,
   Image,
+  ScrollView,
   Alert
 } from 'react-native';
 import axios from 'axios';
 import CoverImage from '../components/CoverImage';
+import globalStyle from '../style'
+import { LinearGradient} from 'expo-linear-gradient';
+import componentStyle from '../components/style'
+
 
 export default class login_screen extends Component {
   constructor(props) {
@@ -72,38 +77,37 @@ export default class login_screen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <CoverImage/>
+      <View style={globalStyle.container}>
+        <LinearGradient
+          style={globalStyle.header}
+          colors={['#6F86D6', '#48C6EF']}
+          start={{ x: 0.0, y: 0.25 }}
+          end={{ x: 0.5, y: 1.0 }}
+        >
         <Image source={require('../../assets/logo.png')}/>
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/20-512.png'}}/>
-          <TextInput style={styles.inputs}
+        </LinearGradient>
+        <View style={[globalStyle.marginTopValue]}>
+          
+          <TextInput   underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Email"
               keyboardType="email-address"
-              underlineColorAndroid='transparent'
               onChangeText={(email) => this.setState({email})}/>
-        </View>
-
-        <View style={styles.inputContainer}>
-          <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
-          <TextInput style={styles.inputs}
+      
+          <TextInput underlineColorAndroid="rgba(0,0,0,0)"
+              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Password"
               secureTextEntry={true}
-              underlineColorAndroid='transparent'
               onChangeText={(password) => this.setState({password})}/>
+
+        <TouchableHighlight  style={componentStyle.buttonBordered} underlayColor="#f1f1f1" onPress={() => this.onLogin('login')}>
+          <Text style={componentStyle.buttonBorderedText}>Login</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight style={componentStyle.buttonBordered} underlayColor="#f1f1f1" onPress={() => this.onRegister('register')}>
+            <Text style={componentStyle.buttonBorderedText}>Register</Text>
+        </TouchableHighlight>
         </View>
-
-        <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={() => this.onLogin('login')}>
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onRestorePassword('restore_password')}>
-            <Text>Forgot your password?</Text>
-        </TouchableHighlight>
-
-        <TouchableHighlight style={styles.buttonContainer} onPress={() => this.onRegister('register')}>
-            <Text>Register</Text>
-        </TouchableHighlight>
       </View>
     );
   }
