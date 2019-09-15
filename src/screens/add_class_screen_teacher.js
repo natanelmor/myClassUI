@@ -47,6 +47,7 @@ class add_classes_screen_teacher extends Component {
       time: this.state.sendTime,
       location: this.state.location,
       teacher: this.passUser.email,
+      icon: 'https://static.thenounproject.com/png/22412-200.png',
     };
 
     if(this.state.name == '' || this.state.sendTime.length == 0 || this.state.location == ''){
@@ -54,6 +55,7 @@ class add_classes_screen_teacher extends Component {
       this.toggleAlert(!this.state.showAlert);
     }
     else{
+    console.log(newClass);
     axios.post('https://myclass-backend.herokuapp.com/class', newClass)
     .catch((err) => {
       console.log(err);
@@ -82,15 +84,13 @@ class add_classes_screen_teacher extends Component {
      // console.log('press confirm: ');
     //  console.log(this.state.selectedItemObjects);
       //console.log(this.SectionedMultiSelect.props);
-      if(this.state.time.length == 0){
-        this.setState({errmsg: 'Time was not chosen'});
-        this.toggleAlert(!this.state.showAlert);
-      }
-      else{
+
+
       const sendData = this.state.selectedItemObjects;
       this.updateTimeFromSelectDay(sendData);
       this.setState({selectedItemObjects: this.state.selectedItemObjects });
-    }
+
+
   }
 
   pushTime(currTime) {
