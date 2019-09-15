@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  Image
+  Image,
+  Alert,
 } from 'react-native';
 import axios from 'axios';
 import { withNavigation } from 'react-navigation';
@@ -13,24 +14,32 @@ import MultiSelectDays from '../components/MultiSelectDays';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import globalStyle from '../style'
 import { LinearGradient} from 'expo-linear-gradient';
-import componentStyle from '../components/style'
+import componentStyle from '../components/style';
+import AwesomeAlert from 'react-native-awesome-alerts';
+
 
 class add_classes_screen_teacher extends Component {
     constructor(props) {
     super(props);
     this.state = {
-        name: '', 
+        name: '',
         time: [],
         location: '',
         teacher: '',
         icon: '',
         sendTime: [],
+        errmsg: '',
+        showAlert: false,
     };
 
     this.onCreate = this.onCreate.bind(this);
     this.updateTimeFromSelectDay = this.updateTimeFromSelectDay.bind(this);
     this.passUser = this.props.navigation.getParam('user');
   }
+
+  toggleAlert(visible){
+   this.setState({ showAlert: visible });
+ }
 
   onCreate = () => {
     const newClass = {
@@ -40,18 +49,26 @@ class add_classes_screen_teacher extends Component {
       teacher: this.passUser.email,
     };
 
+    if(this.state.name == '' || this.state.sendTime.length == 0 || this.state.location == ''){
+      this.setState({errmsg: 'Enter class name, location and choose time'});
+      this.toggleAlert(!this.state.showAlert);
+    }
+    else{
     axios.post('https://myclass-backend.herokuapp.com/class', newClass)
     .catch((err) => {
       console.log(err);
     });
+    let msg = 'Class ' + this.state.name + ' created successfully';
+    Alert.alert('',msg);
     this.props.navigation.navigate('my_profile');
+  }
   }
 
   onSelectedItemsChange = (selectedItems) => {
     this.setState({ selectedItems });
     //this.setState({ myarr: selectedItems });
     //this.setState({ selectedItems: selectedItems });
-    
+
     //console.log(this.state.myarr);
   };
   onSelectedItemObjectsChange = (selectedItemObjects) => {
@@ -65,9 +82,15 @@ class add_classes_screen_teacher extends Component {
      // console.log('press confirm: ');
     //  console.log(this.state.selectedItemObjects);
       //console.log(this.SectionedMultiSelect.props);
+      if(this.state.time.length == 0){
+        this.setState({errmsg: 'Time was not chosen'});
+        this.toggleAlert(!this.state.showAlert);
+      }
+      else{
       const sendData = this.state.selectedItemObjects;
       this.updateTimeFromSelectDay(sendData);
       this.setState({selectedItemObjects: this.state.selectedItemObjects });
+    }
   }
 
   pushTime(currTime) {
@@ -79,7 +102,7 @@ class add_classes_screen_teacher extends Component {
     //const myTime = timearr;
     //console.log(timeArr);
     this.setState({ time: timeArr });
-    
+
     this.orderTime();
     //console.log(this.state.time);
     //console.log(this.state.time);
@@ -107,24 +130,24 @@ class add_classes_screen_teacher extends Component {
         >
         <Image source={require('../../assets/logo.png')}/>
         </LinearGradient>
-      
-        
-          <TextInput 
+
+
+          <TextInput
               underlineColorAndroid="rgba(0,0,0,0)"
               style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder="Class name"
               onChangeText={(name) => this.setState({ name })}
           />
-      
 
-       
-          <TextInput 
+
+
+          <TextInput
              underlineColorAndroid="rgba(0,0,0,0)"
              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder="Location"
               onChangeText={(location) => this.setState({ location })}
           />
-   
+
 
         <View style={{width:'100%' }}>
         <SectionedMultiSelect style={[componentStyle.inputField, componentStyle.shadow]}
@@ -141,17 +164,29 @@ class add_classes_screen_teacher extends Component {
           onSelectedItemObjectsChange={this.onSelectedItemObjectsChange}
           selectedItems={this.state.selectedItems}
           onConfirm={() => this.onConfirm()}
-        
+
         />
       </View>
-       
-        
-        <TouchableHighlight 
-         style={componentStyle.buttonBordered} underlayColor="#f1f1f1" 
+
+
+        <TouchableHighlight
+         style={componentStyle.buttonBordered} underlayColor="#f1f1f1"
           onPress={() => this.onCreate('register')}
         >
           <Text style={componentStyle.buttonBorderedText}>Create Class</Text>
         </TouchableHighlight>
+        <AwesomeAlert
+            show={this.state.showAlert}
+            showProgress={false}
+            message={this.state.errmsg}
+            closeOnTouchOutside={true}
+            showConfirmButton={true}
+            confirmText="ok"
+            confirmButtonColor="#1e90ff"
+            onConfirmPressed={() => {
+              this.toggleAlert(!this.state.showAlert);
+            }}
+          />
       </View>
     );
   }
