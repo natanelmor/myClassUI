@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import { withNavigation } from 'react-navigation';
-import MultiSelectDays from '../components/MultiSelectDays';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import globalStyle from '../style'
 import { LinearGradient} from 'expo-linear-gradient';

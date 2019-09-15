@@ -35,6 +35,8 @@ import LargeHeading from '../components/LargeHeading';
 import CoverImage from '../components/CoverImage';
 import globalStyle from '../style'
 import componentStyle from '../components/style'
+import { LinearGradient} from 'expo-linear-gradient';
+import DisplayAttendanceTeacher from '../components/DisplayAttendanceTeacher'
 
 class class_info_screen extends Component {
 
@@ -75,6 +77,8 @@ class class_info_screen extends Component {
         }
 
         this.startTimer = this.startTimer.bind(this);
+        this.renderGrades = this.renderGrades.bind(this);
+        this.renderAttendance = this.renderAttendance.bind(this);
         this.stopTimer = this.stopTimer.bind(this);
         this.getTimeString = this.getTimeString.bind(this);
     }
@@ -231,6 +235,12 @@ class class_info_screen extends Component {
         }
     }
 
+    renderAttendance() {
+        if( this.state.user.type === "Teacher"){
+            return(<DisplayAttendanceTeacher class={this.state.class}/>)
+        }
+    }
+
     renderUnRegisterPopUp() {
         return (
             <Text>Are you sure you bitch?</Text>
@@ -277,10 +287,16 @@ class class_info_screen extends Component {
 
     render() {
         return (
-                <View style={{ flex: 1, backgroundColor: '#fff', marginTop: 15 }} >
-                    <CoverImage />
-                    <ScrollView showsVerticalScrollIndicator={false}>
-
+              <View style={globalStyle.container}> 
+                <ScrollView style={globalStyle.scrollContainer}>
+                    <LinearGradient
+                        style={globalStyle.header}
+                        colors={['#6F86D6', '#48C6EF']}
+                        start={{ x: 0.0, y: 0.25 }}
+                        end={{ x: 0.5, y: 1.0 }}
+                    >
+                        <CoverImage />
+                    </LinearGradient>
                         <View>{this.renderClassInfo()}</View>
                         <View>{this.renderTools()}</View>
                         <View>{this.renderResources()}</View>
@@ -300,28 +316,36 @@ class class_info_screen extends Component {
                                             {this.renderGrades()}
                                         </View>
                                     </ScrollView>
+                                    <View  style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
                                         <TouchableHighlight
-                                            block light style={styles.mb15}
+                                             style={[componentStyle.actionButton, componentStyle.mt10]}
+                                             underlayColor="#f1f1f1"
                                             onPress={() => {
                                                 this.setModalVisible(!this.state.modalVisible);
                                             }}>
-                                            <Text style={{ fontSize: 18 }}>Close</Text>
+                                            <Text style={{   alignSelf: 'center', color:"white" ,fontSize: 18 }}>Close</Text>
                                         </TouchableHighlight>
+                                        </View>
                                 </View>
                             </Modal>
                         </View>
                         <View style={{ flex: 1 }}>
                             <Modal scroll inside the modal isVisible={this.state.startAttendance}>
                                 <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500 }}>
-                                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
-                                    <Text style={{ fontSize: 18 }}>Time in class: {this.getTimeString(this.state.curr)}</Text>
-                                        <TouchableHighlight
-                                            style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
-                                            onPress={() => { this.setStartAttendanceVisible(!this.state.startAttendance); }}
-                                        >
-                                           <Text style={{ fontSize: 18 }}>Close</Text>
+                                <ScrollView
+                                        showsVerticalScrollIndicator={false}
+                                        nestedScrollEnabled>
+                                        <View>
+                                        {this.renderAttendance()}
+                                        </View>
+                                    </ScrollView>
+                                        <View  style={{ justifyContent: 'center', alignItems: 'center', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
+                                        <TouchableHighlight  style={[componentStyle.actionButton, componentStyle.mt10]}
+                                             underlayColor="#f1f1f1"
+                                            onPress={() => { this.setStartAttendanceVisible(!this.state.startAttendance); }}>
+                                           <Text style={{   alignSelf: 'center', color:"white" ,fontSize: 18 }}>Close</Text>
                                         </TouchableHighlight>
-                                    </View>
+                                        </View>
                                 </View>
                             </Modal>
                         </View>
