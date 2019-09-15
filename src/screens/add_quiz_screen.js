@@ -140,15 +140,20 @@ class add_quiz_screen extends Component {
 
 
   AddQuestion() {
+    console.log(this.state.final_question)
+    console.log(this.state.final_answer1)
+    console.log(this.state.final_answer2)
+    console.log(this.state.final_answer3)
+    console.log(this.state.final_answer4)
     if (!this.state.final_question || 
-        !this.state.final_answer1 || 
-        !this.state.final_answer2 || 
-        !this.state.final_answer3 || 
-        !this.state.final_answer4) {
+        !this.state.final_correct_answer || 
+        !this.state.final_wrong_answer1 || 
+        !this.state.final_wrong_answer2 || 
+        !this.state.final_wrong_answer3) {
       this.setState({ errmsg: 'One field or more is empty.' });
       this.toggleAlert(!this.state.showAlert);
     }
-    else{
+    else {
       const answers = [];
       const correctAnswer = { 'answer_id': 0, 'answer': this.state.final_correct_answer, 'correct': true };
       answers.push(correctAnswer);

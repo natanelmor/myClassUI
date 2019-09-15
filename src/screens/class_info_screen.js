@@ -189,7 +189,7 @@ class class_info_screen extends Component {
             axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
         }
 
-
+        
         this.props.navigation.navigate('my_profile', { user: this.state.user });
     }
 
