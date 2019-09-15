@@ -37,6 +37,8 @@ import globalStyle from '../style'
 import componentStyle from '../components/style'
 import { LinearGradient} from 'expo-linear-gradient';
 import DisplayAttendanceTeacher from '../components/DisplayAttendanceTeacher'
+import ProgressCircle from 'react-native-progress-circle'
+import * as Progress from 'react-native-progress';
 
 class class_info_screen extends Component {
 
@@ -74,6 +76,12 @@ class class_info_screen extends Component {
             modalVisible: false,
             startAttendance: false,
             unRegisterVisible: false,
+
+            classDuringTimeInSEC: 7200,
+            percentage: 0,
+            attTime: 0,
+            attendanceMsg: 'you dont have class for today',
+            attendanceVisible: false,
         }
 
         this.startTimer = this.startTimer.bind(this);
@@ -98,20 +106,167 @@ class class_info_screen extends Component {
                     quizes: res.data.quizes,
                     grades: this.state.user.grades,
                 });
+                this.updateAttendancePercentage();
+
+                if (this.checkIfNeedToSetTimer()) {
+                    //this.updateAttendancePercentage;
+                    this.updateAttendance();
+                    console.log('checkIfNeedToSetTimer pass');
+                    //this.startTimer();
+                   // AppState.addEventListener('change', this._handleAppStateChange);
+                }
+
             })
             .catch(err => {
                 console.log(err);
             });
-        this.startTimer();
+
+        //check if we need to take time at all
+        //this.checkIfNeedToSetTimer();
+       // this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
         });
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange);
-        this.updateAttendance();
+        console.log('componentWillUnmount: currtime- ' + this.state.curr);
+        if(this.state.curr > 0) {
+           // AppState.removeEventListener('change', this._handleAppStateChange);
+            this.updateAttendance();
+        }
         clearInterval(this.state.timer);
+        AppState.removeEventListener('change', this._handleAppStateChange);
+        //check if total time != 0
+       // this.updateAttendance();
+        //clearInterval(this.state.timer);
         //this.focusListener.remove();
+    }
+
+    checkTheClassHours(time) {                      //בודק שהשעות מתאימות לשיעור של היום
+        const start = time.from;
+        const end = time.until;
+        var currentTime = new Date();
+        var currendHour= currentTime.getHours();
+        var currendMin= currentTime.getMinutes();
+
+        const [staerHour, startMin] = start.split(':');
+        const [endrHour, endtMin] = end.split(':');
+
+        const currentTimeInMinuts = (currendHour * 60) + currendMin;
+        const startTimeInMinuts = (Number(staerHour) * 60) + (Number(startMin));
+        const endTimeInMinuts = (Number(endrHour) * 60) + (Number(endtMin));
+
+
+        if ((currentTimeInMinuts >= startTimeInMinuts) && (currentTimeInMinuts <= endTimeInMinuts)) {
+            console.log('we are in!');
+            return true;
+        } else {
+            console.log('we dont have match time');
+            return false;
+        }
+
+        console.log('currentTimeInMinuts :' + currentTimeInMinuts);
+        console.log('startTimeInMinuts :' + startTimeInMinuts);
+        console.log('endTimeInMinuts :' + endTimeInMinuts);
+
+
+
+        //console.log('class start hour:' + staerHour);
+        //console.log('class start min:' + startMin);
+
+        //console.log('class end hour:' + endrHour);
+        //console.log('class end min:' + endtMin);
+
+        //console.log('currend hour:' + currendHour);
+        //console.log('currend min:' + currendMin);
+
+       // if ()
+
+
+
+    }
+
+    checkIfNeedToSetTimer() {
+        //console.log('checkIfNeedToSetTimer: ');
+        var currentTime = new Date();
+        
+        axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email)
+        .then(res => {
+            this.setState({
+                user: res.data,
+            });
+
+            //console.log(this.state);
+            
+            this.state.class.time.forEach(time => {
+                if ((currentTime.getDay() + 1) === time.day) {                     //  בודק שיש לך שיעור באותו יום
+                    console.log('we have class that day: ' + time.day);
+                    if (this.checkTheClassHours(time)) {                            // בודק שהשעות מתאימות לשיעור של היום
+                        console.log('we find a class to check in');
+                        this.startTimer();
+                        this.stopTimer();
+                        this.updateAttendance();
+                        this.startTimer();
+                        this.setState({ attendanceMsg: 'class ' + this.state.class.name + ' started', attendanceVisible: true });
+
+                        console.log(this.state.attendanceMsg);
+                        
+                        return true;
+                        //this.updateOrCreateAttendance();  
+                        //return true;
+                    }
+
+
+
+                } else {
+                    console.log('we dont have class that day: ' + time.day);   //           "אפשר להוסיף הדפסה "אין לך שיעור היום
+                }
+            });
+           // this.setState({ attendanceMsg: 'you dont have class for today' });
+            return false;      
+        });
+
+/*
+            this.state.user.attendance.forEach(element => {   //check if we need to update attendance or create new one
+                //console.log(element.date);
+                
+                var timestmp2 = new Date(element.date);
+
+                //console.log('day :' + timestmp2.getDay());
+
+                if(timestmp2.getDay() == currentTime.getDay())
+                {
+
+                }
+
+
+      
+            });
+
+              
+
+
+
+
+        }).catch(err => { console.log(err); });
+
+
+        //////////////////////////////////////////good practice
+        //var currentTime = Date.now();
+        //var timestmp = new Date();
+        //var timestmp2 = new Date(currentTime);
+        //var day1 = timestmp.getDay();
+        //var day2 = timestmp2.getDay();
+
+
+        //console.log('currentTime: ' + timestmp);
+        //console.log('currentTime2 : ' + timestmp2);
+        //var currentDay = currentTime.getDay();
+        //console.log('currentDay: ' + day1);
+        //console.log('currentDay2: ' + day2);
+
+        */
+
     }
 
     setModalVisible(visible) {
@@ -151,7 +306,10 @@ class class_info_screen extends Component {
         let timer = setInterval(() => {
            this.setState({
            start: this.state.start + 1,
-           curr: this.state.start + this.state.totalTime
+           curr: this.state.start + this.state.totalTime,
+           percentage: (this.state.attTime + 1) / this.state.classDuringTimeInSEC,
+           attTime: this.state.attTime +1,   
+           
            });
        }, 1000);
        this.setState({ timer });
@@ -168,11 +326,59 @@ class class_info_screen extends Component {
         this.setState({ appState: nextAppState });
     }
 
+    updateAttendancePercentage() {
+        
+        const currentTime = new Date();
+        
+    
+        //const [staerHour, startMin] = start.split(':');
+        //const [endrHour, endtMin] = end.split(':');
+        this.state.user.attendance.forEach(attendance => {
+            const attendanceDate = new Date(attendance.date);
+            
+            if ((attendanceDate.getDay() == currentTime.getDay()) && 
+                (attendanceDate.getMonth() == currentTime.getMonth()) && 
+                (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
+                (attendance.class_id == this.state.id)) {
+                    //attendance.time += this.state.curr;
+                    //newAttendanceFlag = false;
+
+                    this.setState({
+                        percentage: (attendance.time) / this.state.classDuringTimeInSEC,
+                        attTime: attendance.time
+                    } );
+            }
+
+
+        });
+    }
+
     updateAttendance() {
-        this.state.user.attendance.push({
-            "class_id": "" + this.state.id,
-            "date": Date.now(),
-            "time": Math.floor(this.state.totalTime / 60 )});
+        var newAttendanceFlag = true;
+        const currentTime = new Date();
+        this.state.user.attendance.forEach(attendance => {
+            const attendanceDate = new Date(attendance.date);
+            
+            if ((attendanceDate.getDay() == currentTime.getDay()) && 
+                (attendanceDate.getMonth() == currentTime.getMonth()) && 
+                (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
+                (attendance.class_id == this.state.id)) {
+                    attendance.time += this.state.curr;
+                    newAttendanceFlag = false;
+                    
+            }
+
+
+        });
+
+        if (newAttendanceFlag) {
+            this.state.user.attendance.push({
+                "class_id": "" + this.state.id,
+                "date": Date.now(),
+                "time": this.state.curr,
+            });
+        }
+
         axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user)
             .then(response => {}).catch(e => { console.log(e); });
     }
@@ -238,6 +444,18 @@ class class_info_screen extends Component {
     renderAttendance() {
         if( this.state.user.type === "Teacher"){
             return(<DisplayAttendanceTeacher class={this.state.class}/>)
+        } else {
+            return(
+                <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop:25, marginVertical:20, paddingVertical:20}}>
+                    <View style={globalStyle.row}>
+                        <Text style={[globalStyle.name]}> { this.state.attendanceMsg } </Text>
+                    </View> 
+                    <View style={{paddingTop:20}}>  
+                        {this.state.attendanceVisible ? 
+                        <Progress.Circle size={180} progress={this.state.percentage} showsText="true"  formatText={() => { return `${Math.floor(this.state.percentage*100)}%`}} /> : null}
+                    </View>  
+                </View> 
+            )
         }
     }
 
@@ -329,7 +547,7 @@ class class_info_screen extends Component {
                                 </View>
                             </Modal>
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1, direction: 'rtl' }}>
                             <Modal scroll inside the modal isVisible={this.state.startAttendance}>
                                 <View style={{ backgroundColor: '#f0f8ff', borderRadius: 15, height: 500 }}>
                                 <ScrollView
