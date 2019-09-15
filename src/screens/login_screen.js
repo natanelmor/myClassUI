@@ -8,14 +8,15 @@ import {
   TouchableHighlight,
   Image,
   ScrollView,
-  Alert
+  Alert,
 } from 'react-native';
 import axios from 'axios';
 import CoverImage from '../components/CoverImage';
 import globalStyle from '../style'
 import { LinearGradient} from 'expo-linear-gradient';
-import componentStyle from '../components/style'
-
+import componentStyle from '../components/style';
+import Modal from 'react-native-modal';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 export default class login_screen extends Component {
   constructor(props) {
@@ -28,7 +29,8 @@ export default class login_screen extends Component {
       grades: [],
       attendance: [],
       name: '',
-      
+      errmsg: '',
+      showAlert: false,
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -45,10 +47,26 @@ export default class login_screen extends Component {
       email: this.state.email,
       password: this.state.password
     }
+    if(this.state.email == '' && this.state.password == ''){
+      this.setState({errmsg: 'Enter a valid email address and a password'})
+    }
+    else if(this.state.password == ''){
+      this.setState({errmsg: 'Enter a password'})
+    }
+    else if(this.state.email == ''){
+      this.setState({errmsg: 'Enter a valid email address'})
+    }
+    if(this.state.email == '' || this.state.password == ''){
+      this.toggleAlert(!this.state.showAlert);
+    }
 
     axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.email)
     .then(res => {
-      if (this.validateCredentials(res.data)) {
+      if(res.data == null && this.state.password != ''){
+        this.setState({errmsg: 'Incorrect email address'})
+        this.toggleAlert(!this.state.showAlert);
+      }
+      else if (this.validateCredentials(res.data)) {
         this.setState({
           user: res.data,
           type: res.data.type,
@@ -60,10 +78,18 @@ export default class login_screen extends Component {
         });
         this.props.navigation.navigate('my_profile', { user: this.state.user });
       }
+      else{
+        this.setState({errmsg: 'Incorrect password'})
+        this.toggleAlert(!this.state.showAlert);
+      }
     })
     .catch(err => {
       console.log(err);
     });
+  }
+
+  toggleAlert(visible){
+    this.setState({ showAlert: visible });
   }
 
   onRestorePassword = (viewId) => {
@@ -87,13 +113,12 @@ export default class login_screen extends Component {
         <Image source={require('../../assets/logo.png')}/>
         </LinearGradient>
         <View style={[globalStyle.marginTopValue]}>
-          
           <TextInput   underlineColorAndroid="rgba(0,0,0,0)"
               style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Email"
               keyboardType="email-address"
               onChangeText={(email) => this.setState({email})}/>
-      
+
           <TextInput underlineColorAndroid="rgba(0,0,0,0)"
               style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder=" Password"
@@ -107,7 +132,27 @@ export default class login_screen extends Component {
         <TouchableHighlight style={componentStyle.buttonBordered} underlayColor="#f1f1f1" onPress={() => this.onRegister('register')}>
             <Text style={componentStyle.buttonBorderedText}>Register</Text>
         </TouchableHighlight>
+
+        <AwesomeAlert
+            show={this.state.showAlert}
+            showProgress={false}
+            message={this.state.errmsg}
+            closeOnTouchOutside={true}
+            showConfirmButton={true}
+            confirmText="ok"
+            confirmButtonColor="#1e90ff"
+            onConfirmPressed={() => {
+              this.toggleAlert(!this.state.showAlert);
+            }}
+          />
+
         </View>
+
+
+
+
+
+
       </View>
     );
   }

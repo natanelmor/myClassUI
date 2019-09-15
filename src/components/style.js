@@ -244,7 +244,6 @@ export default StyleSheet.create({
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
-    elevation: 1,
   },
   conversationContainer: {
     maxWidth: 310,
