@@ -87,7 +87,7 @@ class QuizIndex extends Component {
                           this.props.navigation.navigate("Quiz", {
                             title: item.quiz_name,
                             questions: item.questions,
-                            color: "#f0f8ff",
+                            color: '#1564bf',
                             user: this.state.user,
                             id: this.state.id,
                           })
