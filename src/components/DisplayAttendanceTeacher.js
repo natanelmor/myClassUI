@@ -5,7 +5,7 @@ import { withNavigation } from 'react-navigation';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import globalStyle from '../style'
 import componentStyle from './style'
-import { CheckBox } from 'react-native-elements'
+import { CheckBox,Divider } from 'react-native-elements'
 
 
 
@@ -23,57 +23,69 @@ export default class StudensAttendance extends Component {
   this.renderall = this.renderall.bind(this);
 }
 
-  async componentDidMount(){
+   async componentWillMount(){
     var array = await this.getStudentAttendance()
     this.setState({attendanceList: array})
   }
 
   isStudentInClass(user){
     const currentTime = new Date();
+    let check = false;
     user.attendance.forEach(attendance => {
             const attendanceDate = new Date(attendance.date);           
             if ((attendanceDate.getDay() == currentTime.getDay()) && 
                 (attendanceDate.getMonth() == currentTime.getMonth()) && 
                 (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
                 (attendance.class_id == this.state.class._id)){
-                  console.log(user.name)
-                  return true
+                  check = true;
+                  return (check)
               }
             else{
-              return false
+              return (check)
             }
         });
     }
 
    getStudentAttendance(){
     var attendanceList = []
-    if(this.state.class.students.length >0 ){
+    var pushFlag = true;
+    if(this.state.class.students !=undefined ){
     this.state.class.students.forEach(async element => { 
       await axios.get('https://myclass-backend.herokuapp.com/user?email='+element)
-      .then(res => {  
-        
-         if(this.isStudentInClass(res.data)){
-           attendanceList.push({name: res.data.name, inClass: true})
-         }
-         else{
-         
+      .then(res => {
+        const currentTime = new Date();
+        pushFlag = true;
+        res.data.attendance.forEach(attendance => {
+            const attendanceDate = new Date(attendance.date);           
+            if ((attendanceDate.getDay() == currentTime.getDay()) && 
+                (attendanceDate.getMonth() == currentTime.getMonth()) && 
+                (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
+                (attendance.class_id == this.state.class._id)){
+                  attendanceList.push({name: res.data.name, inClass: true})
+                  pushFlag = false;
+              }
+      
+        });
+        if(pushFlag){
           attendanceList.push({name: res.data.name, inClass: false})
-         }
-      }).catch(err => alert(err))       
+        }
+      }).catch(err => alert(err))            
     });
   }
 
     return attendanceList
   }
 
-  renderall(){
+    renderall(){
     if (this.state.attendanceList !== undefined){
+      //console.log(this.state.attendanceList)
       var all = this.state.attendanceList.map(item => 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }} key={item.name}>
-          <CheckBox checked={true}/>
-          <Text style={styles.sectionHeader}>{item.name}</Text> 
-          </View>)
-        return  (
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginLeft:15, marginRight:15, paddingRight:15, paddingLeft:15}} key={item.name}>
+           <Text style={styles.sectionHeader}>{item.name}</Text> 
+          <CheckBox checkedColor="green" checked={item.inClass}/>
+          
+        </View>)
+        return (
         <View >
         {all}
         </View>  )}
@@ -85,6 +97,7 @@ export default class StudensAttendance extends Component {
   render() {   
     return(
           <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
+            <Text style={styles.sectionHeader}>Look which students are in class:</Text>
             {this.renderall()}
           </View>)}
 
