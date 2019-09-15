@@ -12,7 +12,7 @@ import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
 import componentStyle from '../style'
 import globalStyle from '../style'
-
+import AwesomeAlert from 'react-native-awesome-alerts' 
 
 class QuizIndex extends Component {
   constructor(props) {
@@ -20,7 +20,10 @@ class QuizIndex extends Component {
     this.state = {
       user: this.props.navigation.getParam('user'),
       addQuizVisible: false,
-      id: ''
+      id: '',
+      showAlert: false,
+      errmst: '',
+      selectedItem: {}
     };
   }
 
@@ -54,6 +57,24 @@ class QuizIndex extends Component {
     }
   }
 
+  toggleAlert(visible){
+    this.setState({ showAlert: visible });
+  }
+
+
+  deleteQuiz() {
+    if (this.state.user.type === 'Teacher'){
+      axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
+      .then(res => {
+        var index = res.data.quizes.map(quiz => quiz._id).indexOf(this.state.selectedItem._id)
+        if (index !== -1) {
+          res.data.quizes.splice(index, 1);
+          axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, res.data)
+          .catch(err => {console.log(err)})
+        }
+      })
+    }
+  }
 
   render() {
     return (
@@ -92,6 +113,11 @@ class QuizIndex extends Component {
                             id: this.state.id,
                           })
                         }
+                        onLongPress={() => {
+                          this.setState({ errmsg: 'Are you sure you want to delete this quiz?' });
+                          this.setState({selectedItem: item})
+                          this.toggleAlert(!this.state.showAlert);
+                         }}
                       />
                     </View>
                   );
@@ -104,6 +130,25 @@ class QuizIndex extends Component {
             <View>{this.renderAddQuizButton()}</View>
           </ScrollView>
         </View>
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          message={this.state.errmsg}
+          closeOnTouchOutside={true}
+          showConfirmButton={true}
+          showCancelButton={true}
+          confirmText="Yes"
+          confirmButtonColor="#1e90ff"
+          cancelText="No"
+          onConfirmPressed={() => {
+            this.deleteQuiz()
+            this.toggleAlert(!this.state.showAlert);
+            this.props.navigation.navigate('class_info')
+          }}          
+          onCancelPressed={() => {
+            this.toggleAlert(!this.state.showAlert);
+          }}
+        />
       </View>
     );
   }
