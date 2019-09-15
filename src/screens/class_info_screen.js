@@ -46,17 +46,17 @@ class class_info_screen extends Component {
             totalTime: 0,
             start: 0,
             curr: 0,
-            timer: null,
+            timer: '',
             startDisable: false,
             participants: [],
-            name: null,
-            icon: null,
+            name: '',
+            icon: '',
             user: this.props.navigation.getParam('user'),
             id: this.props.navigation.getParam('key'),
-            class: null,
-            teacher: null,
+            class: '',
+            teacher: '',
             time: [],
-            location: null,
+            location: [],
             items: [
                 { id: '1', type: 'file', source: '', name: 'File' },
                 { id: '2', type: 'file', source: '', name: 'File' },
@@ -67,8 +67,8 @@ class class_info_screen extends Component {
                 { id: '7', type: 'file', source: '', name: 'File' },
                 { id: '8', type: 'file', source: '', name: 'File' },
             ],
-            quizes: null,
-            grades: null,
+            quizes: [],
+            grades: [],
             modalVisible: false,
             startAttendance: false,
             unRegisterVisible: false,
@@ -94,6 +94,7 @@ class class_info_screen extends Component {
                     quizes: res.data.quizes,
                     grades: this.state.user.grades,
                 });
+                console.log(this.state);
             })
             .catch(err => {
                 console.log(err);
@@ -115,7 +116,7 @@ class class_info_screen extends Component {
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
     }
-    
+
     setUnRegisterVisible(visible) {
         this.setState({ unRegisterVisible: visible });
     }
@@ -154,7 +155,7 @@ class class_info_screen extends Component {
            });
        }, 1000);
        this.setState({ timer });
-       
+
        this.setState({ startDisable: true });
        //console.log("start: ", this.getTimeString(this.state.totalTime))
    }
@@ -184,7 +185,7 @@ class class_info_screen extends Component {
             this.state.user.classes.splice(index, 1);
             axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
         }
-       
+
         index = -1;
         index = passClass.students.indexOf(this.state.user.email);
 
@@ -209,7 +210,7 @@ class class_info_screen extends Component {
 
     renderMessages() {
         return (
-            <Feed></Feed> 
+            <Feed></Feed>
         );
     }
 
@@ -222,7 +223,7 @@ class class_info_screen extends Component {
                 time={this.state.time}
                 location={this.state.location}
                 teacher={this.state.teacher}
-            />     
+            />
         );
     }
 
@@ -241,7 +242,7 @@ class class_info_screen extends Component {
             );
 
     }
- 
+
     renderTools(){
         return(
             <View style={globalStyle.recentlyPlayed}>

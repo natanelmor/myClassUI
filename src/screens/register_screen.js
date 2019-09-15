@@ -60,13 +60,29 @@ export default class register_screen extends Component {
     }
 
     else{
+      axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.email)
+          .then(res => {
+            console.log(res.data);
+            if(res.data != null)
+            {
+            this.setState({errmsg: 'Email address is already used'});
+            this.toggleAlert(!this.state.showAlert);
+          }
+          else{
+            axios.post('https://myclass-backend.herokuapp.com/user',  user)
+            .catch((err) => {
+              console.log(err);
+            });
+            Alert.alert('','Registered successfully');
+            this.props.navigation.navigate('login_screen');
+          }
 
-    axios.post('https://myclass-backend.herokuapp.com/user',  user)
-    .catch((err) => {
-      console.log(err);
-    });
-    Alert.alert('','Registered successfully');
-    this.props.navigation.navigate('login_screen');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+
   }
   }
 
