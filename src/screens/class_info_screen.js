@@ -384,21 +384,42 @@ class class_info_screen extends Component {
     }
 
     unRegister() {
-        let passClass = this.state.class;
-        let index = this.state.user.classes.indexOf(this.state.id);
-        if (index !== -1) {
-            this.state.user.classes.splice(index, 1);
-            axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
+        if (this.state.user.type === 'Student') {
+            let passClass = this.state.class;
+            let index = this.state.user.classes.indexOf(this.state.id);
+            if (index !== -1) {
+                this.state.user.classes.splice(index, 1);
+                axios.patch('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email, this.state.user);
+            }
+
+            index = -1;
+            index = passClass.students.indexOf(this.state.user.email);
+            if (index !== -1) {
+                passClass.students.splice(index, 1);
+                console.log(passClass)
+                axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
+            }
         }
-
-        index = -1;
-        index = passClass.students.indexOf(this.state.user.email);
-
-        if (index !== -1) {
-            passClass.students.splice(index, 1);
-            axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
+        else if (this.state.user.type === 'Teacher') {
+            let classUsers = this.state.class.students
+            classUsers.push(this.state.user.email)
+            classUsers.map((users) => {
+                axios.get('https://myclass-backend.herokuapp.com/user?email=' + users)
+                .then(res => {
+                    let classes = res.data.classes
+                    let index = res.data.classes.indexOf(this.state.class._id);
+                    console.log(index)
+                    if (index !== -1) {
+                        res.data.classes.splice(index, 1);
+                        console.log(res.data.classes)
+                        axios.patch('https://myclass-backend.herokuapp.com/user?email=' + users, res.data)
+                        .catch(err => console.log(err));
+                    }
+                })
+                .catch(err => console.log(err));
+            });
+            axios.delete('https://myclass-backend.herokuapp.com/class?id=' + this.state.id);
         }
-
         
         this.props.navigation.navigate('my_profile', { user: this.state.user });
     }
@@ -569,7 +590,7 @@ class class_info_screen extends Component {
                         </View>
 
                         <TouchableHighlight  style={componentStyle.buttonBordered} underlayColor="#f1f1f1"  onPress={() => {this.unRegister();}}>
-                                <Text style={componentStyle.buttonBorderedText}>Unregister</Text>
+                                <Text style={componentStyle.buttonBorderedText}>Remove</Text>
                         </TouchableHighlight>
                     </ScrollView>
                 </View >

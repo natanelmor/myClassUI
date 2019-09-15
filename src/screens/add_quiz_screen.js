@@ -140,11 +140,6 @@ class add_quiz_screen extends Component {
 
 
   AddQuestion() {
-    console.log(this.state.final_question)
-    console.log(this.state.final_answer1)
-    console.log(this.state.final_answer2)
-    console.log(this.state.final_answer3)
-    console.log(this.state.final_answer4)
     if (!this.state.final_question || 
         !this.state.final_correct_answer || 
         !this.state.final_wrong_answer1 || 
