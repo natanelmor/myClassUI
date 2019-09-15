@@ -23,6 +23,7 @@ import { Linking } from 'expo';
 import axios from 'axios';
 import Modal from 'react-native-modal';
 import DisplayGrade from '../components/DisplayGrade';
+import DisplayGradeTeacher from '../components/DisplayGradeTeacher'
 import ClassInfo from '../components/ClassInfo';
 import Messages from '../components/Messages';
 import ResourceFiles from '../components/ResourceFiles';
@@ -52,6 +53,7 @@ class class_info_screen extends Component {
             icon: null,
             user: this.props.navigation.getParam('user'),
             id: this.props.navigation.getParam('key'),
+            class: null,
             teacher: null,
             time: [],
             location: null,
@@ -225,12 +227,12 @@ class class_info_screen extends Component {
     }
 
     renderGrades() {
-        return (
-                <DisplayGrade
-                    data={this.state.grades}
-                    id={this.state.id}
-                />
-        );
+        if( this.state.user.type !== "Teacher"){
+            return(<DisplayGrade data={this.state.grades} id={this.state.id}/>)
+        }
+        else{
+            return ( <DisplayGradeTeacher class={this.state.class}/>)
+        }
     }
 
     renderUnRegisterPopUp() {
@@ -297,21 +299,18 @@ class class_info_screen extends Component {
                                     height: 500}}>
                                     <ScrollView
                                         showsVerticalScrollIndicator={false}
-                                        nestedScrollEnabled
-                                    >
+                                        nestedScrollEnabled>
                                         <View>
                                             {this.renderGrades()}
                                         </View>
                                     </ScrollView>
-                                    <View style={{ justifyContent: 'flex-end', alignItems: 'flex-end', marginTop: 15, marginRight: 10, marginBottom: 10 }}>
                                         <TouchableHighlight
-                                            style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
+                                            block light style={styles.mb15}
                                             onPress={() => {
                                                 this.setModalVisible(!this.state.modalVisible);
-                                            }}
-                                        >
+                                            }}>
                                             <Text style={{ fontSize: 18 }}>Close</Text>
-                                        </TouchableHighlight></View>
+                                        </TouchableHighlight>
                                 </View>
                             </Modal>
                         </View>
@@ -420,6 +419,9 @@ const styles = StyleSheet.create({
       card_icon: {
         width: 32,
         height: 32,
+      },
+      mb15: {
+        marginBottom: 20
       },
 });
 
