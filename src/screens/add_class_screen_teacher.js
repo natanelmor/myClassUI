@@ -26,7 +26,7 @@ class add_classes_screen_teacher extends Component {
         time: [],
         location: '',
         teacher: '',
-        icon: '',
+        icon: 'https://static.thenounproject.com/png/22412-200.png',
         sendTime: [],
         errmsg: '',
         showAlert: false,
@@ -42,12 +42,13 @@ class add_classes_screen_teacher extends Component {
  }
 
   onCreate = () => {
+    console.log(this.state.icon);
     const newClass = {
       name: this.state.name,
       time: this.state.sendTime,
       location: this.state.location,
       teacher: this.passUser.email,
-      icon: 'https://static.thenounproject.com/png/22412-200.png',
+      icon: this.state.icon == '' ? 'https://static.thenounproject.com/png/22412-200.png' : this.state.icon,
     };
 
     if(this.state.name == '' || this.state.sendTime.length == 0 || this.state.location == ''){
@@ -134,6 +135,13 @@ class add_classes_screen_teacher extends Component {
              style={[componentStyle.inputField, componentStyle.shadow]}
               placeholder="Location"
               onChangeText={(location) => this.setState({ location })}
+          />
+
+          <TextInput
+             underlineColorAndroid="rgba(0,0,0,0)"
+             style={[componentStyle.inputField, componentStyle.shadow]}
+              placeholder="Class Icon"
+              onChangeText={(icon) => this.setState({ icon })}
           />
 
 
