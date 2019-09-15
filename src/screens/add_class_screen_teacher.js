@@ -55,14 +55,26 @@ class add_classes_screen_teacher extends Component {
       this.toggleAlert(!this.state.showAlert);
     }
     else{
-    console.log(newClass);
-    axios.post('https://myclass-backend.herokuapp.com/class', newClass)
-    .catch((err) => {
-      console.log(err);
-    });
-    let msg = 'Class ' + this.state.name + ' created successfully';
-    Alert.alert('',msg);
-    this.props.navigation.navigate('my_profile');
+      axios.get('https://myclass-backend.herokuapp.com/classes')
+          .then(res => {
+            const classesName = res.data.filter((item) => item.name == this.state.name);
+            if(classesName.length > 0){
+              this.setState({errmsg: 'Class name is already used'});
+              this.toggleAlert(!this.state.showAlert);
+            }
+            else{
+              axios.post('https://myclass-backend.herokuapp.com/class', newClass)
+              .catch((err) => {
+                console.log(err);
+              });
+              let msg = 'Class ' + this.state.name + ' created successfully';
+              Alert.alert('',msg);
+              this.props.navigation.navigate('my_profile');
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
   }
   }
 
