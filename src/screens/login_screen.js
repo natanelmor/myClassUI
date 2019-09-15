@@ -59,6 +59,7 @@ export default class login_screen extends Component {
     if(this.state.email == '' || this.state.password == ''){
       this.toggleAlert(!this.state.showAlert);
     }
+    else{
 
     axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.email)
     .then(res => {
@@ -87,6 +88,7 @@ export default class login_screen extends Component {
       console.log(err);
     });
   }
+}
 
   toggleAlert(visible){
     this.setState({ showAlert: visible });
