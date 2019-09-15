@@ -383,4 +383,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  bottomView: {
+    position: 'absolute',
+    bottom: 0
+  }
 })

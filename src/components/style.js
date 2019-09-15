@@ -312,5 +312,5 @@ export default StyleSheet.create({
   centreItems: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }
 })

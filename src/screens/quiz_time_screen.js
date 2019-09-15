@@ -10,7 +10,8 @@ import { RowItem } from "../components/RowItem";
 import { withNavigation } from 'react-navigation';
 import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
-
+import componentStyle from '../style'
+import globalStyle from '../style'
 
 
 class QuizIndex extends Component {
@@ -40,14 +41,15 @@ class QuizIndex extends Component {
   renderAddQuizButton() {
     if (this.state.user.type == 'Teacher') {
       return (
-        
+        <View style={[globalStyle.centreItems, position='aboslute', bottom=0]}>
         <TouchableOpacity
-          style={styles.touchOp}
+        style={[componentStyle.mt10, styles.actionButton]}
+        underlayColor="#f1f1f1"underlayColor="#f1f1f1"
           onPress={() => this.props.navigation.navigate('add_quiz', { id: this.state.id, })}
         >
-          <Feather name="plus" />
-          <Text> add quiz </Text>
+          <Feather style={{ justifyContent: 'center'}} size={30} color="white" name ="plus"/>
         </TouchableOpacity>
+        </View>
       )
     }
   }
@@ -57,7 +59,7 @@ class QuizIndex extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <Image style={{ width: '100%', height: '20%', top: 20 }} source={require('../../assets/quiz.jpg')} />
-        <View style={styles.container}>
+        <View style={[styles.container, marginBottom=20]}>
           <ScrollView>
             <StatusBar barStyle="dark-content" />
             <FlatList
@@ -80,12 +82,12 @@ class QuizIndex extends Component {
                     <View>
                       <RowItem
                         name={item.quiz_name}
-                        color="#36b1f0"
+                        color="#f0f8ff"
                         onPress={() =>
                           this.props.navigation.navigate("Quiz", {
                             title: item.quiz_name,
                             questions: item.questions,
-                            color: "#36b1f0",
+                            color: "#f0f8ff",
                             user: this.state.user,
                             id: this.state.id,
                           })
@@ -99,9 +101,9 @@ class QuizIndex extends Component {
 
               }
             />
+            <View>{this.renderAddQuizButton()}</View>
           </ScrollView>
         </View>
-        <View>{this.renderAddQuizButton()}</View>
       </View>
     );
   }
@@ -170,6 +172,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   headerStyle: {
+  },
+  actionButton: {
+    backgroundColor: '#FF758C',
+    borderRadius: 30,
+    padding: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    width: 100,
   },
 });
 
