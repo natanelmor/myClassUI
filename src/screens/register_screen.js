@@ -62,7 +62,6 @@ export default class register_screen extends Component {
     else{
       axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.email)
           .then(res => {
-            console.log(res.data);
             if(res.data != null)
             {
             this.setState({errmsg: 'Email address is already used'});

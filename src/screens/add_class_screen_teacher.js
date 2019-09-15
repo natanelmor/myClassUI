@@ -80,24 +80,12 @@ class add_classes_screen_teacher extends Component {
 
   onSelectedItemsChange = (selectedItems) => {
     this.setState({ selectedItems });
-    //this.setState({ myarr: selectedItems });
-    //this.setState({ selectedItems: selectedItems });
-
-    //console.log(this.state.myarr);
   };
   onSelectedItemObjectsChange = (selectedItemObjects) => {
     this.setState({selectedItemObjects });
-    //this.state.myarr.push(selectedItemObjects);
-    //console.log(selectedItemObjects);
-  }
+   }
 
   onConfirm() {
-   // this.setState({ myarr: this.atate.selectedItems });
-     // console.log('press confirm: ');
-    //  console.log(this.state.selectedItemObjects);
-      //console.log(this.SectionedMultiSelect.props);
-
-
       const sendData = this.state.selectedItemObjects;
       this.updateTimeFromSelectDay(sendData);
       this.setState({selectedItemObjects: this.state.selectedItemObjects });
@@ -110,25 +98,13 @@ class add_classes_screen_teacher extends Component {
     this.state.sendTime.push(obj);
   }
   updateTimeFromSelectDay(timeArr) {
-    //console.log('time in add class: ');
-    //const myTime = timearr;
-    //console.log(timeArr);
     this.setState({ time: timeArr });
 
     this.orderTime();
-    //console.log(this.state.time);
-    //console.log(this.state.time);
-
-    //this.setState({ icon: this.state.name });
-    //console.log(this);
-  }
+    }
 
   orderTime() {
     this.state.selectedItemObjects.map(currTime => this.pushTime(currTime));
-
-   // console.log('sendTime:');
-    //console.log(this.state.sendTime);
-
   }
 
   render() {

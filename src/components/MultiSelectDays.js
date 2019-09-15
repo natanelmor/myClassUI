@@ -16,10 +16,6 @@ export default class MultiSelectDays extends Component {
 
   onSelectedItemsChange = (selectedItems) => {
     this.setState({selectedItems });
-    //this.setState({ myarr: selectedItems });
-    //this.setState({ selectedItems: selectedItems });
-    
-    //console.log(this.state.myarr);
   };
   onSelectedItemObjectsChange = (selectedItemObjects) => {
     this.setState({selectedItemObjects });

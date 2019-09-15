@@ -6,7 +6,6 @@ import globalStyle from '../style'
 const ClassButton = (props)=> {
     const {name , icon, _id, time, location, teacher} = props.myclass;
     const next = props.nextPage;
-    //console.log(time);
 
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     return (

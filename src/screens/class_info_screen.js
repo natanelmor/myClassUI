@@ -94,15 +94,12 @@ class class_info_screen extends Component {
                     quizes: res.data.quizes,
                     grades: this.state.user.grades,
                 });
-                console.log(this.state);
             })
             .catch(err => {
                 console.log(err);
             });
         this.startTimer();
         AppState.addEventListener('change', this._handleAppStateChange);
-                   // console.log('missing params in class info:   ');
-           // console.log(this.state);
         });
     }
 
@@ -144,7 +141,6 @@ class class_info_screen extends Component {
             startDisable: false
         });
         clearInterval(this.state.timer);
-       // console.log("stop: ", this.getTimeString(this.state.totalTime))
     }
 
     startTimer() {
@@ -157,7 +153,6 @@ class class_info_screen extends Component {
        this.setState({ timer });
 
        this.setState({ startDisable: true });
-       //console.log("start: ", this.getTimeString(this.state.totalTime))
    }
 
    _handleAppStateChange = (nextAppState) => {

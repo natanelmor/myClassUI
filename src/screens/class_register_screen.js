@@ -64,7 +64,6 @@ export default class class_register_screen extends Component {
                 icon: res.data.icon,
 
             });
-       // console.log(res.data);
         })
 
         .catch(err => {
