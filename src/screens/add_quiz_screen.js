@@ -14,6 +14,7 @@ import QuestionsToAdd from '../components/QuestionsToAdd';
 import globalStyle from '../style'
 import componentStyle from '../style'
 import { LinearGradient } from 'expo-linear-gradient';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 class add_quiz_screen extends Component {
   constructor(props) {
@@ -21,10 +22,10 @@ class add_quiz_screen extends Component {
     this.state = {
       id: this.props.navigation.getParam('id'),
       new_question: {},
-
+      showAlert: false,
+      errmsg: '',
       class_quizes: [],
       addQuestionVisible: false,
-
       class: {},
       questions: [],
       answers: [],
@@ -39,33 +40,46 @@ class add_quiz_screen extends Component {
     this.passUser = this.props.navigation.getParam('user');
   }
 
+  toggleAlert(visible){
+    this.setState({ showAlert: visible });
+  }
+
   onCreate = () => {
+    console.log(JSON.stringify(this.state.questions));
+    console.log(this.state.questions.length);
+    if (this.state.questions.length === 0) {
+      this.setState({ errmsg: 'Please add questions. Quiz cannot be empty.' });
+      this.toggleAlert(!this.state.showAlert);
+    }
+    else if (!this.state.quiz_name) {
+      this.setState({ errmsg: 'Please enter quiz name. Quiz name cannot be empty.' });
+      this.toggleAlert(!this.state.showAlert);
+    }
+    else {
+      const final_quiz = { 'quiz_name': this.state.quiz_name, 'questions': this.state.questions };
 
-    const final_quiz = { 'quiz_name': this.state.quiz_name, 'questions': this.state.questions };
+      axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)//get the class
+        .then(res => {
+          this.setState({
+            class: res.data,
+          });
 
-    axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)//get the class
-      .then(res => {
-        this.setState({
-          class: res.data,
+
+          this.state.class.quizes.push(final_quiz);
+
+
+          axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
+            .then(response => { }).catch(e => { console.log(e); });
+          this.props.navigation.navigate('class_info');
+        })
+        .catch(err => {
         });
-
-
-        this.state.class.quizes.push(final_quiz);
-
-
-        axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
-          .then(response => { }).catch(e => { console.log(e); });
-        this.props.navigation.navigate('class_info');
-      })
-      .catch(err => {
-      });
-
-
+    }
   }
 
   renderAddQuestionPopUp() {
     return (
-      <ScrollView 
+      <ScrollView
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled
       >
@@ -102,7 +116,7 @@ class add_quiz_screen extends Component {
         </View>
         <View style={globalStyle.container}>
           <TextInput underlineColorAndroid="rgba(0,0,0,0)"
-              style={[styles.inputField, styles.shadow]}
+            style={[styles.inputField, styles.shadow]}
             placeholder="Answer C:"
             underlineColorAndroid='transparent'
             onChangeText={(text) => {
@@ -111,7 +125,7 @@ class add_quiz_screen extends Component {
           />
         </View>
         <View style={globalStyle.container}>
-          <TextInput underlineColorAndroid="rgba(0,0,0,0)"           
+          <TextInput underlineColorAndroid="rgba(0,0,0,0)"
             style={[styles.inputField, styles.shadow]}
             placeholder="Answer D:"
             underlineColorAndroid='transparent'
@@ -126,22 +140,32 @@ class add_quiz_screen extends Component {
 
 
   AddQuestion() {
-    const answers = [];
-    const correctAnswer = { 'answer_id': 0, 'answer': this.state.final_correct_answer, 'correct': true };
-    answers.push(correctAnswer);
+    if (!this.state.final_question || 
+        !this.state.final_answer1 || 
+        !this.state.final_answer2 || 
+        !this.state.final_answer3 || 
+        !this.state.final_answer4) {
+      this.setState({ errmsg: 'One field or more is empty.' });
+      this.toggleAlert(!this.state.showAlert);
+    }
+    else{
+      const answers = [];
+      const correctAnswer = { 'answer_id': 0, 'answer': this.state.final_correct_answer, 'correct': true };
+      answers.push(correctAnswer);
 
-    const wrongAnswer1 = { 'answer_id': 1, 'answer': this.state.final_wrong_answer1, 'correct': false };
-    answers.push(wrongAnswer1);
+      const wrongAnswer1 = { 'answer_id': 1, 'answer': this.state.final_wrong_answer1, 'correct': false };
+      answers.push(wrongAnswer1);
 
-    const wrongAnswer2 = { 'answer_id': 2, 'answer': this.state.final_wrong_answer2, 'correct': false };
-    answers.push(wrongAnswer2);
+      const wrongAnswer2 = { 'answer_id': 2, 'answer': this.state.final_wrong_answer2, 'correct': false };
+      answers.push(wrongAnswer2);
 
-    const wrongAnswer3 = { 'answer_id': 3, 'answer': this.state.final_wrong_answer3, 'correct': false };
-    answers.push(wrongAnswer3);
+      const wrongAnswer3 = { 'answer_id': 3, 'answer': this.state.final_wrong_answer3, 'correct': false };
+      answers.push(wrongAnswer3);
 
-    const question = { 'question': this.state.final_question, 'answers': answers };
+      const question = { 'question': this.state.final_question, 'answers': answers };
 
-    this.state.questions.push(question);
+      this.state.questions.push(question);
+    }
   }
 
   setAddQuestionVisible(visible) {
@@ -209,10 +233,22 @@ class add_quiz_screen extends Component {
                   }}>
                   <Text style={styles.buttonBorderedText}>cancel</Text>
                 </TouchableHighlight>
-                </View>
+              </View>
             </View>
           </Modal>
         </View>
+        <AwesomeAlert
+          show={this.state.showAlert}
+          showProgress={false}
+          message={this.state.errmsg}
+          closeOnTouchOutside={true}
+          showConfirmButton={true}
+          confirmText="ok"
+          confirmButtonColor="#1e90ff"
+          onConfirmPressed={() => {
+            this.toggleAlert(!this.state.showAlert);
+          }}
+        />
       </View>
     );
   }
