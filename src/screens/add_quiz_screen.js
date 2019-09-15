@@ -6,10 +6,12 @@ import {
   TextInput,
   TouchableHighlight,
   ScrollView,
+  FlatList
 } from 'react-native';
 import axios from 'axios';
 import {withNavigation } from 'react-navigation';
 import Modal from 'react-native-modal';
+import QuestionsToAdd from '../components/QuestionsToAdd';
 
 class add_quiz_screen extends Component {
     constructor(props) {
@@ -32,60 +34,31 @@ class add_quiz_screen extends Component {
         final_wrong_answer3: '',
     };
     this.onCreate = this.onCreate.bind(this);
-
     this.passUser = this.props.navigation.getParam('user');
   }
 
   onCreate = () => {
 
-    //console.log('id :' + this.state.id);
-
     const final_quiz = { 'quiz_name': this.state.quiz_name, 'questions': this.state.questions };
-
-    //console.log('final_quiz: ');
-    //console.log(final_quiz);
 
     axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)//get the class
             .then(res => {
-                //console.log(res);
                 this.setState({
                     class: res.data,
                 });
                 
-                //console.log('class before : ');
-                //console.log(this.state.class);
-
-                //var temp_class = this.state.class.quizes;
-                //temp_class.push(final_quiz);
-                this.state.class.quizes.push(final_quiz);
-                //console.log('class after : ');
-                //console.log(this.state.class);
-
-
-                axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
-                    .then(response => {}).catch(e => { console.log(e); });
+             
+    this.state.class.quizes.push(final_quiz);
+            
+                
+    axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
+            .then(response => {}).catch(e => { console.log(e); });
                 this.props.navigation.navigate('class_info');
             })
             .catch(err => {
-                console.log(err);
             }); 
 
-    //console.log('class before : ');
-    //console.log(this.state.class);
-
-
-    //console.log(this.state.class_quizes);
-
-   // this.state.class.quizes.push(final_quiz);
-
-    //console.log('class after : ');
-    //console.log(this.state.class);
-
-
-    //axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, this.state.class)//update the class
-      //  .then(response => {}).catch(e => { console.log(e); });
-
-   // this.props.navigation.navigate('QuizIndex');
+    
   }
 
   renderAddQuestionPopUp() {
@@ -100,13 +73,7 @@ class add_quiz_screen extends Component {
                     placeholder="Question:"
                     underlineColorAndroid='transparent'
                     onChangeText={(question) => {
-                       // console.log(question); 
                         this.setState({ final_question: question });
-                    //var get_question = this.state.new_question; 
-                    //get_question.question = question;
-                    //this.setState({ new_question: get_question }, () => {
-                    //  console.log(this.state.new_question)
-                    //});
                   }}
                 />
             </View>
@@ -116,19 +83,7 @@ class add_quiz_screen extends Component {
                     placeholder="Answer A (The correct one):"
                     underlineColorAndroid='transparent'
                     onChangeText={(answer) => {
-                        //console.log(answer);
                         this.setState({ final_correct_answer: answer });
-
-                    //var get_question2 = this.state.new_question;
-                    //var new_answer = { answer: answer, correct: true };
-                    //if (!get_question2.answers) {
-                    //    get_question2.answers = [];
-                    //}
-                    //get_question2.answers.push(new_answer);
-                    //console.log(get_question2);
-                    //this.state.new_question.setState(get_question2);
-                    //console.log(this.state.new_question.answers);
-                    //console.log('new_question:' + JSON.stringify(new_question.answers))
                   }}
                   
                 />
@@ -139,12 +94,7 @@ class add_quiz_screen extends Component {
                     placeholder="Answer B:"
                     underlineColorAndroid='transparent'
                     onChangeText={(text) => {
-                       // console.log(text);
                         this.setState({ final_wrong_answer1: text });
-                        
-                    //var get_question = this.state.new_question
-                    //get_question.answers.push({answer: text, correct: false})
-                    //this.setState({new_question: get_question})}
                     }}
                 />
             </View>
@@ -154,13 +104,7 @@ class add_quiz_screen extends Component {
                     placeholder="Answer C:"
                     underlineColorAndroid='transparent'
                     onChangeText={(text) => {
-                        //console.log(text);
                         this.setState({ final_wrong_answer2: text });
-
-
-                    //var get_question = this.state.new_question
-                    //get_question.answers.push({answer: text, correct: false})
-                    //this.setState({new_question: get_question})}
                   }}
                 />
             </View>
@@ -170,12 +114,7 @@ class add_quiz_screen extends Component {
                     placeholder="Answer D:"
                     underlineColorAndroid='transparent'
                     onChangeText={(text) => {
-                        //console.log(text);
                         this.setState({ final_wrong_answer3: text });
-
-                    //var get_question = this.state.new_question
-                   // get_question.answers.push({answer: text, correct: false})
-                    //this.setState({new_question: get_question})}
                   }}
                 />
             </View>
@@ -201,8 +140,6 @@ class add_quiz_screen extends Component {
     const question = { 'question': this.state.final_question, 'answers': answers };  
 
     this.state.questions.push(question);
-
-    //console.log(this.state.questions);
   }
 
   setAddQuestionVisible(visible){
@@ -221,7 +158,6 @@ class add_quiz_screen extends Component {
               onChangeText={(name) => this.setState({ quiz_name: name })}
           />
         </View>
-        
         <TouchableHighlight 
           style={[styles.buttonContainer, styles.loginButton]} 
           onPress={() => this.setAddQuestionVisible(!this.state.addQuestionVisible) }
@@ -231,7 +167,7 @@ class add_quiz_screen extends Component {
 
         <TouchableHighlight 
           style={[styles.buttonContainer, styles.loginButton]} 
-          onPress={() => this.onCreate('QuizIndex')}
+          onPress={() => {this.onCreate('QuizIndex')}}
         >
           <Text style={styles.loginText}>create</Text>
         </TouchableHighlight>
@@ -250,9 +186,9 @@ class add_quiz_screen extends Component {
                       <TouchableHighlight
                           style={{ justifyContent: 'flex-end', alignItems: 'flex-end' }}
                           onPress={() => {
-                              this.setAddQuestionVisible(!this.state.addQuestionVisible);
                               this.AddQuestion();
-                          }}>
+                              this.setAddQuestionVisible(!this.state.addQuestionVisible);
+                              }}>
                           <Text style={{ fontSize: 18, margin: 3 }}>add</Text>
                       </TouchableHighlight>
                       <TouchableHighlight

@@ -80,8 +80,7 @@ class class_info_screen extends Component {
     }
 
     componentDidMount() {
-       // this.focusListener = this.props.navigation.addListener('didFocus', () => {
-       // });
+       this.focusListener = this.props.navigation.addListener('didFocus', () => {
         axios.get('https://myclass-backend.herokuapp.com/class?id=' + this.state.id)
             .then(res => {
                 this.setState({
@@ -103,6 +102,7 @@ class class_info_screen extends Component {
         AppState.addEventListener('change', this._handleAppStateChange);
                    // console.log('missing params in class info:   ');
            // console.log(this.state);
+        });
     }
 
     componentWillUnmount() {

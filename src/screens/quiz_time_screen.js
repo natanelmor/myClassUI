@@ -64,8 +64,6 @@ class QuizIndex extends Component {
               keyExtractor={(file) => file._id}
               data={this.state.quizes}
               renderItem={({ item }) => {
-                // console.log('quizes :');
-                // console.log(this.state.quizes);
                 const res = this.state.user.grades.some(e => ((e.quiz_id == item.quiz_name) && (e.class_id == this.state.id)));
                 if(res && this.state.user.type === 'Student') {
                   return (
