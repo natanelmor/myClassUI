@@ -140,10 +140,10 @@ class add_quiz_screen extends Component {
 
 
   AddQuestion() {
-    if (!this.state.final_question || 
-        !this.state.final_correct_answer || 
-        !this.state.final_wrong_answer1 || 
-        !this.state.final_wrong_answer2 || 
+    if (!this.state.final_question ||
+        !this.state.final_correct_answer ||
+        !this.state.final_wrong_answer1 ||
+        !this.state.final_wrong_answer2 ||
         !this.state.final_wrong_answer3) {
       this.setState({ errmsg: 'One field or more is empty.' });
       this.toggleAlert(!this.state.showAlert);
@@ -213,7 +213,7 @@ class add_quiz_screen extends Component {
               height: 500
             }}
             >
-              <View style={styles.headerStyle}>
+              <View style={styles.headerStyle, {marginLeft: 10}}>
                 <Text style={styles.headerTextStyle}>Please add a question</Text>
               </View>
               <View>{this.renderAddQuestionPopUp()}</View>
