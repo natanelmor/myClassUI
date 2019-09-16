@@ -11,7 +11,7 @@ const ClassInfo = (props) => {
         <Text style={componentStyle.profileValues}>{props.name}</Text>
                 <Image
                    style={globalStyle.smallImage}
-                    source={{ uri: props.icon === null ? '../../assets/bible.png' : props.icon }}/>
+                    source={{ uri: props.icon === null ? 'https://cdn3.iconfinder.com/data/icons/education-flat-icon-1/130/135-512.png' : props.icon }}/>
                 <FlatList  
                     keyExtractor={(time) => time._id}
                     data={props.time}

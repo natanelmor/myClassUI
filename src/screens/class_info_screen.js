@@ -111,7 +111,7 @@ class class_info_screen extends Component {
                 if (this.checkIfNeedToSetTimer()) {
                     //this.updateAttendancePercentage;
                     this.updateAttendance();
-                    console.log('checkIfNeedToSetTimer pass');
+                    //console.log('checkIfNeedToSetTimer pass');
                     //this.startTimer();
                    // AppState.addEventListener('change', this._handleAppStateChange);
                 }
@@ -129,7 +129,7 @@ class class_info_screen extends Component {
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount: currtime- ' + this.state.curr);
+       // console.log('componentWillUnmount: currtime- ' + this.state.curr);
         if(this.state.curr > 0) {
            // AppState.removeEventListener('change', this._handleAppStateChange);
             this.updateAttendance();
@@ -156,20 +156,17 @@ class class_info_screen extends Component {
         const startTimeInMinuts = (Number(staerHour) * 60) + (Number(startMin));
         const endTimeInMinuts = (Number(endrHour) * 60) + (Number(endtMin));
 
-
         if ((currentTimeInMinuts >= startTimeInMinuts) && (currentTimeInMinuts <= endTimeInMinuts)) {
-            console.log('we are in!');
+           // console.log('we are in!');
             return true;
         } else {
-            console.log('we dont have match time');
+          //  console.log('we dont have match time');
             return false;
         }
 
-        console.log('currentTimeInMinuts :' + currentTimeInMinuts);
-        console.log('startTimeInMinuts :' + startTimeInMinuts);
-        console.log('endTimeInMinuts :' + endTimeInMinuts);
-
-
+       // console.log('currentTimeInMinuts :' + currentTimeInMinuts);
+       // console.log('startTimeInMinuts :' + startTimeInMinuts);
+       // console.log('endTimeInMinuts :' + endTimeInMinuts);
 
         //console.log('class start hour:' + staerHour);
         //console.log('class start min:' + startMin);
@@ -179,10 +176,6 @@ class class_info_screen extends Component {
 
         //console.log('currend hour:' + currendHour);
         //console.log('currend min:' + currendMin);
-
-       // if ()
-
-
 
     }
 
@@ -200,56 +193,29 @@ class class_info_screen extends Component {
 
             this.state.class.time.forEach(time => {
                 if ((currentTime.getDay() + 1) === time.day) {                     //  בודק שיש לך שיעור באותו יום
-                    console.log('we have class that day: ' + time.day);
+                   // console.log('we have class that day: ' + time.day);
                     if (this.checkTheClassHours(time)) {                            // בודק שהשעות מתאימות לשיעור של היום
-                        console.log('we find a class to check in');
+                      //  console.log('we find a class to check in');
                         this.startTimer();
                         this.stopTimer();
                         this.updateAttendance();
                         this.startTimer();
                         this.setState({ attendanceMsg: 'class ' + this.state.class.name + ' started', attendanceVisible: true });
 
-                        console.log(this.state.attendanceMsg);
-
+                      //  console.log(this.state.attendanceMsg);
+                        
                         return true;
                         //this.updateOrCreateAttendance();
                         //return true;
                     }
 
-
-
                 } else {
-                    console.log('we dont have class that day: ' + time.day);   //           "אפשר להוסיף הדפסה "אין לך שיעור היום
+                  //  console.log('we dont have class that day: ' + time.day);   //           "אפשר להוסיף הדפסה "אין לך שיעור היום
                 }
             });
            // this.setState({ attendanceMsg: 'you dont have class for today' });
             return false;
         });
-
-/*
-            this.state.user.attendance.forEach(element => {   //check if we need to update attendance or create new one
-                //console.log(element.date);
-
-                var timestmp2 = new Date(element.date);
-
-                //console.log('day :' + timestmp2.getDay());
-
-                if(timestmp2.getDay() == currentTime.getDay())
-                {
-
-                }
-
-
-
-            });
-
-
-
-
-
-
-        }).catch(err => { console.log(err); });
-
 
         //////////////////////////////////////////good practice
         //var currentTime = Date.now();
@@ -265,7 +231,7 @@ class class_info_screen extends Component {
         //console.log('currentDay: ' + day1);
         //console.log('currentDay2: ' + day2);
 
-        */
+        
 
     }
 
@@ -396,7 +362,7 @@ class class_info_screen extends Component {
             index = passClass.students.indexOf(this.state.user.email);
             if (index !== -1) {
                 passClass.students.splice(index, 1);
-                console.log(passClass)
+               // console.log(passClass)
                 axios.patch('https://myclass-backend.herokuapp.com/class?id=' + this.state.id, passClass);
             }
         }
@@ -408,10 +374,10 @@ class class_info_screen extends Component {
                 .then(res => {
                     let classes = res.data.classes
                     let index = res.data.classes.indexOf(this.state.class._id);
-                    console.log(index)
+                //    console.log(index)
                     if (index !== -1) {
                         res.data.classes.splice(index, 1);
-                        console.log(res.data.classes)
+                      //  console.log(res.data.classes)
                         axios.patch('https://myclass-backend.herokuapp.com/user?email=' + users, res.data)
                         .catch(err => console.log(err));
                     }
@@ -470,12 +436,12 @@ class class_info_screen extends Component {
                 <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop:25, marginVertical:20, paddingVertical:20}}>
                     <View style={globalStyle.row}>
                         <Text style={[globalStyle.name]}> { this.state.attendanceMsg } </Text>
-                    </View>
-                    <View style={{paddingTop:20}}>
-                        {this.state.attendanceVisible ?
-                        <Progress.Circle size={180} progress={this.state.percentage} showsText="true"  formatText={() => { return `${Math.floor(this.state.percentage*100)}%`}} /> : null}
-                    </View>
-                </View>
+                    </View> 
+                    <View style={{paddingTop:20}}>  
+                        {this.state.attendanceVisible ? 
+                        <Progress.Circle size={180} progress={this.state.percentage} showsText={true}  formatText={() => { return `${Math.floor(this.state.percentage*100)}%`}} /> : null}
+                    </View>  
+                </View> 
             )
         }
     }

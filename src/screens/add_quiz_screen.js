@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   TouchableHighlight,
-  ScrollView
+  ScrollView,
+  SafeAreaView
 } from 'react-native';
 import axios from 'axios';
 import { withNavigation } from 'react-navigation';
@@ -38,6 +39,7 @@ class add_quiz_screen extends Component {
     };
     this.onCreate = this.onCreate.bind(this);
     this.passUser = this.props.navigation.getParam('user');
+    this.renderAddedQuestion = this.renderAddedQuestion.bind(this);
   }
 
   toggleAlert(visible){
@@ -138,6 +140,43 @@ class add_quiz_screen extends Component {
     );
   }
 
+  renderAddedAnswers(answers) {
+    var all = answers.map(a => 
+         <View  style={styles.inputContainerans} key={a.answer}>
+         <Text style={styles.sectionHeader}>{a.answer_id + 1}. {a.answer}</Text>   
+         </View>
+    );
+
+      return (
+        <View  >
+          {all}
+        </View>
+      );
+  }
+
+  renderAddedQuestion() {
+    console.log(this.state.questions);
+    
+    var all = this.state.questions.map(q => 
+      <View key={q.question} 
+      style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <View  style={styles.inputContainer} >
+         <Text  style={styles.sectionHeader}>{q.question}</Text>   
+         </View>
+        {this.renderAddedAnswers(q.answers)}
+      </View>
+    );
+
+      return (
+        <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+           <ScrollView
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled >
+          {all}
+        </ScrollView>
+        </View>  
+      );
+  }
 
   AddQuestion() {
     if (!this.state.final_question ||
@@ -174,25 +213,31 @@ class add_quiz_screen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={globalStyle.container}>
+           <ScrollView style={globalStyle.scrollContainer}>
         <LinearGradient
           style={globalStyle.header}
           colors={['#6F86D6', '#48C6EF']}
           start={{ x: 0.0, y: 0.25 }}
           end={{ x: 0.5, y: 1.0 }}
-        ></LinearGradient>
+        >
         <View style={globalStyle.titleContainer}>
           <Text style={globalStyle.title}> Start a new quiz: </Text>
         </View>
+        </LinearGradient>
+        <View style={globalStyle.marginTopValue}>
         <View style={styles.inputContainer}>
           <TextInput
-            style={styles.inputs}
+           style={styles.inputs} 
             placeholder="quiz name:"
             underlineColorAndroid='transparent'
             onChangeText={(name) => this.setState({ quiz_name: name })}
           />
-        </View>
-        <View style={globalStyle.bottomView}>
+      </View>
+        
+        <View style={globalStyle.marginTopValue}>
+        
+        <View style={globalStyle.buttonContainer}>
           <TouchableHighlight
             style={styles.buttonBordered} underlayColor="#f1f1f1"
             onPress={() => this.setAddQuestionVisible(!this.state.addQuestionVisible)}
@@ -206,6 +251,10 @@ class add_quiz_screen extends Component {
             <Text style={styles.buttonBorderedText}>create</Text>
           </TouchableHighlight>
         </View>
+        </View>
+        <SafeAreaView style={{flex: 1}} forceInset={{ top: 'always' }}>
+          {this.renderAddedQuestion()}    
+          </SafeAreaView>  
         <View style={{ flex: 1 }}>
           <Modal scroll inside the modal isVisible={this.state.addQuestionVisible}>
             <View style={{
@@ -250,6 +299,8 @@ class add_quiz_screen extends Component {
           }}
         />
       </View>
+      </ScrollView>
+      </View>
     );
   }
 
@@ -262,6 +313,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#DCDCDC',
   },
+  sectionHeader: { 
+    color: '#4990E2',
+    fontSize: 18,
+    alignSelf: 'center',
+},
   inputContainer: {
     borderBottomColor: '#F5FCFF',
     backgroundColor: '#FFFFFF',
@@ -269,8 +325,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     width: 350,
     height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
+    marginBottom: 5,
+    marginTop: 10,
+    alignItems: 'center'
+  },
+  inputContainerans: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    borderBottomWidth: 1,
+    width: 350,
+    flexDirection: 'column',
     alignItems: 'center'
   },
   inputs: {
