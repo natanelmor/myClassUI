@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image , ScrollView} from 'react-native';
+import { View, StyleSheet, Text, FlatList, TouchableOpacity, Image , ScrollView, Linking} from 'react-native';
 import LargeHeading from './LargeHeading'
 import globalStyle from '../style'
 const ResourceFiles = (props) => {
     return (
-        <View style={globalStyle.recentlyPlayed}>
+        <View style={[globalStyle.recentlyPlayed, {height: 230, justifyContent: 'center', alignItems: 'center'}]}>
               <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled>
             <Text style={[globalStyle.name, globalStyle.paddingLeftValue]}>Resources</Text>
                 <FlatList
@@ -14,8 +14,10 @@ const ResourceFiles = (props) => {
                     renderItem={({ item }) => {
                         icon = (item.type) === 'file' ? require('../../assets/fileIcon.png') : require('../../assets/linkIcon.png')
                         return (
-                            <View style={{ height: 75, width: 75 }}>
-                                <TouchableOpacity>
+                            <View style={{ height: 75, width: 90 }}>
+                                <TouchableOpacity
+                                  onPress={() => Linking.openURL(item.source).catch((err) => console.error('An error occurred', err))}
+                                >
                                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                         <Image
                                             style={styles.userIcon}

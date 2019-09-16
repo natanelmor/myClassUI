@@ -62,14 +62,14 @@ class class_info_screen extends Component {
             time: [],
             location: [],
             items: [
-                { id: '1', type: 'file', source: '', name: 'File' },
-                { id: '2', type: 'file', source: '', name: 'File' },
-                { id: '3', type: 'link', source: '', name: 'Link' },
-                { id: '4', type: 'file', source: '', name: 'File' },
-                { id: '5', type: 'file', source: '', name: 'File' },
-                { id: '6', type: 'link', source: '', name: 'Link' },
-                { id: '7', type: 'file', source: '', name: 'File' },
-                { id: '8', type: 'file', source: '', name: 'File' },
+                { id: '1', type: 'link', source: 'http://volunteerinternational.org//', name: 'Volunteering' },
+                { id: '2', type: 'file', source: 'https://www.unl.edu/gradstudies/current/teaching/Syllabus_Sample.pdf', name: 'Syllabus' },
+                { id: '3', type: 'link', source: 'https://www.wikipedia.org/', name: 'Wikipedia' },
+                { id: '4', type: 'file', source: 'https://www.mv.helsinki.fi/home/jmisotal/BoS.pdf', name: 'Statistics' },
+                { id: '5', type: 'file', source: 'http://www.silvic.usv.ro/diverse_doc/secrets_studying.pdf', name: 'Studying' },
+                { id: '6', type: 'link', source: 'https://openlibrary.org/', name: 'Library' },
+                { id: '7', type: 'file', source: 'http://www.apathtowisdom.com/wp-content/uploads/2014/03/How-to-Manage-Your-Time-Wisely1.pdf', name: 'Manage Time' },
+                { id: '8', type: 'file', source: 'http://promeng.eu/downloads/training-materials/ebooks/soft-skills/effective-communication-skills.pdf', name: 'Skills' },
             ],
             quizes: [],
             grades: [],
@@ -189,7 +189,7 @@ class class_info_screen extends Component {
     checkIfNeedToSetTimer() {
         //console.log('checkIfNeedToSetTimer: ');
         var currentTime = new Date();
-        
+
         axios.get('https://myclass-backend.herokuapp.com/user?email=' + this.state.user.email)
         .then(res => {
             this.setState({
@@ -197,7 +197,7 @@ class class_info_screen extends Component {
             });
 
             //console.log(this.state);
-            
+
             this.state.class.time.forEach(time => {
                 if ((currentTime.getDay() + 1) === time.day) {                     //  בודק שיש לך שיעור באותו יום
                     console.log('we have class that day: ' + time.day);
@@ -210,9 +210,9 @@ class class_info_screen extends Component {
                         this.setState({ attendanceMsg: 'class ' + this.state.class.name + ' started', attendanceVisible: true });
 
                         console.log(this.state.attendanceMsg);
-                        
+
                         return true;
-                        //this.updateOrCreateAttendance();  
+                        //this.updateOrCreateAttendance();
                         //return true;
                     }
 
@@ -223,13 +223,13 @@ class class_info_screen extends Component {
                 }
             });
            // this.setState({ attendanceMsg: 'you dont have class for today' });
-            return false;      
+            return false;
         });
 
 /*
             this.state.user.attendance.forEach(element => {   //check if we need to update attendance or create new one
                 //console.log(element.date);
-                
+
                 var timestmp2 = new Date(element.date);
 
                 //console.log('day :' + timestmp2.getDay());
@@ -240,10 +240,10 @@ class class_info_screen extends Component {
                 }
 
 
-      
+
             });
 
-              
+
 
 
 
@@ -308,8 +308,8 @@ class class_info_screen extends Component {
            start: this.state.start + 1,
            curr: this.state.start + this.state.totalTime,
            percentage: (this.state.attTime + 1) / this.state.classDuringTimeInSEC,
-           attTime: this.state.attTime +1,   
-           
+           attTime: this.state.attTime +1,
+
            });
        }, 1000);
        this.setState({ timer });
@@ -327,17 +327,17 @@ class class_info_screen extends Component {
     }
 
     updateAttendancePercentage() {
-        
+
         const currentTime = new Date();
-        
-    
+
+
         //const [staerHour, startMin] = start.split(':');
         //const [endrHour, endtMin] = end.split(':');
         this.state.user.attendance.forEach(attendance => {
             const attendanceDate = new Date(attendance.date);
-            
-            if ((attendanceDate.getDay() == currentTime.getDay()) && 
-                (attendanceDate.getMonth() == currentTime.getMonth()) && 
+
+            if ((attendanceDate.getDay() == currentTime.getDay()) &&
+                (attendanceDate.getMonth() == currentTime.getMonth()) &&
                 (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
                 (attendance.class_id == this.state.id)) {
                     //attendance.time += this.state.curr;
@@ -358,14 +358,14 @@ class class_info_screen extends Component {
         const currentTime = new Date();
         this.state.user.attendance.forEach(attendance => {
             const attendanceDate = new Date(attendance.date);
-            
-            if ((attendanceDate.getDay() == currentTime.getDay()) && 
-                (attendanceDate.getMonth() == currentTime.getMonth()) && 
+
+            if ((attendanceDate.getDay() == currentTime.getDay()) &&
+                (attendanceDate.getMonth() == currentTime.getMonth()) &&
                 (attendanceDate.getFullYear() == currentTime.getFullYear()) &&
                 (attendance.class_id == this.state.id)) {
                     attendance.time += this.state.curr;
                     newAttendanceFlag = false;
-                    
+
             }
 
 
@@ -420,7 +420,7 @@ class class_info_screen extends Component {
             });
             axios.delete('https://myclass-backend.herokuapp.com/class?id=' + this.state.id);
         }
-        
+
         this.props.navigation.navigate('my_profile', { user: this.state.user });
     }
 
@@ -470,12 +470,12 @@ class class_info_screen extends Component {
                 <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center', paddingTop:25, marginVertical:20, paddingVertical:20}}>
                     <View style={globalStyle.row}>
                         <Text style={[globalStyle.name]}> { this.state.attendanceMsg } </Text>
-                    </View> 
-                    <View style={{paddingTop:20}}>  
-                        {this.state.attendanceVisible ? 
+                    </View>
+                    <View style={{paddingTop:20}}>
+                        {this.state.attendanceVisible ?
                         <Progress.Circle size={180} progress={this.state.percentage} showsText="true"  formatText={() => { return `${Math.floor(this.state.percentage*100)}%`}} /> : null}
-                    </View>  
-                </View> 
+                    </View>
+                </View>
             )
         }
     }
@@ -526,7 +526,7 @@ class class_info_screen extends Component {
 
     render() {
         return (
-              <View style={globalStyle.container}> 
+              <View style={globalStyle.container}>
                 <ScrollView style={globalStyle.scrollContainer}>
                     <LinearGradient
                         style={globalStyle.header}
